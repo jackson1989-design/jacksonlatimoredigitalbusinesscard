@@ -26,37 +26,57 @@
     <script type="text/babel">
       const { useState, useEffect, useRef } = React;
 
-      // --- 1. CLEAN KNOWLEDGE BASE (No Markdown) ---
+      // --- 1. THE DEEP KNOWLEDGE BASE (GFI Strategic Architecture) ---
       const KNOWLEDGE_BASE = {
         "Wealth Accumulation": {
-          title: "THE RULE OF 72 AND COMPOUND INTEREST",
-          content: "Wealth isn't about how much you make; it's about how your money grows. We use the Rule of 72 to determine how fast your money doubles. Simply divide 72 by your interest rate. For example, at 3%, it takes 24 years to double. At 12%, it takes only 6 years. My goal is to move you from Slow Money to Smart Money.",
-          next: "Ask me about the Three Tax Buckets to see how to keep more of that growth."
+          title: "TAX-ADVANTAGED WEALTH ACCUMULATION",
+          content: "Strategic wealth accumulation is about shifting from level-growth to inflation-adjusted growth. We use the Rule of 72 to calculate doubling periods: divide 72 by your interest rate to see your timeline. Most people save in the Tax-Later bucket (401k/IRA); we specialize in the Tax-Never bucket, utilizing Indexed Universal Life to build a harvest you can access tax-free.",
+          next: "Ask me how the Rule of 72 changes your retirement timeline."
         },
         "Asset Protection": {
-          title: "SAFE MONEY AND MARKET VOLATILITY",
-          content: "Most people are concerned about the next market crash. We specialize in Fixed Indexed strategies that provide a Floor of 0%. This means when the market goes down, you lose nothing. When the market goes up, you participate in the gains. It is the power of the reset.",
-          next: "Would you like to know how to roll over an old 401k into a protected account?"
+          title: "PRINCIPAL PROTECTION AND THE 0% FLOOR",
+          content: "Asset protection is designed to solve the volatility problem. Traditional portfolios risk the 4% rule, where market drops can deplete your savings. We utilize Fixed Indexed strategies that provide a 0% Floor—ensuring that when the market drops, you lose nothing, and when it rises, you participate in the gains. This creates a foundation of safe, predictable growth.",
+          next: "Ask how a rollover can secure your current retirement balance."
         },
         "Living Benefits": {
-          title: "LIFE INSURANCE YOU DONT HAVE TO DIE TO USE",
-          content: "Modern life insurance includes riders for Critical, Chronic, and Terminal illness. If you suffer a heart attack, stroke, or cancer diagnosis, you can access your death benefit while living to pay for treatment or replace lost income. Your health is your currency.",
-          next: "Ask me about Mortgage Protection to see how this keeps your family in their home."
+          title: "MODERN PROTECTION FOR THE LIVING",
+          content: "Life insurance has evolved beyond death benefits. Modern policies include riders for Critical, Chronic, and Terminal illness. If you suffer a qualifying event like a heart attack, stroke, or cancer diagnosis, you can accelerate up to 90% of your death benefit while living. This provides immediate liquidity for medical bills or replacing lost income when you need it most.",
+          next: "Ask about the difference between traditional and modern living benefits."
         },
         "Debt Management": {
           title: "REDIRECTING THE INTEREST DRAG",
-          content: "Debt is a wealth destroyer. We use the Debt Shredder concept to redirect interest payments away from the banks and back into your own Family Bank. This allows many families to pay off 30-year mortgages in 9-12 years without changing their lifestyle.",
-          next: "Ready to run your numbers through the scorecard?"
+          content: "Debt acts as a wealth destroyer by creating an interest drag on your cash flow. Our 'Debt Shredder' strategy focuses on redirecting the interest you currently pay to banks back into your own Family Bank. By utilizing participating policy loans, families can often pay off 30-year mortgages and consumer debt in approximately 9 to 12 years without increasing their monthly budget.",
+          next: "Run your numbers through the scorecard to see your potential payoff date."
         },
         "Estate Planning": {
-          title: "LEGACY BEYOND MONEY",
-          content: "A legacy isn't just an inheritance; it's a plan. Through our partnership with Ethos, we provide Free Will and Trust tools to ensure your family avoids the cost and headache of probate. We protect your Legacy Portrait.",
-          next: "Click the Planning Portal button to access these tools."
+          title: "CREATING YOUR LEGACY PORTRAIT",
+          content: "Estate planning ensures your values and assets transition to the next generation without the delay of probate. Through our partnership with Ethos, we provide free Will and Trust tools to help you document your Legacy Portrait. This goes beyond money—it is about clarity, stewardship, and ensuring your family is protected legally and financially.",
+          next: "Access the Planning Portal to begin your free estate documentation."
         },
         "Mortgage Protection": {
-          title: "THE ROOF OVER THEIR HEAD",
-          content: "Your home is your family's sanctuary. Mortgage protection ensures that if a breadwinner passes away or gets sick, the mortgage is paid off. Unlike lender insurance, you own this policy, and the benefit goes to your family, not the bank.",
-          next: "Ask about Living Benefits to see how this covers you if you get sick but don't die."
+          title: "SECURE HOUSING STRATEGY",
+          content: "Your home is typically your largest liability until the deed is clear. Mortgage protection ensures that if the primary breadwinner passes away or becomes ill, the home is paid off for the family. Unlike lender-owned insurance, you own this plan, you choose the beneficiary, and the coverage remains in force even if you sell the home or refinance.",
+          next: "Ask me about the D.I.M.E. calculation for your home."
+        },
+        "College Funding": {
+          title: "THE MILLION DOLLAR BABY CONCEPT",
+          content: "Traditional 529 plans are restricted to education. We utilize juvenile Indexed Universal Life (IUL) policies to create a tax-free cash pile for your children. This can be used for college, a down payment on a home, or kept as a lifelong head start. It provides guaranteed insurability for their future regardless of their later health status.",
+          next: "Ask how a juvenile plan grows over 20 years."
+        },
+        "Indexed Growth": {
+          title: "THE POWER OF THE ANNUAL RESET",
+          content: "Indexed growth offers the 'Smart Money' advantage: market-linked gains without market-linked risk. Through the Annual Reset feature, your gains are locked in every year. If the index goes up, your account value increases. If the index goes down, you stay at your current level (Zero is your Hero). You never have to earn back losses from previous years.",
+          next: "Ask how indexing compares to traditional stock market investing."
+        },
+        "Business Strategies": {
+          title: "BUSINESS CONTINUITY AND SUCCESSION",
+          content: "Business owners face unique risks, specifically 'Key Person' loss. We design strategies using life insurance to provide immediate liquidity to a business if a partner or vital employee passes. This funds Buy-Sell agreements, allowing surviving owners to buy out heirs fairly and keep the business operating without forced liquidation.",
+          next: "Ask about Key Person protection for your leadership team."
+        },
+        "Final Expense": {
+          title: "PLANNING FOR DIGNITY",
+          content: "Final expense planning removes the financial burden of funeral and end-of-life costs from your family. We utilize simplified whole life plans that offer immediate coverage with no medical exams. This ensures your legacy is defined by peace and preparedness, providing your loved ones with the funds they need during a difficult time without delay.",
+          next: "Ask about instant-decision burial and final cost plans."
         }
       };
 
@@ -77,20 +97,11 @@
         }
       };
 
-      // --- 2. THE ANALYTICS TRACKER ---
-      const trackActivity = (action) => {
-        const stats = JSON.parse(localStorage.getItem('legacy_stats') || '{"clicks":0, "topics":[]}');
-        stats.clicks += 1;
-        if (!stats.topics.includes(action)) stats.topics.push(action);
-        localStorage.setItem('legacy_stats', JSON.stringify(stats));
-        console.log("Activity Tracked:", action);
-      };
-
-      // --- 3. COMPONENTS ---
+      // --- 2. COMPONENTS ---
 
       const Assistant = ({ onClose, initialQuery }) => {
         const [messages, setMessages] = useState([
-          { role: "assistant", content: "Hi, I'm Legacy AI. 👋 \n\nI am Jackson's expert strategy engine. I don't just sell policies; I teach strategies. Select a topic below or ask me anything." }
+          { role: "assistant", content: "Hi, I'm Legacy AI. 👋 \n\nI am Jackson's expert strategy engine. I provide education on wealth accumulation, protection, and legacy concepts. Select a topic on the card or ask me anything." }
         ]);
         const [isTyping, setIsTyping] = useState(false);
         const scrollRef = useRef(null);
@@ -103,19 +114,30 @@
           if (!text.trim()) return;
           setMessages(prev => [...prev, { role: "user", content: text }]);
           setIsTyping(true);
-          trackActivity("AI Query: " + text);
 
           setTimeout(() => {
             let foundKey = Object.keys(KNOWLEDGE_BASE).find(k => text.toLowerCase().includes(k.toLowerCase()));
-            let data = foundKey ? KNOWLEDGE_BASE[foundKey] : {
-              title: "STRATEGY INSIGHT",
-              content: "The best way to begin is by using the D.I.M.E. Method (Debt, Income, Mortgage, Education). This tells us exactly what your family needs to be 100% secure.",
-              next: "Check your Financial Score using the gold button on my card."
-            };
+            
+            // DIME logic check
+            let data = foundKey ? KNOWLEDGE_BASE[foundKey] : null;
+            if (text.toLowerCase().includes("dime")) {
+                data = {
+                    title: "THE D.I.M.E. METHOD",
+                    content: "The D.I.M.E. method is the gold standard for calculating financial need:\n\nDEBT: Total payoff of all high-interest loans.\nINCOME: 10x your salary to replace your earning power.\nMORTGAGE: The balance required to clear the deed.\nEDUCATION: College or trade school funding for children.\n\nThis calculation ensures your family remains in their home and maintains their standard of living.",
+                    next: "Check your Financial Score to run your personalized D.I.M.E. analysis."
+                };
+            }
 
-            const cleanText = `${data.title}\n\n${data.content}\n\nNext Step: ${data.next}`;
+            if (!data) {
+              data = {
+                title: "STRATEGY INSIGHT",
+                content: "I specialize in the Three Rules of Money: Compound Interest (Rule of 72), Indexing (Zero is your Hero), and Tax-Free Retirement. Which strategy would you like to master today?",
+                next: "Type a topic above to begin."
+              };
+            }
 
-            setMessages(prev => [...prev, { role: "assistant", content: cleanText }]);
+            const cleanResponse = `${data.title}\n\n${data.content}\n\nNext Step: ${data.next}`;
+            setMessages(prev => [...prev, { role: "assistant", content: cleanResponse }]);
             setIsTyping(false);
             scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
           }, 800);
@@ -125,8 +147,8 @@
           <div className="flex flex-col h-full bg-white">
             <div className="p-5 strategy-gradient text-white flex justify-between items-center border-b-4 border-[#C29D6F]">
               <div>
-                <h3 className="font-black text-sm uppercase tracking-widest">Legacy AI</h3>
-                <p className="text-[10px] text-[#C29D6F] font-bold uppercase">Expert Strategy Engine</p>
+                <h3 className="font-black text-sm uppercase tracking-widest leading-none">Legacy AI</h3>
+                <p className="text-[10px] text-[#C29D6F] font-bold uppercase mt-1">Expert Strategy Engine</p>
               </div>
               <button onClick={onClose} className="w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-xl">×</button>
             </div>
@@ -138,18 +160,18 @@
                   </div>
                 </div>
               ))}
-              {isTyping && <div className="text-[10px] text-slate-400 animate-pulse px-2 italic font-bold uppercase">Legacy AI Analyzing...</div>}
+              {isTyping && <div className="text-[10px] text-slate-400 animate-pulse px-2 font-bold uppercase italic">Legacy AI Analyzing...</div>}
             </div>
             <div className="p-4 bg-white border-t flex flex-col gap-2">
                <div className="flex overflow-x-auto gap-2 pb-2 no-scrollbar">
-                  {["Rule of 72", "Living Benefits", "Tax Buckets", "DIME Method"].map(tag => (
-                    <button key={tag} onClick={() => handleSend(tag)} className="whitespace-nowrap px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-[#1D3A5F] border border-slate-200 uppercase">
+                  {["Rule of 72", "Living Benefits", "DIME Method", "Tax Buckets"].map(tag => (
+                    <button key={tag} onClick={() => handleSend(tag)} className="whitespace-nowrap px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-[#1D3A5F] border border-slate-200 uppercase tracking-tighter">
                       {tag}
                     </button>
                   ))}
                </div>
                <div className="flex gap-2">
-                  <input id="chatInput" placeholder="Ask a strategy question..." className="flex-1 bg-slate-100 p-3 rounded-xl text-sm outline-none border focus:border-[#C29D6F]" onKeyDown={(e)=>e.key==='Enter' && handleSend(e.target.value)} />
+                  <input id="chatInput" placeholder="Ask about the Rule of 72..." className="flex-1 bg-slate-100 p-3 rounded-xl text-sm outline-none border focus:border-[#C29D6F]" onKeyDown={(e)=>e.key==='Enter' && handleSend(e.target.value)} />
                   <button onClick={() => {const el=document.getElementById('chatInput'); handleSend(el.value); el.value='';}} className="bg-[#1D3A5F] text-white px-5 rounded-xl font-bold">➡️</button>
                </div>
             </div>
@@ -159,25 +181,20 @@
 
       const QRCodeModal = ({ onClose }) => {
         useEffect(() => {
-          new QRCode(document.getElementById("qrcode"), {
-            text: APP_DATA.links.main,
-            width: 200, height: 200,
-            colorDark : "#1D3A5F", colorLight : "#ffffff",
-          });
+          new QRCode(document.getElementById("qrcode"), { text: APP_DATA.links.main, width: 200, height: 200, colorDark : "#1D3A5F", colorLight : "#ffffff", });
         }, []);
         return (
           <div className="fixed inset-0 z-50 bg-[#1D3A5F]/90 backdrop-blur-md flex items-center justify-center p-6" onClick={onClose}>
             <div className="bg-white p-8 rounded-[3rem] text-center animate-slide-up" onClick={e=>e.stopPropagation()}>
               <h3 className="font-black text-[#1D3A5F] mb-2 uppercase tracking-widest text-sm">Share My Legacy Card</h3>
               <div id="qrcode" className="mx-auto border-8 border-slate-50 p-2 rounded-2xl mb-4"></div>
-              <p className="text-[10px] text-slate-400 font-bold uppercase">Scan to save contact info</p>
-              <button onClick={onClose} className="mt-6 w-full py-3 bg-slate-100 rounded-xl text-[#1D3A5F] font-black text-xs">CLOSE</button>
+              <button onClick={onClose} className="mt-6 w-full py-3 bg-slate-100 rounded-xl text-[#1D3A5F] font-black text-xs uppercase">Close</button>
             </div>
           </div>
         );
       };
 
-      // --- 4. MAIN APP ---
+      // --- 3. MAIN APP ---
 
       const App = () => {
         const [view, setView] = useState(null); 
@@ -189,7 +206,7 @@
         };
 
         return (
-          <div className="min-h-screen flex flex-col items-center sm:py-10 bg-slate-100">
+          <div className="min-h-screen flex flex-col items-center sm:py-10 bg-slate-100 selection:bg-[#C29D6F]/30">
             <div className="w-full max-w-[440px] bg-white sm:rounded-[3rem] shadow-2xl relative border border-slate-200 min-h-screen sm:min-h-[850px] overflow-visible">
               
               {/* Header */}
@@ -197,45 +214,40 @@
                 <img src="https://jackson1989-design.github.io/latimore-life-legacy-site/hero.jpg" className="w-full h-full object-cover opacity-50" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1D3A5F] via-[#1D3A5F]/40 to-transparent" />
                 <div className="absolute bottom-6 px-8">
-                  <p className="text-[#C29D6F] text-[10px] font-black uppercase tracking-[0.3em] mb-1">Preparedness is Everything</p>
+                  <p className="text-[#C29D6F] text-[10px] font-black uppercase tracking-[0.3em] mb-1">Preparedness Is Everything</p>
                   <h2 className="text-white text-[11px] font-medium italic leading-relaxed opacity-90 uppercase">
                     My life was saved because someone else planned ahead. I build legacies so your family never has to scramble.
                   </h2>
                 </div>
               </div>
 
-              {/* Profile */}
+              {/* Profile Card */}
               <div className="text-center px-6 -mt-16 relative z-10">
                 <div className="w-32 h-32 mx-auto rounded-full bg-white p-1 shadow-2xl mb-4 border-4 border-white">
                   <div className="w-full h-full rounded-full bg-[#1D3A5F] flex items-center justify-center text-3xl text-white font-black">JL</div>
                 </div>
                 <h1 className="text-2xl font-black text-[#1D3A5F] tracking-tighter uppercase">{APP_DATA.name}</h1>
                 <p className="text-[#C29D6F] font-bold text-[10px] uppercase tracking-[0.2em] mt-1">{APP_DATA.title}</p>
-                <p className="text-slate-400 text-[9px] font-bold mt-1 uppercase">{APP_DATA.license}</p>
+                <p className="text-slate-400 text-[9px] font-bold mt-1 uppercase leading-none">{APP_DATA.license}</p>
               </div>
 
               {/* ACTION FUNNEL */}
               <div className="px-6 py-8 space-y-4">
-                <a href={APP_DATA.links.scorecard} onClick={()=>trackActivity("Scorecard Click")} target="_blank" className="flex flex-col items-center justify-center w-full py-5 bg-[#C29D6F] text-white rounded-3xl shadow-xl hover:scale-[1.02] transition-all">
-                  <span className="font-black text-sm uppercase tracking-widest">🏆 Get Your Financial Score</span>
+                <a href={APP_DATA.links.scorecard} target="_blank" className="flex flex-col items-center justify-center w-full py-5 bg-[#C29D6F] text-white rounded-3xl shadow-xl hover:scale-[1.02] transition-all">
+                  <span className="font-black text-sm uppercase tracking-widest leading-none">🏆 Get Your Financial Score</span>
                   <span className="text-[9px] font-bold opacity-80 uppercase mt-1 tracking-tighter">Start Free Assessment</span>
                 </a>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <a href={APP_DATA.links.portal} onClick={()=>trackActivity("Portal Click")} target="_blank" className="flex items-center justify-center py-4 bg-[#1D3A5F] text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg">Strategic Portal</a>
-                  <button onClick={() => {setView('qr'); trackActivity("QR Shared");}} className="flex items-center justify-center py-4 bg-slate-800 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg">Share Card</button>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <a href={`tel:${APP_DATA.phone.replace(/\D/g,'')}`} className="py-4 border-2 border-slate-100 rounded-2xl text-[#1D3A5F] font-black text-[10px] uppercase tracking-widest text-center">📞 CALL</a>
-                  <a href={`mailto:${APP_DATA.email}`} className="py-4 border-2 border-slate-100 rounded-2xl text-[#1D3A5F] font-black text-[10px] uppercase tracking-widest text-center">✉️ EMAIL</a>
+                  <a href={APP_DATA.links.portal} target="_blank" className="flex items-center justify-center py-4 bg-[#1D3A5F] text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg">Strategic Portal</a>
+                  <button onClick={() => setView('qr')} className="flex items-center justify-center py-4 bg-slate-800 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg">Share Card</button>
                 </div>
               </div>
 
-              {/* STRATEGIC SERVICES */}
+              {/* SERVICE GRID (10 CARDS) */}
               <div className="px-6 mb-24">
                 <div className="bg-slate-50 rounded-[2.5rem] p-6 border border-slate-100">
-                   <h2 className="text-[#1D3A5F] text-center font-black text-[10px] uppercase tracking-[0.25em] mb-6">Education First Planning</h2>
+                   <h2 className="text-[#1D3A5F] text-center font-black text-[10px] uppercase tracking-[0.25em] mb-6">Expert Consulting Services</h2>
                    <div className="grid grid-cols-2 gap-3">
                       {Object.keys(KNOWLEDGE_BASE).map(service => (
                         <button key={service} onClick={() => openStrategy(service)} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center hover:border-[#C29D6F] transition-all active:scale-95">
@@ -247,7 +259,7 @@
                 </div>
               </div>
 
-              {/* Floating Chat Button */}
+              {/* STICKY CHAT */}
               <div className="sticky bottom-6 flex justify-end px-6 z-20 pointer-events-none pb-6">
                 <button onClick={() => setView('ai')} className="bg-[#1D3A5F] px-6 py-4 rounded-full text-white shadow-2xl border-2 border-[#C29D6F] pointer-events-auto flex items-center gap-2">
                   <span className="text-xs font-black tracking-widest">💬 LEGACY AI</span>
