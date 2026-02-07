@@ -3,34 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jackson Latimore • Digital Business Card</title>
-
-    <!-- Tailwind CDN -->
+    <title>Jackson Latimore • Legacy Strategy Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- React + ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-
-    <!-- Babel (for text/babel) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
-      .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-      .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 999px; }
-      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-
-      @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      .animate-in { animation: fadeUp 220ms ease-out; }
-
-      @keyframes pulseSoft {
-        0%, 100% { opacity: 0.6; }
-        50% { opacity: 1; }
-      }
-      .pulse-soft { animation: pulseSoft 1.2s ease-in-out infinite; }
+      .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #C29D6F; border-radius: 10px; }
+      @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+      .animate-slide-up { animation: slideUp 0.3s ease-out; }
+      .strategy-gradient { background: linear-gradient(135deg, #1D3A5F 0%, #0F2036 100%); }
     </style>
   </head>
 
@@ -38,891 +23,248 @@
     <div id="root"></div>
 
     <script type="text/babel">
-      const { useState, useEffect, useRef, useCallback } = React;
+      const { useState, useEffect, useRef } = React;
 
-      // --- DATA & CONFIG ---
+      // --- 1. CORE DATA & KNOWLEDGE BASE ---
       const APP_DATA = {
         name: "Jackson M. Latimore Sr.",
         title: "Founder & CEO",
         company: "Latimore Life & Legacy LLC",
-        license: "PA License #1268820",
+        license: "PA License #1268820 • NIPR #21638507",
         tagline: "Protecting Today. Securing Tomorrow.",
         phone: "(856) 895-1457",
         email: "jackson1989@latimorelegacy.com",
-        bio:
-          "Licensed life, health, accident, and annuities professional providing education-first planning to help families protect what matters and make informed decisions.",
-        bannerUrl: "https://jackson1989-design.github.io/latimore-life-legacy-site/hero.jpg",
         links: {
-          main: "https://jackson1989-design.github.io/latimore-life-legacy-site/",
-          ethos: "https://agents.ethoslife.com/invite/29ad1",
-          booking: "https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus",
+          main: window.location.href,
+          scorecard: "https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus",
+          portal: "https://globalfinancialimpact.fillout.com/latimorelifelegacy",
           linkedin: "https://www.linkedin.com/in/startwithjacksongfi/",
           facebook: "https://www.facebook.com/LatimoreLegacyLLC",
           instagram: "https://www.instagram.com/jacksonlatimore.global"
-        },
-        services: [
-          { title: "Wealth Accumulation", icon: "WA", description: "Education on tax-advantaged accumulation concepts and long-term planning considerations." },
-          { title: "Asset Protection", icon: "AP", description: "Strategies designed to limit downside exposure and support disciplined planning." },
-          { title: "Education Funding", icon: "EF", description: "Funding approaches focused on flexibility, control, and tax efficiency concepts." },
-          { title: "Debt Management", icon: "DM", description: "Cash-flow-based payoff sequencing to reduce interest drag and improve liquidity (results depend on income, rates, and consistency)." },
-          { title: "Life Insurance", icon: "LI", description: "Coverage designed to create immediate liquidity for beneficiaries and protect income." },
-          { title: "Living Benefits", icon: "LB", description: "General education on riders that may allow early access to benefits under qualifying events (terms vary by policy)." },
-          { title: "Estate Planning Support", icon: "EP", description: "Coordination support (attorney-led for legal documents) and legacy planning concepts." },
-          { title: "Indexed Strategies", icon: "IS", description: "Index-linked product education; features vary by carrier and policy, including caps/spreads/participation." },
-          { title: "Mortgage Protection", icon: "MP", description: "Coverage structured to help protect the home and household stability if a covered event occurs." },
-          { title: "Business Strategies", icon: "BS", description: "Key person coverage and executive benefit concepts for continuity and retention planning." }
-        ]
-      };
-
-      // --- LOCAL CONTEXT (Tri-County grounding) ---
-      const TRI_COUNTY_CONTEXT = `
-LOCAL CONTEXT (Schuylkill • Luzerne • Northumberland):
-- High homeownership → mortgage and income protection are practical priorities.
-- Aging population → retirement income, legacy planning, and final expense questions are common.
-- Blue-collar/logistics + small businesses → workplace coverage gaps and key person risk show up often.
-- Tight monthly cashflow → keep recommendations simple and budget-aware.
-Tone: preparation, protection, legacy — never fear-based.
-`;
-
-      // --- ANALYTICS (privacy-first) ---
-      // Stores anonymous category counts in localStorage. No names/emails stored in analytics.
-      const ANALYTICS_KEY = "latimore_analytics_v1";
-      const getAnalytics = () => {
-        try { return JSON.parse(localStorage.getItem(ANALYTICS_KEY) || "{}"); }
-        catch { return {}; }
-      };
-      const bumpAnalytics = (category) => {
-        const a = getAnalytics();
-        a[category] = (a[category] || 0) + 1;
-        localStorage.setItem(ANALYTICS_KEY, JSON.stringify(a));
-      };
-      const classifyQuestion = (text) => {
-        const t = (text || "").toLowerCase();
-        const rules = [
-          ["mortgage", ["mortgage","home","house"]],
-          ["workplace", ["work","employer","job","group","portable"]],
-          ["term", ["term","coverage amount","how much","need"]],
-          ["living_benefits", ["living benefits","critical","chronic","terminal","rider"]],
-          ["iul", ["iul","indexed universal","cash value","cap","floor","participation","spread"]],
-          ["annuity", ["annuity","fia","fixed indexed","income rider","lifetime income"]],
-          ["debt", ["debt","credit","loan","payoff","interest"]],
-          ["business", ["key person","buy-sell","succession","business"]],
-          ["final_expense", ["final expense","funeral","burial"]],
-          ["pricing", ["price","cost","premium","quote","rates"]],
-          ["booking_intent", ["book","schedule","appointment","meeting","call"]],
-          ["other", []]
-        ];
-        for (const [cat, kws] of rules) {
-          if (kws.some(k => t.includes(k))) return cat;
         }
-        return "other";
       };
 
-      // --- SPANISH QUICK SUMMARY (light) ---
-      const wantsSpanish = (text) => /\b(español|espanol|spanish|hola)\b/i.test(text || "");
-      const spanishSummary = () => (
-`Resumen breve (Español):
-Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere, puedo ayudarle a estimar una cantidad aproximada aquí mismo y explicarle los próximos pasos sin presión.`
-      );
-
-      // --- CONVERSATION MEMORY (session-only) ---
-      const blankMemory = () => ({ protect: "", priority: "", ageRange: "" });
-      const updateMemory = (mem, text) => {
-        const t = (text || "").toLowerCase();
-
-        if (!mem.protect) {
-          if (t.includes("family") || t.includes("kids") || t.includes("children")) mem.protect = "family";
-          else if (t.includes("mortgage") || t.includes("home") || t.includes("house")) mem.protect = "home";
-          else if (t.includes("income")) mem.protect = "income";
-          else if (t.includes("retire") || t.includes("retirement")) mem.protect = "retirement";
-          else if (t.includes("business") || t.includes("key person")) mem.protect = "business";
+      const KNOWLEDGE_BASE = {
+        "Wealth Accumulation": {
+          title: "The Rule of 72 & Compound Interest",
+          content: "Wealth isn't about how much you make; it's about how your money grows. We use the **Rule of 72** to determine how fast your money doubles. Divide 72 by your interest rate. At 3%, it takes 24 years to double. At 12%, it takes only 6 years. My goal is to move you from 'Slow Money' to 'Smart Money'.",
+          next: "Ask me about the 'Three Tax Buckets' to see how to keep more of that growth."
+        },
+        "Asset Protection": {
+          title: "Safe Money & Market Volatility",
+          content: "Most people are terrified of the next market crash. We specialize in **Fixed Indexed strategies** that provide a 'Floor of 0%.' When the market goes down, you lose nothing. When the market goes up, you participate in the gains. It is the power of the reset.",
+          next: "Would you like to know how to roll over an old 401(k) into a protected account?"
+        },
+        "Living Benefits": {
+          title: "Life Insurance You Don't Have To Die To Use",
+          content: "Modern life insurance includes riders for **Critical, Chronic, and Terminal illness.** If you suffer a heart attack, stroke, or cancer diagnosis, you can access your death benefit while living to pay for treatment or replace lost income. Your health is your currency.",
+          next: "Ask me about 'Mortgage Protection' to see how this keeps your family in their home."
+        },
+        "Debt Management": {
+          title: "Redirecting the Interest Drag",
+          content: "Debt is a wealth destroyer. We use the **Debt Shredder** concept to redirect interest payments away from the banks and back into your own 'Family Bank.' This allows you to pay off 30-year mortgages in 9-12 years without changing your lifestyle.",
+          next: "Ready to run your numbers through the scorecard?"
+        },
+        "Estate Planning": {
+          title: "Legacy Beyond Money",
+          content: "A legacy isn't just an inheritance; it's a plan. Through our partnership with Ethos, we provide **Free Will and Trust tools** (a $898 value) to ensure your family avoids the cost and headache of probate. We protect your 'Legacy Portrait.'",
+          next: "Click the 'Planning Portal' button to access these tools."
+        },
+        "Mortgage Protection": {
+          title: "The Roof Over Their Head",
+          content: "Your home is your family's sanctuary. Mortgage protection ensures that if a breadwinner passes away or gets sick, the mortgage is paid off. Unlike lender insurance, *you* own this policy, and the benefit goes to your *family*, not the bank.",
+          next: "Ask about 'Living Benefits' to see how this covers you if you get sick but don't die."
         }
-
-        if (!mem.priority) {
-          if (t.includes("cheap") || t.includes("affordable") || t.includes("lowest cost") || t.includes("budget")) mem.priority = "lowest cost";
-          else if (t.includes("strong") || t.includes("most protection") || t.includes("maximize")) mem.priority = "strong protection";
-          else if (t.includes("flex") || t.includes("flexible")) mem.priority = "flexibility";
-        }
-
-        if (!mem.ageRange) {
-          const m = t.match(/\b(18-24|25-34|35-44|45-54|55-64|65\+)\b/);
-          if (m) mem.ageRange = m[1];
-          const m2 = t.match(/\b(i'?m|im|i am)\s(\d{2})\b/);
-          if (m2 && m2[2]) {
-            const age = parseInt(m2[2], 10);
-            if (!isNaN(age)) {
-              if (age < 25) mem.ageRange = "18-24";
-              else if (age < 35) mem.ageRange = "25-34";
-              else if (age < 45) mem.ageRange = "35-44";
-              else if (age < 55) mem.ageRange = "45-54";
-              else if (age < 65) mem.ageRange = "55-64";
-              else mem.ageRange = "65+";
-            }
-          }
-        }
-
-        return mem;
       };
 
-      // --- EXPANDED KNOWLEDGE BASE (answer-first; booking only when appropriate) ---
-      const KNOWLEDGE_BASE = [
-        {
-          id: "workplace_gap",
-          keywords: ["work", "employer", "job", "group life", "workplace coverage", "portable"],
-          answer: {
-            headline: "🏢 Workplace life insurance: helpful start, but often not the full plan",
-            keyPoints: [
-              "Many employer plans are limited (often 1–2x salary) and may not follow you if you change jobs.",
-              "It can be smart to keep workplace coverage and add an individual policy to fill the gap and stay portable.",
-              "Your plan should match real obligations: mortgage/rent, childcare, debt, and income replacement."
-            ],
-            disclosure: "ℹ️ Educational info only. Coverage features vary by policy and carrier.",
-            nextStep: "✅ Next step: about how much coverage do you have at work (1x salary, 2x salary, or unknown), and do you have a mortgage?"
-          }
-        },
-        {
-          id: "coverage_amount",
-          keywords: ["how much", "coverage", "need", "amount", "life insurance amount"],
-          answer: {
-            headline: "🧮 How much life insurance is “enough”? A practical framework",
-            keyPoints: [
-              "Start with what you’re protecting: (1) income for 10–20 years, (2) mortgage/rent payoff, (3) childcare/education, (4) debts, (5) final costs.",
-              "If budget is tight, prioritize the biggest stability risk first (usually income + housing).",
-              "We can build a rough range right here without running an application."
-            ],
-            disclosure: "ℹ️ Educational info only. Not individualized financial advice.",
-            nextStep: "✅ Next step: tell me (A) household income, (B) years left on mortgage/rent plan, and (C) number of dependents."
-          }
-        },
-        {
-          id: "term_vs_perm",
-          keywords: ["term", "permanent", "whole life", "universal life", "term vs", "difference", "which is better"],
-          answer: {
-            headline: "🛡️ Term vs Permanent life insurance — how to choose without overcomplicating it",
-            keyPoints: [
-              "Term = coverage for a set period (often best for the ‘big responsibility years’ like mortgage/kids).",
-              "Permanent = longer-term coverage; some types can build cash value, but costs/charges matter.",
-              "A common approach: start with term to protect the basics, then add permanent only if it fits goals and budget."
-            ],
-            disclosure: "ℹ️ Educational info only. Product terms and costs vary by carrier and underwriting class.",
-            nextStep: "✅ Next step: are you mainly protecting income/mortgage for the next 20–30 years, or planning for lifetime legacy?"
-          }
-        },
-        {
-          id: "mortgage_protection",
-          keywords: ["mortgage", "home", "house", "protect the house", "keep the house", "mortgage protection"],
-          answer: {
-            headline: "🏠 Mortgage protection: designed to help keep the home stable",
-            keyPoints: [
-              "Typically structured as term life aligned with the mortgage timeline (10/20/30 years).",
-              "Goal: enough benefit to protect housing stability and reduce financial shock.",
-              "Beneficiary/ownership should match the household plan."
-            ],
-            disclosure: "ℹ️ Educational info only. Features vary by policy/carrier.",
-            nextStep: "✅ Next step: about how many years remain (10/20/30) and the approximate balance?"
-          }
-        },
-        {
-          id: "living_benefits",
-          keywords: ["living benefits", "critical illness", "chronic illness", "terminal", "accelerated", "rider"],
-          answer: {
-            headline: "❤️ Living benefits: a feature that may help during a serious health event",
-            keyPoints: [
-              "Some life policies include riders that may allow early access to benefits under defined qualifying events.",
-              "Definitions and payout rules vary—review the rider language.",
-              "Not a replacement for health insurance; it’s a separate feature with specific terms."
-            ],
-            disclosure: "ℹ️ Educational info only. Rider availability varies by product and underwriting.",
-            nextStep: "✅ Next step: are you thinking about living benefits mainly for household stability or business continuity?"
-          }
-        },
-        {
-          id: "pricing",
-          keywords: ["cost", "price", "quote", "premium", "rates", "how much does it cost", "expensive"],
-          answer: {
-            headline: "💲 What drives pricing (and how to estimate without pressure)",
-            keyPoints: [
-              "Pricing depends on age range, health history, tobacco status, state, coverage amount, and product type.",
-              "Underwriting class can materially change premiums when underwriting applies.",
-              "We can estimate here, then you can decide whether to run a formal quote."
-            ],
-            disclosure: "ℹ️ Educational info only. Quotes aren’t binding and depend on eligibility/underwriting.",
-            nextStep: "✅ Next step: share age range (25–34/35–44/45–54/55–64/65+), tobacco yes/no, and target coverage amount."
-          }
-        },
-        {
-          id: "iul_basics",
-          keywords: ["iul", "indexed universal life", "cash value", "cap", "floor", "participation", "spread", "index"],
-          answer: {
-            headline: "📈 IUL (Indexed Universal Life): what it is and what it isn’t",
-            keyPoints: [
-              "IUL is permanent life insurance that may build cash value using index-linked crediting (not a direct stock investment).",
-              "Index crediting may use caps/participation/spreads; policy charges still apply even in flat markets.",
-              "Loans/withdrawals can reduce values; design and funding level matter."
-            ],
-            disclosure: "ℹ️ Educational info only. Not tax/legal advice. Product terms vary by carrier and policy.",
-            nextStep: "✅ Next step: is your interest lifetime protection, cash value concepts, or retirement income planning?"
-          }
-        },
-        {
-          id: "fia_basics",
-          keywords: ["annuity", "fia", "fixed indexed annuity", "indexed annuity", "income rider", "lifetime income"],
-          answer: {
-            headline: "🧾 Fixed Indexed Annuity (FIA): principal protection + index-linked crediting",
-            keyPoints: [
-              "An FIA credits interest linked to an index with limits; it’s not a stock investment.",
-              "Most contracts have surrender periods and liquidity rules—typically long-term money.",
-              "Income features (when elected) are contract-based and depend on terms and rider costs."
-            ],
-            disclosure: "ℹ️ Educational info only. Features, surrender periods, and rider costs vary by product.",
-            nextStep: "✅ Next step: are you looking for accumulation, or specifically for predictable lifetime income?"
-          }
-        },
-        {
-          id: "debt_strategy",
-          keywords: ["debt", "credit card", "loan", "payoff", "interest", "student loan"],
-          answer: {
-            headline: "📉 Debt strategy: reduce interest drag while protecting cashflow",
-            keyPoints: [
-              "Goal: lower interest waste without draining emergency reserves.",
-              "Payoff sequencing often prioritizes highest-rate debt while keeping minimums elsewhere.",
-              "Small changes (payment timing, budgeting, refinance evaluation) can improve control."
-            ],
-            disclosure: "ℹ️ Educational info only. Not legal, tax, or credit counseling advice.",
-            nextStep: "✅ Next step: which is biggest right now—credit cards, auto, student loans, or mortgage?"
-          }
-        },
-        {
-          id: "final_expense",
-          keywords: ["final expense", "funeral", "burial", "cremation", "end of life"],
-          answer: {
-            headline: "🕊️ Final expense coverage: planning for dignity and fewer surprises",
-            keyPoints: [
-              "Typically smaller permanent coverage meant to help with funeral and final costs.",
-              "Helps loved ones avoid scrambling or taking on high-interest debt.",
-              "Right amount depends on preferences and existing savings."
-            ],
-            disclosure: "ℹ️ Educational info only. Availability varies by health and product.",
-            nextStep: "✅ Next step: are you aiming to cover funeral only, or also leave a small cushion for family expenses?"
-          }
-        },
-        {
-          id: "business_key_person",
-          keywords: ["key person", "buy-sell", "succession", "business", "partner", "executive benefits"],
-          answer: {
-            headline: "🏢 Business protection: key person + continuity planning",
-            keyPoints: [
-              "Key person coverage can help a business keep operating if a key leader is lost.",
-              "Buy-sell planning sets a clear ownership transition path and funding can create liquidity.",
-              "Design depends on revenue dependence, partners, and timeline."
-            ],
-            disclosure: "ℹ️ Educational info only. Not legal advice; attorney drafts legal agreements.",
-            nextStep: "✅ Next step: is this a solo owner, or do you have partners who would need a transition plan?"
-          }
-        },
-        {
-          id: "rule_72",
-          keywords: ["rule of 72", "72", "doubling", "double", "compound", "compound interest"],
-          answer: {
-            headline: "🧠 Rule of 72: estimating how quickly money can double",
-            keyPoints: [
-              "Divide 72 by an annual rate to estimate the doubling timeframe.",
-              "Example: 6% ≈ 12 years (72 ÷ 6), 9% ≈ 8 years (72 ÷ 9).",
-              "Shortcut for comparisons—not a guarantee.",
-              "Inflation matters; purchasing power can still fall if inflation is higher than growth."
-            ],
-            disclosure: "ℹ️ Educational info only. Outcomes depend on product terms, costs, and market conditions.",
-            nextStep: "✅ Next step: are you using this for savings growth, retirement planning, or comparing debt interest?"
-          }
-        }
-      ];
+      // --- 2. COMPONENTS ---
 
-      // --- helper: normalize + matching ---
-      const normalize = (s) =>
-        (s || "")
-          .toLowerCase()
-          .replace(/[^\w\s]/g, " ")
-          .replace(/\s+/g, " ")
-          .trim();
-
-      const scoreEntry = (text, entry) => {
-        const t = normalize(text);
-        let score = 0;
-
-        for (const kw of entry.keywords || []) {
-          const k = normalize(kw);
-          if (!k) continue;
-          if (t.includes(k)) score += Math.min(10, 3 + k.split(" ").length);
-          if (k.split(" ").length === 1 && t.split(" ").includes(k)) score += 2;
-        }
-
-        if (/[?]/.test(text)) score += 1;
-        if (/\b(compare|difference|pros|cons|best|should|recommend)\b/i.test(text)) score += 1;
-        if (/\b(mortgage|work|quote|premium|annuity|iul|living)\b/i.test(text)) score += 1;
-
-        return score;
-      };
-
-      const formatAnswer = (entry, memory) => {
-        const a = entry.answer || {};
-        const bullets = (a.keyPoints || []).map((p) => `• ${p}`).join("\n");
-        const disclosure = a.disclosure ? `\n\n${a.disclosure}` : "";
-        const next = a.nextStep ? `\n\n${a.nextStep}` : "";
-
-        const localLine = "\n\n📍 Local note: In our tri-county area, homeownership and tight monthly budgets make simple, affordable protection plans a smart place to start.";
-
-        const memLineParts = [];
-        if (memory?.protect) memLineParts.push(`🔎 Protecting: ${memory.protect}`);
-        if (memory?.priority) memLineParts.push(`🎯 Priority: ${memory.priority}`);
-        if (memory?.ageRange) memLineParts.push(`👤 Age range: ${memory.ageRange}`);
-        const memLine = memLineParts.length ? `\n\n${memLineParts.join(" • ")}` : "";
-
-        return `${a.headline || "Information"}\n\n${bullets}${disclosure}${memLine}${localLine}${next}`;
-      };
-
-      // Booking should be OPTIONAL and only when user is asking for personalization/apply/quote.
-      const shouldSuggestBooking = (text) => {
-        const t = normalize(text);
-        const triggers = [
-          "apply","application","enroll","start","sign up",
-          "quote","premium","rates","price","how much will it cost",
-          "recommend","best for me","compare options","review my policy",
-          "underwriting","denied","medical exam"
-        ];
-        return triggers.some(k => t.includes(k));
-      };
-
-      // --- TYPEWRITER ---
-      const Typewriter = ({ text, onComplete }) => {
-        const [displayedText, setDisplayedText] = useState("");
-        useEffect(() => {
-          let index = 0;
-          const timer = setInterval(() => {
-            setDisplayedText((prev) => prev + text.charAt(index));
-            index++;
-            if (index === text.length) {
-              clearInterval(timer);
-              if (onComplete) onComplete();
-            }
-          }, 10);
-          return () => clearInterval(timer);
-        }, [text]);
-        return <span className="whitespace-pre-wrap">{displayedText}</span>;
-      };
-
-      // --- COMPONENT: SOCIAL BUTTON ---
-      const SocialBtn = ({ href, label }) => (
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center h-12 px-4 bg-white border-2 border-slate-100 rounded-2xl text-[#1D3A5F] hover:border-[#C29D6F] hover:bg-[#C29D6F]/5 transition-all text-xs font-bold uppercase tracking-wider"
-          aria-label={label}
-        >
-          {label}
-        </a>
-      );
-
-      // --- SAVE PLAN (soft lead capture) ---
-      const SAVED_PLANS_KEY = "latimore_saved_plans_v1";
-      const getSavedPlans = () => {
-        try { return JSON.parse(localStorage.getItem(SAVED_PLANS_KEY) || "[]"); }
-        catch { return []; }
-      };
-      const savePlanLocal = (plan) => {
-        const existing = getSavedPlans();
-        existing.unshift({ ...plan, savedAt: new Date().toISOString() });
-        localStorage.setItem(SAVED_PLANS_KEY, JSON.stringify(existing.slice(0, 25)));
-      };
-
-      // --- COMPONENT: AI CHAT ASSISTANT ---
       const Assistant = ({ onClose, initialQuery }) => {
         const [messages, setMessages] = useState([
-          {
-            role: "assistant",
-            content:
-              "👋 Welcome — I’m the Latimore Life & Legacy assistant.\n\nAsk a question about:\n• 🛡️ Life insurance basics\n• 🏠 Mortgage protection\n• ❤️ Living benefits\n• 🧾 Annuity concepts\n• 📈 IUL basics\n\nI’ll give clear, education-first answers (no pressure)."
-          }
+          { role: "assistant", content: "👋 I am the Legacy Strategy Engine. I don't just sell policies; I teach strategies. Select a topic below or ask me anything." }
         ]);
-        const [input, setInput] = useState("");
         const [isTyping, setIsTyping] = useState(false);
-        const [memory, setMemory] = useState(blankMemory());
-        const [showSave, setShowSave] = useState(false);
-        const [savedToast, setSavedToast] = useState(false);
-        const [saveEmail, setSaveEmail] = useState("");
         const scrollRef = useRef(null);
-        const hasAutoQueried = useRef(false);
 
         useEffect(() => {
-          if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }, [messages, isTyping]);
+          if (initialQuery) handleSend(initialQuery);
+        }, [initialQuery]);
 
-        const generateResponse = (userText) => {
-          bumpAnalytics(classifyQuestion(userText));
+        const handleSend = (text) => {
+          if (!text.trim()) return;
+          setMessages(prev => [...prev, { role: "user", content: text }]);
+          setIsTyping(true);
 
-          const ranked = KNOWLEDGE_BASE
-            .map((entry) => ({ entry, score: scoreEntry(userText, entry) }))
-            .sort((a, b) => b.score - a.score);
+          setTimeout(() => {
+            let found = Object.keys(KNOWLEDGE_BASE).find(k => text.toLowerCase().includes(k.toLowerCase()));
+            let response = found ? KNOWLEDGE_BASE[found] : {
+              title: "Strategy Insight",
+              content: "The best way to begin is by using the **D.I.M.E. Method** (Debt, Income, Mortgage, Education). This tells us exactly what your family needs to be 100% secure.",
+              next: "Check your 'Financial Score' using the gold button on my card."
+            };
 
-          const best = ranked[0];
-          const matched = best && best.score >= 3 ? best.entry : null;
-
-          if (!matched) {
-            return (
-              "✅ I can help—pick the closest option and I’ll outline the key considerations:\n\n" +
-              "• 🛡️ Family protection (life insurance basics)\n" +
-              "• 🏠 Mortgage protection\n" +
-              "• ❤️ Living benefits\n" +
-              "• 🧾 Retirement income concepts (annuities)\n" +
-              "• 📈 IUL basics\n" +
-              "• 🏢 Business planning (key person / buy-sell)\n\n" +
-              "Reply with one, and tell me what matters most: 💲 lowest cost, 🛡️ strongest protection, or 🔄 flexibility."
-            );
-          }
-
-          let response = formatAnswer(matched, memory);
-
-          if (wantsSpanish(userText)) response += "\n\n" + spanishSummary();
-
-          if (shouldSuggestBooking(userText)) {
-            response += `\n\n📅 If you want a personalized plan (amount, options, and next steps), you can schedule a no-pressure review here:\n${APP_DATA.links.booking}`;
-          } else {
-            response += "\n\n👉 Next best step (in chat): share your age range and what matters most (💲 lowest cost, 🛡️ strongest protection, 🔄 flexibility).";
-          }
-
-          response += "\n\n💾 Want me to save a quick summary of this plan for you?";
-          return response;
-        };
-
-        const handleSend = useCallback(
-          (overrideText) => {
-            const text = (overrideText ?? input).trim();
-            if (!text || isTyping) return;
-
-            setInput("");
-            setMessages((prev) => [...prev, { role: "user", content: text }]);
-
-            setMemory((prev) => updateMemory({ ...prev }, text));
-
-            setIsTyping(true);
-            setShowSave(false);
-
-            setTimeout(() => {
-              const responseText = generateResponse(text);
-              setMessages((prev) => [...prev, { role: "assistant", content: responseText, type: "typewriter" }]);
-              setIsTyping(false);
-              setShowSave(true);
-            }, 550);
-          },
-          [input, isTyping, memory]
-        );
-
-        useEffect(() => {
-          if (initialQuery && !hasAutoQueried.current) {
-            hasAutoQueried.current = true;
-            handleSend(initialQuery);
-          }
-        }, [initialQuery, handleSend]);
-
-        useEffect(() => {
-          const onKey = (e) => { if (e.key === "Escape") onClose(); };
-          window.addEventListener("keydown", onKey);
-          return () => window.removeEventListener("keydown", onKey);
-        }, [onClose]);
-
-        const saveCurrentPlan = () => {
-          const lastAssistant = [...messages].reverse().find(m => m.role === "assistant");
-          if (!lastAssistant) return;
-
-          savePlanLocal({ memory, summary: lastAssistant.content, source: "assistant" });
-
-          if (saveEmail.trim()) {
-            const subject = encodeURIComponent("Saved Plan Summary • Latimore Life & Legacy");
-            const body = encodeURIComponent(
-              `Here’s your saved summary:\n\n${lastAssistant.content}\n\n— ${APP_DATA.company}\n${APP_DATA.tagline}\n${APP_DATA.links.main}`
-            );
-            window.location.href = `mailto:${saveEmail.trim()}?subject=${subject}&body=${body}`;
-          }
-
-          setSavedToast(true);
-          setTimeout(() => setSavedToast(false), 1800);
-          setShowSave(false);
-          setSaveEmail("");
-        };
-
-        const viewAnalytics = () => {
-          const a = getAnalytics();
-          const lines = Object.entries(a)
-            .sort(([,v1],[,v2]) => (v2||0)-(v1||0))
-            .map(([k,v]) => `${k}: ${v}`)
-            .join("\n");
-          alert(lines ? `📊 Anonymous question categories (this device):\n\n${lines}` : "No analytics recorded yet on this device.");
+            setMessages(prev => [...prev, { 
+              role: "assistant", 
+              content: `### ${response.title}\n\n${response.content}\n\n**Next Step:** ${found ? response.next : "Complete your Financial Scorecard."}` 
+            }]);
+            setIsTyping(false);
+            scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+          }, 800);
         };
 
         return (
-          <div className="flex flex-col h-full bg-slate-50">
-            <div className="p-5 bg-[#1D3A5F] text-white flex justify-between items-center shrink-0">
-              <div className="flex items-center space-x-3">
-                <div className="bg-[#C29D6F] px-3 py-2 rounded-lg text-xs font-black tracking-widest">🤖 AI</div>
-                <div>
-                  <h3 className="font-bold text-base">Legacy Advisor</h3>
-                  <p className="text-[10px] text-[#C29D6F] font-bold uppercase tracking-widest">Education-First Assistant</p>
-                </div>
+          <div className="flex flex-col h-full bg-white">
+            <div className="p-5 strategy-gradient text-white flex justify-between items-center border-b-4 border-[#C29D6F]">
+              <div>
+                <h3 className="font-black text-sm uppercase tracking-widest">Legacy Strategy Engine</h3>
+                <p className="text-[10px] text-[#C29D6F] font-bold">Jackson Latimore's Expert System</p>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={viewAnalytics}
-                  className="text-[10px] px-3 py-2 rounded-full bg-white/10 hover:bg-white/15"
-                  title="View anonymous analytics (this device)"
-                >
-                  📊 Analytics
-                </button>
-                <button
-                  onClick={onClose}
-                  className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-full transition-colors text-xl"
-                  aria-label="Close assistant"
-                >
-                  ×
-                </button>
-              </div>
+              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center bg-white/10 rounded-full">×</button>
             </div>
-
-            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-              {messages.map((msg, idx) => (
-                <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-in`}>
-                  <div
-                    className={`max-w-[88%] p-3.5 rounded-2xl shadow-sm text-sm ${
-                      msg.role === "user"
-                        ? "bg-[#1D3A5F] text-white rounded-tr-none"
-                        : "bg-white border border-slate-200 text-slate-700 rounded-tl-none"
-                    }`}
-                  >
-                    {msg.type === "typewriter" && idx === messages.length - 1 ? (
-                      <Typewriter text={msg.content} />
-                    ) : (
-                      <span className="whitespace-pre-wrap">{msg.content}</span>
-                    )}
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-slate-50">
+              {messages.map((m, i) => (
+                <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[90%] p-4 rounded-2xl text-sm shadow-sm ${m.role === 'user' ? 'bg-[#1D3A5F] text-white' : 'bg-white border border-slate-200 text-slate-800'}`}>
+                    <span className="whitespace-pre-wrap">{m.content}</span>
                   </div>
                 </div>
               ))}
-
-              {isTyping && (
-                <div className="flex justify-start animate-in">
-                  <div className="bg-white border border-slate-200 p-3 rounded-2xl flex items-center space-x-2 shadow-sm">
-                    <span className="w-2 h-2 bg-[#C29D6F] rounded-full pulse-soft"></span>
-                    <span className="w-2 h-2 bg-[#C29D6F] rounded-full pulse-soft" style={{ animationDelay: "0.15s" }}></span>
-                    <span className="w-2 h-2 bg-[#C29D6F] rounded-full pulse-soft" style={{ animationDelay: "0.3s" }}></span>
-                  </div>
-                </div>
-              )}
+              {isTyping && <div className="text-[10px] text-slate-400 animate-pulse px-2">Strategist analyzing...</div>}
             </div>
-
-            {showSave && !isTyping && (
-              <div className="px-4 pb-2 bg-white border-t">
-                <div className="mt-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                  <div className="text-xs font-bold text-[#1D3A5F]">💾 Save this plan summary?</div>
-                  <div className="text-[11px] text-slate-500 mt-1">
-                    Optional: add your email to send a copy. (No pressure — you can skip this.)
-                  </div>
-                  <div className="flex gap-2 mt-2">
-                    <input
-                      value={saveEmail}
-                      onChange={(e) => setSaveEmail(e.target.value)}
-                      placeholder="📩 Optional email (for your copy)"
-                      className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#C29D6F]/40"
-                    />
-                    <button
-                      onClick={saveCurrentPlan}
-                      className="px-4 py-2 rounded-xl bg-[#C29D6F] text-white text-xs font-bold hover:opacity-90"
-                    >
-                      ✅ Save
+            <div className="p-4 bg-white border-t flex flex-col gap-2">
+               <div className="flex overflow-x-auto gap-2 pb-2 no-scrollbar">
+                  {["Rule of 72", "Living Benefits", "Tax Buckets", "DIME Method"].map(tag => (
+                    <button key={tag} onClick={() => handleSend(tag)} className="whitespace-nowrap px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-[#1D3A5F] border border-slate-200">
+                      {tag}
                     </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="p-4 border-t bg-white shrink-0">
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="💬 Ask a planning question..."
-                  className="flex-1 bg-slate-100 px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C29D6F]/50"
-                />
-                <button
-                  onClick={() => handleSend()}
-                  disabled={isTyping || !input.trim()}
-                  className="w-12 bg-[#1D3A5F] text-white rounded-xl shadow-md hover:bg-[#152a45] active:scale-95 transition-all flex items-center justify-center disabled:opacity-50"
-                  aria-label="Send message"
-                >
-                  ➡️
-                </button>
-              </div>
-
-              {savedToast && (
-                <div className="mt-2 text-[11px] text-emerald-700 font-semibold">
-                  ✅ Saved locally
-                </div>
-              )}
-
-              <p className="text-[10px] text-slate-400 mt-3 leading-relaxed">
-                Educational information only. No individualized financial, tax, or legal advice is provided here. Policy features vary by carrier and product.
-              </p>
+                  ))}
+               </div>
+               <div className="flex gap-2">
+                  <input id="chatInput" placeholder="Ask a strategy question..." className="flex-1 bg-slate-100 p-3 rounded-xl text-sm outline-none border focus:border-[#C29D6F]" onKeyDown={(e)=>e.key==='Enter' && handleSend(e.target.value)} />
+                  <button onClick={() => handleSend(document.getElementById('chatInput').value)} className="bg-[#1D3A5F] text-white px-5 rounded-xl font-bold">➡️</button>
+               </div>
             </div>
           </div>
         );
       };
 
-      // --- MAIN APP ---
-      const App = () => {
-        const [showAssistant, setShowAssistant] = useState(false);
-        const [assistantQuery, setAssistantQuery] = useState(null);
-        const [selectedService, setSelectedService] = useState(null);
-        const [copied, setCopied] = useState(false);
-
-        const handleCopyLink = () => {
-          navigator.clipboard.writeText(window.location.href);
-          setCopied(true);
-          setTimeout(() => setCopied(false), 2000);
-        };
-
-        const handleSaveContact = () => {
-          const vcardRows = [
-            "BEGIN:VCARD",
-            "VERSION:3.0",
-            `FN:${APP_DATA.name}`,
-            `ORG:${APP_DATA.company}`,
-            `TITLE:${APP_DATA.title}`,
-            `TEL;TYPE=WORK,VOICE:${APP_DATA.phone}`,
-            `EMAIL;TYPE=WORK,INTERNET:${APP_DATA.email}`,
-            `URL:${APP_DATA.links.main}`,
-            "END:VCARD"
-          ];
-          const blob = new Blob([vcardRows.join("\n")], { type: "text/vcard" });
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(blob);
-          link.download = "Latimore_Legacy.vcf";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        };
-
+      const QRCodeModal = ({ onClose }) => {
         useEffect(() => {
-          const anyModalOpen = showAssistant || !!selectedService;
-          document.body.style.overflow = anyModalOpen ? "hidden" : "";
-          return () => { document.body.style.overflow = ""; };
-        }, [showAssistant, selectedService]);
+          new QRCode(document.getElementById("qrcode"), {
+            text: APP_DATA.links.main,
+            width: 200,
+            height: 200,
+            colorDark : "#1D3A5F",
+            colorLight : "#ffffff",
+          });
+        }, []);
+        return (
+          <div className="fixed inset-0 z-50 bg-[#1D3A5F]/90 backdrop-blur-md flex items-center justify-center p-6" onClick={onClose}>
+            <div className="bg-white p-8 rounded-[3rem] text-center animate-slide-up" onClick={e=>e.stopPropagation()}>
+              <h3 className="font-black text-[#1D3A5F] mb-2 uppercase tracking-widest text-sm">Share My Legacy Card</h3>
+              <div id="qrcode" className="mx-auto border-8 border-slate-50 p-2 rounded-2xl mb-4"></div>
+              <p className="text-[10px] text-slate-400 font-bold uppercase">Scan to save contact info</p>
+              <button onClick={onClose} className="mt-6 w-full py-3 bg-slate-100 rounded-xl text-[#1D3A5F] font-black text-xs">CLOSE</button>
+            </div>
+          </div>
+        );
+      };
 
-        const openAssistantWith = (query) => {
-          setAssistantQuery(query || null);
-          setShowAssistant(true);
+      // --- 3. MAIN APP ---
+
+      const App = () => {
+        const [view, setView] = useState(null); // 'ai', 'qr'
+        const [query, setQuery] = useState(null);
+
+        const openStrategy = (topic) => {
+          setQuery(topic);
+          setView('ai');
         };
 
         return (
-          <div className="min-h-screen flex flex-col items-center sm:py-10 selection:bg-[#C29D6F]/30">
-            <div className="w-full max-w-[440px] bg-white sm:rounded-[3rem] shadow-2xl overflow-hidden relative sm:border border-slate-200 min-h-screen sm:min-h-[800px]">
-
-              {/* Banner */}
-              <div className="w-full h-80 relative flex items-center justify-center overflow-hidden bg-[#1D3A5F]">
-                <img src={APP_DATA.bannerUrl} alt="Banner" className="w-full h-full object-cover opacity-90" />
-                {/* IMPORTANT: pointer-events-none so clicks/taps work */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1D3A5F]/90 to-transparent pointer-events-none" />
-                <div className="absolute bottom-0 w-full h-1.5 bg-[#C29D6F] pointer-events-none" />
+          <div className="min-h-screen flex flex-col items-center sm:py-10 bg-slate-100">
+            <div className="w-full max-w-[440px] bg-white sm:rounded-[3rem] shadow-2xl relative overflow-visible border border-slate-200">
+              
+              {/* Header / Origin Story */}
+              <div className="w-full h-72 relative bg-[#1D3A5F] sm:rounded-t-[3rem] overflow-hidden">
+                <img src="https://jackson1989-design.github.io/latimore-life-legacy-site/hero.jpg" className="w-full h-full object-cover opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1D3A5F] via-[#1D3A5F]/20 to-transparent" />
+                <div className="absolute bottom-6 px-8">
+                  <p className="text-[#C29D6F] text-[10px] font-black uppercase tracking-[0.3em] mb-1">Founded on Survival</p>
+                  <h2 className="text-white text-xs font-medium italic leading-relaxed opacity-90">
+                    "My life was saved by an AED because someone else planned ahead. I build legacies so your family never has to scramble."
+                  </h2>
+                </div>
               </div>
 
               {/* Profile */}
-              <div className="text-center px-6 -mt-20 relative z-10 pb-8">
-                <div className="w-32 h-32 mx-auto rounded-full bg-white p-1 shadow-xl mb-4">
-                  <div className="w-full h-full rounded-full bg-[#1D3A5F] flex items-center justify-center text-3xl overflow-hidden text-white font-black tracking-wider">
-                    JL
-                  </div>
+              <div className="text-center px-6 -mt-16 relative z-10">
+                <div className="w-32 h-32 mx-auto rounded-full bg-white p-1 shadow-2xl mb-4 border-4 border-white">
+                  <div className="w-full h-full rounded-full bg-[#1D3A5F] flex items-center justify-center text-3xl text-white font-black">JL</div>
+                </div>
+                <h1 className="text-2xl font-black text-[#1D3A5F] tracking-tighter">{APP_DATA.name}</h1>
+                <p className="text-[#C29D6F] font-bold text-[10px] uppercase tracking-[0.2em] mt-1">{APP_DATA.title}</p>
+                <p className="text-slate-400 text-[10px] mt-1">{APP_DATA.license}</p>
+              </div>
+
+              {/* ACTION FUNNEL */}
+              <div className="px-6 py-8 space-y-4">
+                <a href={APP_DATA.links.scorecard} target="_blank" className="flex flex-col items-center justify-center w-full py-5 bg-[#C29D6F] text-white rounded-3xl shadow-xl hover:scale-[1.02] transition-all">
+                  <span className="font-black text-sm uppercase tracking-widest">🏆 Get Your Financial Score</span>
+                  <span className="text-[9px] font-bold opacity-80 uppercase mt-1 tracking-tighter">Official Assessment Tool</span>
+                </a>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <a href={APP_DATA.links.portal} target="_blank" className="flex items-center justify-center py-4 bg-[#1D3A5F] text-white rounded-2xl font-bold text-xs shadow-lg">Planning Portal</a>
+                  <button onClick={() => setView('qr')} className="flex items-center justify-center py-4 bg-slate-800 text-white rounded-2xl font-bold text-xs shadow-lg">Share Card</button>
                 </div>
 
-                <h1 className="text-2xl font-black text-[#1D3A5F] tracking-tight">{APP_DATA.name}</h1>
-                <p className="text-[#C29D6F] font-bold text-xs uppercase tracking-widest mt-1">{APP_DATA.title}</p>
-                <p className="text-slate-500 text-xs mt-1">{APP_DATA.company}</p>
-                <p className="text-slate-400 text-[11px] mt-2">{APP_DATA.license}</p>
-
-                <div className="flex justify-center gap-3 mt-6 flex-wrap">
-                  <SocialBtn href={APP_DATA.links.linkedin} label="💼 LinkedIn" />
-                  <SocialBtn href={APP_DATA.links.facebook} label="📘 Facebook" />
-                  <SocialBtn href={APP_DATA.links.instagram} label="📸 Instagram" />
-                  <SocialBtn href={APP_DATA.links.main} label="🌐 Website" />
-                </div>
-
-                <div className="mt-8 mx-2 px-6 py-6 bg-slate-50 rounded-3xl border border-slate-100 relative">
-                  <span className="absolute -top-3 left-4 text-[#C29D6F] text-5xl font-serif pointer-events-none">"</span>
-                  <p className="text-[#1D3A5F] text-sm leading-relaxed italic font-medium relative z-10">
-                    {APP_DATA.bio}
-                  </p>
-                  <p className="text-slate-500 text-xs mt-4 font-semibold">{APP_DATA.tagline}</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <a href={`tel:${APP_DATA.phone.replace(/\D/g,'')}`} className="py-4 border-2 border-slate-100 rounded-2xl text-[#1D3A5F] font-black text-xs text-center">📞 CALL</a>
+                  <a href={`mailto:${APP_DATA.email}`} className="py-4 border-2 border-slate-100 rounded-2xl text-[#1D3A5F] font-black text-xs text-center">✉️ EMAIL</a>
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="px-6 space-y-3 mb-10">
-                <a
-                  href={`mailto:${APP_DATA.email}`}
-                  className="flex items-center justify-center w-full py-4 bg-[#1D3A5F] text-white rounded-2xl shadow-lg hover:bg-[#152a45] transition-all font-bold text-sm"
-                >
-                  ✉️ Email
-                </a>
-
-                <a
-                  href={`tel:${APP_DATA.phone.replace(/[^\d+]/g, "")}`}
-                  className="flex items-center justify-center w-full py-4 bg-white border border-slate-200 text-[#1D3A5F] rounded-2xl shadow-sm hover:bg-slate-50 transition-all font-bold text-sm"
-                >
-                  📞 Call
-                </a>
-
-                <a
-                  href={APP_DATA.links.booking}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-full py-4 bg-[#C29D6F] text-white rounded-2xl shadow-lg hover:opacity-90 transition-all font-bold text-sm"
-                >
-                  📅 Schedule Review
-                </a>
-
-                <div className="grid grid-cols-2 gap-3 pt-1">
-                  <button
-                    onClick={handleCopyLink}
-                    className="flex items-center justify-center py-3 border border-slate-200 rounded-xl text-slate-600 font-semibold text-xs hover:bg-slate-50"
-                  >
-                    {copied ? "✅ Copied" : "🔗 Copy Link"}
-                  </button>
-                  <button
-                    onClick={handleSaveContact}
-                    className="flex items-center justify-center py-3 bg-slate-800 text-white rounded-xl shadow-md font-semibold text-xs hover:bg-slate-900"
-                  >
-                    📇 Save Contact
-                  </button>
-                </div>
-
-                <p className="text-[10px] text-slate-400 leading-relaxed pt-2">
-                  Educational information and planning support. Not legal or tax advice. Product availability, terms, and features vary by carrier and policy.
-                </p>
-              </div>
-
-              {/* Services */}
-              <div className="px-4 mb-24">
-                <div className="bg-slate-50 rounded-[2.5rem] p-6 border border-slate-100 shadow-inner">
-                  <h2 className="text-[#1D3A5F] text-center font-black text-[10px] uppercase tracking-[0.25em] mb-8 pb-4 border-b border-[#C29D6F]/20">
-                    🧰 Services
-                  </h2>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    {APP_DATA.services.map((service, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setSelectedService(service)}
-                        className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center hover:border-[#C29D6F] transition-all h-32 justify-center"
-                      >
-                        <div className="w-11 h-11 rounded-2xl bg-slate-100 flex items-center justify-center text-[#1D3A5F] font-black text-sm mb-2">
-                          {service.icon}
-                        </div>
-                        <span className="text-[10px] font-bold text-[#1D3A5F] uppercase leading-tight">
-                          {service.title}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
+              {/* STRATEGIC SERVICES (Education Triggers) */}
+              <div className="px-6 mb-24">
+                <div className="bg-slate-50 rounded-[2.5rem] p-6 border border-slate-100">
+                   <h2 className="text-[#1D3A5F] text-center font-black text-[10px] uppercase tracking-[0.25em] mb-6">Master Your Money</h2>
+                   <div className="grid grid-cols-2 gap-3">
+                      {Object.keys(KNOWLEDGE_BASE).map(service => (
+                        <button key={service} onClick={() => openStrategy(service)} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center hover:border-[#C29D6F] transition-all active:scale-95">
+                           <div className="text-[10px] font-black text-[#1D3A5F] uppercase leading-tight">{service}</div>
+                           <div className="text-[8px] text-slate-400 mt-2 font-bold uppercase tracking-tighter">Learn Strategy →</div>
+                        </button>
+                      ))}
+                   </div>
                 </div>
               </div>
 
               {/* Floating Chat */}
-              <button
-                onClick={() => openAssistantWith(null)}
-                className="absolute bottom-6 right-6 bg-[#1D3A5F] px-5 py-4 rounded-full text-white shadow-2xl hover:scale-105 transition-all z-20 border-2 border-[#C29D6F]"
-                aria-label="Open assistant"
-              >
-                <span className="text-xs font-black tracking-widest">💬 ASSIST</span>
-              </button>
+              <div className="sticky bottom-6 flex justify-end px-6 z-20 pointer-events-none pb-6">
+                <button onClick={() => setView('ai')} className="bg-[#1D3A5F] px-6 py-4 rounded-full text-white shadow-2xl border-2 border-[#C29D6F] pointer-events-auto flex items-center gap-2">
+                  <span className="text-xs font-black tracking-widest">💬 STRATEGY ENGINE</span>
+                </button>
+              </div>
 
-              {/* Service Modal */}
-              {selectedService && (
-                <div
-                  className="absolute inset-0 z-40 flex items-center justify-center p-4 bg-[#1D3A5F]/60 backdrop-blur-sm"
-                  onClick={() => setSelectedService(null)}
-                >
-                  <div
-                    className="bg-white w-full max-w-sm rounded-[2rem] p-8 relative animate-in"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <button
-                      onClick={() => setSelectedService(null)}
-                      className="absolute top-6 right-6 p-2 bg-slate-100 rounded-full text-slate-600"
-                      aria-label="Close service"
-                    >
-                      ×
-                    </button>
-
-                    <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-[#1D3A5F] font-black text-sm mb-4">
-                      {selectedService.icon}
-                    </div>
-
-                    <h3 className="text-[#1D3A5F] font-black text-xl mb-2">{selectedService.title}</h3>
-                    <p className="text-slate-600 text-sm leading-relaxed">{selectedService.description}</p>
-
-                    <div className="mt-6 grid grid-cols-2 gap-3">
-                      <a
-                        href={APP_DATA.links.booking}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="py-3 rounded-xl bg-[#C29D6F] text-white font-bold text-xs text-center hover:opacity-90"
-                      >
-                        📅 Book Review
-                      </a>
-
-                      <button
-                        onClick={() => {
-                          const q = `Explain ${selectedService.title} in simple terms and what to consider.`;
-                          setSelectedService(null);
-                          openAssistantWith(q);
-                        }}
-                        className="py-3 rounded-xl border border-slate-200 text-[#1D3A5F] font-bold text-xs hover:bg-slate-50"
-                      >
-                        🤖 Ask Assistant
-                      </button>
-                    </div>
-
-                    <p className="text-[10px] text-slate-400 mt-5 leading-relaxed">
-                      Educational information only. Not individualized financial, tax, or legal advice. Product features vary by carrier and policy.
-                    </p>
+              {/* MODALS */}
+              {view === 'ai' && (
+                <div className="fixed inset-0 z-50 bg-[#1D3A5F]/60 backdrop-blur-sm p-4 flex items-center justify-center" onClick={() => setView(null)}>
+                  <div className="bg-white w-full max-w-sm h-[600px] rounded-[3rem] overflow-hidden shadow-2xl animate-slide-up" onClick={e=>e.stopPropagation()}>
+                    <Assistant onClose={() => {setView(null); setQuery(null);}} initialQuery={query} />
                   </div>
                 </div>
               )}
 
-              {/* Assistant Modal */}
-              {showAssistant && (
-                <div
-                  className="absolute inset-0 z-50 bg-[#1D3A5F]/60 backdrop-blur-sm p-4 flex items-center justify-center"
-                  onClick={() => setShowAssistant(false)}
-                >
-                  <div
-                    className="bg-white w-full max-w-sm h-[600px] rounded-[2rem] overflow-hidden shadow-2xl animate-in"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Assistant
-                      initialQuery={assistantQuery}
-                      onClose={() => {
-                        setShowAssistant(false);
-                        setAssistantQuery(null);
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
+              {view === 'qr' && <QRCodeModal onClose={() => setView(null)} />}
+
             </div>
+            <p className="text-[10px] text-slate-400 mt-8 font-bold uppercase tracking-widest">#TheBeatGoesOn</p>
           </div>
         );
       };
 
-      const root = ReactDOM.createRoot(document.getElementById("root"));
-      root.render(<App />);
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
     </script>
   </body>
 </html>
