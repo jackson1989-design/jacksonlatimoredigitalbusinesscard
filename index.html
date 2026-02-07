@@ -38,7 +38,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-      const { useState, useEffect, useRef, useCallback, useMemo } = React;
+      const { useState, useEffect, useRef, useCallback } = React;
 
       // --- DATA & CONFIG ---
       const APP_DATA = {
@@ -65,7 +65,7 @@
           { title: "Asset Protection", icon: "AP", description: "Strategies designed to limit downside exposure and support disciplined planning." },
           { title: "Education Funding", icon: "EF", description: "Funding approaches focused on flexibility, control, and tax efficiency concepts." },
           { title: "Debt Management", icon: "DM", description: "Cash-flow-based payoff sequencing to reduce interest drag and improve liquidity (results depend on income, rates, and consistency)." },
-          { title: "Life Insurance", icon: "LI", description: "Coverage designed to create liquidity for beneficiaries and protect income." },
+          { title: "Life Insurance", icon: "LI", description: "Coverage designed to create immediate liquidity for beneficiaries and protect income." },
           { title: "Living Benefits", icon: "LB", description: "General education on riders that may allow early access to benefits under qualifying events (terms vary by policy)." },
           { title: "Estate Planning Support", icon: "EP", description: "Coordination support (attorney-led for legal documents) and legacy planning concepts." },
           { title: "Indexed Strategies", icon: "IS", description: "Index-linked product education; features vary by carrier and policy, including caps/spreads/participation." },
@@ -165,176 +165,174 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
       };
 
       // --- EXPANDED KNOWLEDGE BASE (answer-first; booking only when appropriate) ---
-      // Each entry can include: headline, keyPoints, disclosure, nextStep (in-chat), bookingWhen (array of triggers)
       const KNOWLEDGE_BASE = [
         {
           id: "workplace_gap",
           keywords: ["work", "employer", "job", "group life", "workplace coverage", "portable"],
           answer: {
-            headline: "Workplace life insurance: helpful start, but often not the full plan",
+            headline: "🏢 Workplace life insurance: helpful start, but often not the full plan",
             keyPoints: [
               "Many employer plans are limited (often 1–2x salary) and may not follow you if you change jobs.",
               "It can be smart to keep workplace coverage and add an individual policy to fill the gap and stay portable.",
               "Your plan should match real obligations: mortgage/rent, childcare, debt, and income replacement."
             ],
-            disclosure: "Educational info only. Coverage features vary by policy and carrier.",
-            nextStep: "Next step: about how much coverage do you have at work (1x salary, 2x salary, or unknown), and do you have a mortgage?"
+            disclosure: "ℹ️ Educational info only. Coverage features vary by policy and carrier.",
+            nextStep: "✅ Next step: about how much coverage do you have at work (1x salary, 2x salary, or unknown), and do you have a mortgage?"
           }
         },
         {
           id: "coverage_amount",
           keywords: ["how much", "coverage", "need", "amount", "life insurance amount"],
           answer: {
-            headline: "How much life insurance is “enough”? A practical tri-county framework",
+            headline: "🧮 How much life insurance is “enough”? A practical framework",
             keyPoints: [
               "Start with what you’re protecting: (1) income for 10–20 years, (2) mortgage/rent payoff, (3) childcare/education, (4) debts, (5) final costs.",
               "If budget is tight, prioritize the biggest stability risk first (usually income + housing).",
               "We can build a rough range right here without running an application."
             ],
-            disclosure: "Educational info only. Not individualized financial advice.",
-            nextStep: "Next step: tell me (A) your household income, (B) years left on mortgage/rent plan, and (C) number of dependents."
+            disclosure: "ℹ️ Educational info only. Not individualized financial advice.",
+            nextStep: "✅ Next step: tell me (A) household income, (B) years left on mortgage/rent plan, and (C) number of dependents."
           }
         },
         {
           id: "term_vs_perm",
           keywords: ["term", "permanent", "whole life", "universal life", "term vs", "difference", "which is better"],
           answer: {
-            headline: "Term vs Permanent life insurance — how to choose without overcomplicating it",
+            headline: "🛡️ Term vs Permanent life insurance — how to choose without overcomplicating it",
             keyPoints: [
               "Term = coverage for a set period (often best for the ‘big responsibility years’ like mortgage/kids).",
               "Permanent = longer-term coverage; some types can build cash value, but costs/charges matter.",
               "A common approach: start with term to protect the basics, then add permanent only if it fits goals and budget."
             ],
-            disclosure: "Educational info only. Product terms and costs vary by carrier and underwriting class.",
-            nextStep: "Next step: are you mainly protecting your income/mortgage for the next 20–30 years, or planning for lifetime legacy?"
+            disclosure: "ℹ️ Educational info only. Product terms and costs vary by carrier and underwriting class.",
+            nextStep: "✅ Next step: are you mainly protecting income/mortgage for the next 20–30 years, or planning for lifetime legacy?"
           }
         },
         {
           id: "mortgage_protection",
           keywords: ["mortgage", "home", "house", "protect the house", "keep the house", "mortgage protection"],
           answer: {
-            headline: "Mortgage protection: designed to keep the home stable for the family",
+            headline: "🏠 Mortgage protection: designed to help keep the home stable",
             keyPoints: [
               "Typically structured as term life aligned with the mortgage timeline (10/20/30 years).",
               "Goal: enough benefit to protect housing stability and reduce financial shock.",
-              "Beneficiary/ownership should match the household plan (who needs the funds to keep the home)."
+              "Beneficiary/ownership should match the household plan."
             ],
-            disclosure: "Educational info only. Features vary by policy/carrier.",
-            nextStep: "Next step: about how many years remain on your mortgage (10/20/30) and what’s the approximate balance?"
+            disclosure: "ℹ️ Educational info only. Features vary by policy/carrier.",
+            nextStep: "✅ Next step: about how many years remain (10/20/30) and the approximate balance?"
           }
         },
         {
           id: "living_benefits",
           keywords: ["living benefits", "critical illness", "chronic illness", "terminal", "accelerated", "rider"],
           answer: {
-            headline: "Living benefits: a policy feature that may help during a serious health event",
+            headline: "❤️ Living benefits: a feature that may help during a serious health event",
             keyPoints: [
               "Some life policies include riders that may allow early access to benefits under defined qualifying events.",
-              "Definitions and payout rules vary by carrier and contract—always review the rider language.",
-              "It’s not a replacement for health insurance; it’s a separate feature with specific terms."
+              "Definitions and payout rules vary—review the rider language.",
+              "Not a replacement for health insurance; it’s a separate feature with specific terms."
             ],
-            disclosure: "Educational info only. Rider availability varies by product and underwriting.",
-            nextStep: "Next step: are you thinking about living benefits mainly for household stability (bills/income), or business continuity?"
+            disclosure: "ℹ️ Educational info only. Rider availability varies by product and underwriting.",
+            nextStep: "✅ Next step: are you thinking about living benefits mainly for household stability or business continuity?"
           }
         },
         {
           id: "pricing",
           keywords: ["cost", "price", "quote", "premium", "rates", "how much does it cost", "expensive"],
           answer: {
-            headline: "What drives pricing (and how to estimate without pressure)",
+            headline: "💲 What drives pricing (and how to estimate without pressure)",
             keyPoints: [
               "Pricing depends on age range, health history, tobacco status, state, coverage amount, and product type.",
-              "Underwriting class can materially change the premium when underwriting applies.",
-              "We can do a rough estimate here, then you can choose whether to run a formal quote."
+              "Underwriting class can materially change premiums when underwriting applies.",
+              "We can estimate here, then you can decide whether to run a formal quote."
             ],
-            disclosure: "Educational info only. Quotes aren’t binding and depend on eligibility/underwriting.",
-            nextStep: "Next step: share your age range (25–34/35–44/45–54/55–64/65+), tobacco yes/no, and the coverage amount you’re considering."
-          },
-          bookingWhen: ["apply", "application", "start", "enroll", "run a quote", "get a quote"]
+            disclosure: "ℹ️ Educational info only. Quotes aren’t binding and depend on eligibility/underwriting.",
+            nextStep: "✅ Next step: share age range (25–34/35–44/45–54/55–64/65+), tobacco yes/no, and target coverage amount."
+          }
         },
         {
           id: "iul_basics",
           keywords: ["iul", "indexed universal life", "cash value", "cap", "floor", "participation", "spread", "index"],
           answer: {
-            headline: "IUL (Indexed Universal Life): what it is and what it isn’t",
+            headline: "📈 IUL (Indexed Universal Life): what it is and what it isn’t",
             keyPoints: [
               "IUL is permanent life insurance that may build cash value using index-linked crediting (not a direct stock investment).",
               "Index crediting may use caps/participation/spreads; policy charges still apply even in flat markets.",
-              "Loans/withdrawals can reduce values and change performance; design and funding level matter."
+              "Loans/withdrawals can reduce values; design and funding level matter."
             ],
-            disclosure: "Educational info only. Not tax/legal advice. Product terms vary by carrier and policy.",
-            nextStep: "Next step: is your interest mostly lifetime protection, cash value concepts, or retirement income planning?"
+            disclosure: "ℹ️ Educational info only. Not tax/legal advice. Product terms vary by carrier and policy.",
+            nextStep: "✅ Next step: is your interest lifetime protection, cash value concepts, or retirement income planning?"
           }
         },
         {
           id: "fia_basics",
           keywords: ["annuity", "fia", "fixed indexed annuity", "indexed annuity", "income rider", "lifetime income"],
           answer: {
-            headline: "Fixed Indexed Annuity (FIA): principal protection + index-linked crediting (contract details matter)",
+            headline: "🧾 Fixed Indexed Annuity (FIA): principal protection + index-linked crediting",
             keyPoints: [
               "An FIA credits interest linked to an index with limits; it’s not a stock investment.",
               "Most contracts have surrender periods and liquidity rules—typically long-term money.",
               "Income features (when elected) are contract-based and depend on terms and rider costs."
             ],
-            disclosure: "Educational info only. Features, surrender periods, and rider costs vary by product.",
-            nextStep: "Next step: are you looking for accumulation, or specifically for predictable lifetime income?"
+            disclosure: "ℹ️ Educational info only. Features, surrender periods, and rider costs vary by product.",
+            nextStep: "✅ Next step: are you looking for accumulation, or specifically for predictable lifetime income?"
           }
         },
         {
           id: "debt_strategy",
           keywords: ["debt", "credit card", "loan", "payoff", "interest", "student loan"],
           answer: {
-            headline: "Debt strategy: reduce interest drag while protecting cashflow",
+            headline: "📉 Debt strategy: reduce interest drag while protecting cashflow",
             keyPoints: [
-              "The goal is to lower interest waste without draining emergency reserves.",
+              "Goal: lower interest waste without draining emergency reserves.",
               "Payoff sequencing often prioritizes highest-rate debt while keeping minimums elsewhere.",
               "Small changes (payment timing, budgeting, refinance evaluation) can improve control."
             ],
-            disclosure: "Educational info only. Not legal, tax, or credit counseling advice.",
-            nextStep: "Next step: which is biggest right now—credit cards, auto, student loans, or mortgage?"
+            disclosure: "ℹ️ Educational info only. Not legal, tax, or credit counseling advice.",
+            nextStep: "✅ Next step: which is biggest right now—credit cards, auto, student loans, or mortgage?"
           }
         },
         {
           id: "final_expense",
           keywords: ["final expense", "funeral", "burial", "cremation", "end of life"],
           answer: {
-            headline: "Final expense coverage: planning for dignity and fewer financial surprises",
+            headline: "🕊️ Final expense coverage: planning for dignity and fewer surprises",
             keyPoints: [
               "Typically smaller permanent coverage meant to help with funeral and final costs.",
               "Helps loved ones avoid scrambling or taking on high-interest debt.",
-              "The right amount depends on your preferences and existing savings."
+              "Right amount depends on preferences and existing savings."
             ],
-            disclosure: "Educational info only. Availability varies by health and product.",
-            nextStep: "Next step: are you aiming to cover funeral only, or also leave a small cushion for family expenses?"
+            disclosure: "ℹ️ Educational info only. Availability varies by health and product.",
+            nextStep: "✅ Next step: are you aiming to cover funeral only, or also leave a small cushion for family expenses?"
           }
         },
         {
           id: "business_key_person",
           keywords: ["key person", "buy-sell", "succession", "business", "partner", "executive benefits"],
           answer: {
-            headline: "Business protection: key person + continuity planning in plain language",
+            headline: "🏢 Business protection: key person + continuity planning",
             keyPoints: [
               "Key person coverage can help a business keep operating if a key leader is lost.",
-              "Buy-sell planning sets a clear ownership transition path and funding can create real liquidity.",
-              "The right design depends on revenue dependence, partners, and time horizon."
+              "Buy-sell planning sets a clear ownership transition path and funding can create liquidity.",
+              "Design depends on revenue dependence, partners, and timeline."
             ],
-            disclosure: "Educational info only. Not legal advice; attorney drafts legal agreements.",
-            nextStep: "Next step: is this a solo owner, or do you have partners who would need a clear transition plan?"
+            disclosure: "ℹ️ Educational info only. Not legal advice; attorney drafts legal agreements.",
+            nextStep: "✅ Next step: is this a solo owner, or do you have partners who would need a transition plan?"
           }
         },
         {
           id: "rule_72",
           keywords: ["rule of 72", "72", "doubling", "double", "compound", "compound interest"],
           answer: {
-            headline: "Rule of 72: estimating how quickly money can double",
+            headline: "🧠 Rule of 72: estimating how quickly money can double",
             keyPoints: [
               "Divide 72 by an annual rate to estimate the doubling timeframe.",
               "Example: 6% ≈ 12 years (72 ÷ 6), 9% ≈ 8 years (72 ÷ 9).",
-              "It’s a shortcut for comparisons—not a guarantee.",
+              "Shortcut for comparisons—not a guarantee.",
               "Inflation matters; purchasing power can still fall if inflation is higher than growth."
             ],
-            disclosure: "Educational info only. Actual outcomes depend on product terms, costs, and market conditions.",
-            nextStep: "Next step: are you using this for savings growth, retirement planning, or comparing debt interest?"
+            disclosure: "ℹ️ Educational info only. Outcomes depend on product terms, costs, and market conditions.",
+            nextStep: "✅ Next step: are you using this for savings growth, retirement planning, or comparing debt interest?"
           }
         }
       ];
@@ -354,7 +352,6 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
         for (const kw of entry.keywords || []) {
           const k = normalize(kw);
           if (!k) continue;
-
           if (t.includes(k)) score += Math.min(10, 3 + k.split(" ").length);
           if (k.split(" ").length === 1 && t.split(" ").includes(k)) score += 2;
         }
@@ -372,17 +369,15 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
         const disclosure = a.disclosure ? `\n\n${a.disclosure}` : "";
         const next = a.nextStep ? `\n\n${a.nextStep}` : "";
 
-        // Gentle local grounding (short; not spammy)
-        const local = `\n\n(Quick local note: ${TRI_COUNTY_CONTEXT.split("\n").filter(Boolean)[1] || ""})`;
+        const localLine = "\n\n📍 Local note: In our tri-county area, homeownership and tight monthly budgets make simple, affordable protection plans a smart place to start.";
 
-        // Memory-aware personalization (small)
         const memLineParts = [];
-        if (memory?.protect) memLineParts.push(`protecting: ${memory.protect}`);
-        if (memory?.priority) memLineParts.push(`priority: ${memory.priority}`);
-        if (memory?.ageRange) memLineParts.push(`age range: ${memory.ageRange}`);
-        const memLine = memLineParts.length ? `\n\nWhat I’m tracking so far: ${memLineParts.join(" • ")}.` : "";
+        if (memory?.protect) memLineParts.push(`🔎 Protecting: ${memory.protect}`);
+        if (memory?.priority) memLineParts.push(`🎯 Priority: ${memory.priority}`);
+        if (memory?.ageRange) memLineParts.push(`👤 Age range: ${memory.ageRange}`);
+        const memLine = memLineParts.length ? `\n\n${memLineParts.join(" • ")}` : "";
 
-        return `${a.headline || "Information"}\n\n${bullets}${disclosure}${memLine}${local}${next}`;
+        return `${a.headline || "Information"}\n\n${bullets}${disclosure}${memLine}${localLine}${next}`;
       };
 
       // Booking should be OPTIONAL and only when user is asking for personalization/apply/quote.
@@ -415,7 +410,7 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
         return <span className="whitespace-pre-wrap">{displayedText}</span>;
       };
 
-      // --- SOCIAL BUTTON ---
+      // --- COMPONENT: SOCIAL BUTTON ---
       const SocialBtn = ({ href, label }) => (
         <a
           href={href}
@@ -429,7 +424,6 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
       );
 
       // --- SAVE PLAN (soft lead capture) ---
-      // Stores the saved plan locally; can optionally open email compose.
       const SAVED_PLANS_KEY = "latimore_saved_plans_v1";
       const getSavedPlans = () => {
         try { return JSON.parse(localStorage.getItem(SAVED_PLANS_KEY) || "[]"); }
@@ -441,13 +435,13 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
         localStorage.setItem(SAVED_PLANS_KEY, JSON.stringify(existing.slice(0, 25)));
       };
 
-      // --- COMPONENT: ASSISTANT ---
+      // --- COMPONENT: AI CHAT ASSISTANT ---
       const Assistant = ({ onClose, initialQuery }) => {
         const [messages, setMessages] = useState([
           {
             role: "assistant",
             content:
-              "Hey — I’m the Latimore Life & Legacy assistant. I can explain coverage options in plain language (life insurance, living benefits, mortgage protection, retirement income, and business continuity).\n\nWhat are you trying to protect right now: your family, your home, your income, your retirement, or your business?"
+              "👋 Welcome — I’m the Latimore Life & Legacy assistant.\n\nAsk a question about:\n• 🛡️ Life insurance basics\n• 🏠 Mortgage protection\n• ❤️ Living benefits\n• 🧾 Annuity concepts\n• 📈 IUL basics\n\nI’ll give clear, education-first answers (no pressure)."
           }
         ]);
         const [input, setInput] = useState("");
@@ -464,10 +458,8 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
         }, [messages, isTyping]);
 
         const generateResponse = (userText) => {
-          // analytics
           bumpAnalytics(classifyQuestion(userText));
 
-          // pick best KB entry
           const ranked = KNOWLEDGE_BASE
             .map((entry) => ({ entry, score: scoreEntry(userText, entry) }))
             .sort((a, b) => b.score - a.score);
@@ -477,34 +469,28 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
 
           if (!matched) {
             return (
-              "I can help—pick the closest option and I’ll outline the key considerations:\n\n" +
-              "• Family protection (life insurance basics)\n" +
-              "• Mortgage protection\n" +
-              "• Living benefits (serious illness riders)\n" +
-              "• Retirement income concepts (annuities)\n" +
-              "• IUL basics (cash value life insurance)\n" +
-              "• Business planning (key person / buy-sell)\n\n" +
-              "Reply with one, and tell me what matters most: lowest cost, strongest protection, or flexibility."
+              "✅ I can help—pick the closest option and I’ll outline the key considerations:\n\n" +
+              "• 🛡️ Family protection (life insurance basics)\n" +
+              "• 🏠 Mortgage protection\n" +
+              "• ❤️ Living benefits\n" +
+              "• 🧾 Retirement income concepts (annuities)\n" +
+              "• 📈 IUL basics\n" +
+              "• 🏢 Business planning (key person / buy-sell)\n\n" +
+              "Reply with one, and tell me what matters most: 💲 lowest cost, 🛡️ strongest protection, or 🔄 flexibility."
             );
           }
 
           let response = formatAnswer(matched, memory);
 
-          // Spanish quick summary only when asked
-          if (wantsSpanish(userText)) {
-            response += "\n\n" + spanishSummary();
-          }
+          if (wantsSpanish(userText)) response += "\n\n" + spanishSummary();
 
-          // Booking suggestion ONLY when appropriate
           if (shouldSuggestBooking(userText)) {
-            response += `\n\nIf you want a personalized plan (amount, options, and next steps), you can schedule a no-pressure review here:\n${APP_DATA.links.booking}`;
+            response += `\n\n📅 If you want a personalized plan (amount, options, and next steps), you can schedule a no-pressure review here:\n${APP_DATA.links.booking}`;
           } else {
-            response += "\n\nNext best step (in chat): share your age range and what matters most (lowest cost, strongest protection, or flexibility).";
+            response += "\n\n👉 Next best step (in chat): share your age range and what matters most (💲 lowest cost, 🛡️ strongest protection, 🔄 flexibility).";
           }
 
-          // Soft lead capture prompt
-          response += "\n\nIf you’d like, I can save a quick summary of this plan for you.";
-
+          response += "\n\n💾 Want me to save a quick summary of this plan for you?";
           return response;
         };
 
@@ -516,7 +502,6 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
             setInput("");
             setMessages((prev) => [...prev, { role: "user", content: text }]);
 
-            // update memory
             setMemory((prev) => updateMemory({ ...prev }, text));
 
             setIsTyping(true);
@@ -526,7 +511,7 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
               const responseText = generateResponse(text);
               setMessages((prev) => [...prev, { role: "assistant", content: responseText, type: "typewriter" }]);
               setIsTyping(false);
-              setShowSave(true); // show opt-in save after assistant answers
+              setShowSave(true);
             }, 550);
           },
           [input, isTyping, memory]
@@ -539,11 +524,8 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
           }
         }, [initialQuery, handleSend]);
 
-        // ESC to close
         useEffect(() => {
-          const onKey = (e) => {
-            if (e.key === "Escape") onClose();
-          };
+          const onKey = (e) => { if (e.key === "Escape") onClose(); };
           window.addEventListener("keydown", onKey);
           return () => window.removeEventListener("keydown", onKey);
         }, [onClose]);
@@ -552,14 +534,8 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
           const lastAssistant = [...messages].reverse().find(m => m.role === "assistant");
           if (!lastAssistant) return;
 
-          const plan = {
-            memory,
-            summary: lastAssistant.content,
-            source: "assistant",
-          };
-          savePlanLocal(plan);
+          savePlanLocal({ memory, summary: lastAssistant.content, source: "assistant" });
 
-          // optional email (opens user's mail client; no server)
           if (saveEmail.trim()) {
             const subject = encodeURIComponent("Saved Plan Summary • Latimore Life & Legacy");
             const body = encodeURIComponent(
@@ -580,14 +556,14 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
             .sort(([,v1],[,v2]) => (v2||0)-(v1||0))
             .map(([k,v]) => `${k}: ${v}`)
             .join("\n");
-          alert(lines ? `Anonymous question categories (this device):\n\n${lines}` : "No analytics recorded yet on this device.");
+          alert(lines ? `📊 Anonymous question categories (this device):\n\n${lines}` : "No analytics recorded yet on this device.");
         };
 
         return (
           <div className="flex flex-col h-full bg-slate-50">
             <div className="p-5 bg-[#1D3A5F] text-white flex justify-between items-center shrink-0">
               <div className="flex items-center space-x-3">
-                <div className="bg-[#C29D6F] px-3 py-2 rounded-lg text-xs font-black tracking-widest">AI</div>
+                <div className="bg-[#C29D6F] px-3 py-2 rounded-lg text-xs font-black tracking-widest">🤖 AI</div>
                 <div>
                   <h3 className="font-bold text-base">Legacy Advisor</h3>
                   <p className="text-[10px] text-[#C29D6F] font-bold uppercase tracking-widest">Education-First Assistant</p>
@@ -599,7 +575,7 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                   className="text-[10px] px-3 py-2 rounded-full bg-white/10 hover:bg-white/15"
                   title="View anonymous analytics (this device)"
                 >
-                  Analytics
+                  📊 Analytics
                 </button>
                 <button
                   onClick={onClose}
@@ -641,11 +617,10 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
               )}
             </div>
 
-            {/* Soft lead capture (Save plan) */}
             {showSave && !isTyping && (
               <div className="px-4 pb-2 bg-white border-t">
                 <div className="mt-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                  <div className="text-xs font-bold text-[#1D3A5F]">Save this plan summary?</div>
+                  <div className="text-xs font-bold text-[#1D3A5F]">💾 Save this plan summary?</div>
                   <div className="text-[11px] text-slate-500 mt-1">
                     Optional: add your email to send a copy. (No pressure — you can skip this.)
                   </div>
@@ -653,14 +628,14 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                     <input
                       value={saveEmail}
                       onChange={(e) => setSaveEmail(e.target.value)}
-                      placeholder="Optional email (for your copy)"
+                      placeholder="📩 Optional email (for your copy)"
                       className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#C29D6F]/40"
                     />
                     <button
                       onClick={saveCurrentPlan}
                       className="px-4 py-2 rounded-xl bg-[#C29D6F] text-white text-xs font-bold hover:opacity-90"
                     >
-                      Save
+                      ✅ Save
                     </button>
                   </div>
                 </div>
@@ -674,7 +649,7 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="Ask a planning question..."
+                  placeholder="💬 Ask a planning question..."
                   className="flex-1 bg-slate-100 px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C29D6F]/50"
                 />
                 <button
@@ -683,13 +658,13 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                   className="w-12 bg-[#1D3A5F] text-white rounded-xl shadow-md hover:bg-[#152a45] active:scale-95 transition-all flex items-center justify-center disabled:opacity-50"
                   aria-label="Send message"
                 >
-                  →
+                  ➡️
                 </button>
               </div>
 
               {savedToast && (
                 <div className="mt-2 text-[11px] text-emerald-700 font-semibold">
-                  Saved locally ✅
+                  ✅ Saved locally
                 </div>
               )}
 
@@ -753,8 +728,9 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
               {/* Banner */}
               <div className="w-full h-80 relative flex items-center justify-center overflow-hidden bg-[#1D3A5F]">
                 <img src={APP_DATA.bannerUrl} alt="Banner" className="w-full h-full object-cover opacity-90" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1D3A5F]/90 to-transparent" />
-                <div className="absolute bottom-0 w-full h-1.5 bg-[#C29D6F]" />
+                {/* IMPORTANT: pointer-events-none so clicks/taps work */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1D3A5F]/90 to-transparent pointer-events-none" />
+                <div className="absolute bottom-0 w-full h-1.5 bg-[#C29D6F] pointer-events-none" />
               </div>
 
               {/* Profile */}
@@ -771,14 +747,14 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                 <p className="text-slate-400 text-[11px] mt-2">{APP_DATA.license}</p>
 
                 <div className="flex justify-center gap-3 mt-6 flex-wrap">
-                  <SocialBtn href={APP_DATA.links.linkedin} label="LinkedIn" />
-                  <SocialBtn href={APP_DATA.links.facebook} label="Facebook" />
-                  <SocialBtn href={APP_DATA.links.instagram} label="Instagram" />
-                  <SocialBtn href={APP_DATA.links.main} label="Website" />
+                  <SocialBtn href={APP_DATA.links.linkedin} label="💼 LinkedIn" />
+                  <SocialBtn href={APP_DATA.links.facebook} label="📘 Facebook" />
+                  <SocialBtn href={APP_DATA.links.instagram} label="📸 Instagram" />
+                  <SocialBtn href={APP_DATA.links.main} label="🌐 Website" />
                 </div>
 
                 <div className="mt-8 mx-2 px-6 py-6 bg-slate-50 rounded-3xl border border-slate-100 relative">
-                  <span className="absolute -top-3 left-4 text-[#C29D6F] text-5xl font-serif">"</span>
+                  <span className="absolute -top-3 left-4 text-[#C29D6F] text-5xl font-serif pointer-events-none">"</span>
                   <p className="text-[#1D3A5F] text-sm leading-relaxed italic font-medium relative z-10">
                     {APP_DATA.bio}
                   </p>
@@ -792,7 +768,14 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                   href={`mailto:${APP_DATA.email}`}
                   className="flex items-center justify-center w-full py-4 bg-[#1D3A5F] text-white rounded-2xl shadow-lg hover:bg-[#152a45] transition-all font-bold text-sm"
                 >
-                  Email
+                  ✉️ Email
+                </a>
+
+                <a
+                  href={`tel:${APP_DATA.phone.replace(/[^\d+]/g, "")}`}
+                  className="flex items-center justify-center w-full py-4 bg-white border border-slate-200 text-[#1D3A5F] rounded-2xl shadow-sm hover:bg-slate-50 transition-all font-bold text-sm"
+                >
+                  📞 Call
                 </a>
 
                 <a
@@ -801,7 +784,7 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-full py-4 bg-[#C29D6F] text-white rounded-2xl shadow-lg hover:opacity-90 transition-all font-bold text-sm"
                 >
-                  Schedule Review
+                  📅 Schedule Review
                 </a>
 
                 <div className="grid grid-cols-2 gap-3 pt-1">
@@ -809,13 +792,13 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                     onClick={handleCopyLink}
                     className="flex items-center justify-center py-3 border border-slate-200 rounded-xl text-slate-600 font-semibold text-xs hover:bg-slate-50"
                   >
-                    {copied ? "Copied" : "Copy Link"}
+                    {copied ? "✅ Copied" : "🔗 Copy Link"}
                   </button>
                   <button
                     onClick={handleSaveContact}
                     className="flex items-center justify-center py-3 bg-slate-800 text-white rounded-xl shadow-md font-semibold text-xs hover:bg-slate-900"
                   >
-                    Save Contact
+                    📇 Save Contact
                   </button>
                 </div>
 
@@ -828,7 +811,7 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
               <div className="px-4 mb-24">
                 <div className="bg-slate-50 rounded-[2.5rem] p-6 border border-slate-100 shadow-inner">
                   <h2 className="text-[#1D3A5F] text-center font-black text-[10px] uppercase tracking-[0.25em] mb-8 pb-4 border-b border-[#C29D6F]/20">
-                    Services
+                    🧰 Services
                   </h2>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -856,7 +839,7 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                 className="absolute bottom-6 right-6 bg-[#1D3A5F] px-5 py-4 rounded-full text-white shadow-2xl hover:scale-105 transition-all z-20 border-2 border-[#C29D6F]"
                 aria-label="Open assistant"
               >
-                <span className="text-xs font-black tracking-widest">ASSIST</span>
+                <span className="text-xs font-black tracking-widest">💬 ASSIST</span>
               </button>
 
               {/* Service Modal */}
@@ -891,7 +874,7 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                         rel="noopener noreferrer"
                         className="py-3 rounded-xl bg-[#C29D6F] text-white font-bold text-xs text-center hover:opacity-90"
                       >
-                        Book Review
+                        📅 Book Review
                       </a>
 
                       <button
@@ -902,7 +885,7 @@ Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere
                         }}
                         className="py-3 rounded-xl border border-slate-200 text-[#1D3A5F] font-bold text-xs hover:bg-slate-50"
                       >
-                        Ask Assistant
+                        🤖 Ask Assistant
                       </button>
                     </div>
 
