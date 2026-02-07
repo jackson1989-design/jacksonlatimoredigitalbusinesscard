@@ -8,6 +8,15 @@
   <meta property="og:image" content="https://jackson1989-design.github.io/latimore-life-legacy-site/hero.jpg">
   <title>Latimore Life & Legacy - Digital Portfolio</title>
   
+  <!-- Google Analytics 4: replace G-XXXXXXX with your Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX'); // replace with your ID
+  </script>
+
   <!-- React & Babel -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -533,6 +542,72 @@
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
+  </script>
+
+  <!-- GA4 click-tracking (tracks link clicks and sends events to GA4) -->
+  <script>
+  (function(){
+    function buildPayload(el){
+      var text = (el.textContent || el.innerText || '').trim().slice(0,200);
+      var href = el.href || '';
+      var hostname = el.hostname || '';
+      var isDownload = href.match(/\.(pdf|zip|docx?|xlsx?|pptx?|csv|jpg|png|mp3|mp4)$/i) ? true : false;
+      return {
+        event: 'link_click',
+        link_text: text,
+        link_url: href,
+        link_domain: hostname,
+        link_target: el.target || '',
+        link_classes: el.className || '',
+        link_is_download: isDownload ? '1' : '0',
+        page_path: location.pathname + location.search,
+        page_title: document.title
+      };
+    }
+
+    function sendToGA(payload, callback){
+      if (window.gtag) {
+        var cb = function(){
+          if (typeof callback === 'function') callback();
+        };
+        var p = Object.assign({}, payload);
+        p.event_callback = cb;
+        gtag('event', p.event || 'link_click', p);
+        // fallback in case gtag doesn't return quickly
+        setTimeout(cb, 800);
+      } else {
+        // as a fallback, try a beacon to a tracking endpoint or just continue
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/.well-known/track-click', JSON.stringify(payload));
+        }
+        if (typeof callback === 'function') callback();
+      }
+    }
+
+    document.addEventListener('click', function(e){
+      var el = e.target;
+      while (el && el.tagName !== 'A') el = el.parentElement;
+      if (!el || !el.href) return;
+      var payload = buildPayload(el);
+
+      var external = (el.hostname !== location.hostname);
+      var shouldBlock = external || (el.getAttribute('href') && (el.getAttribute('href').indexOf('mailto:') === 0 || el.getAttribute('href').indexOf('tel:') === 0)) || payload.link_is_download === '1';
+
+      if (shouldBlock) {
+        e.preventDefault();
+        sendToGA(payload, function(){
+          if (el.target === '_blank') {
+            window.open(el.href, '_blank');
+          } else {
+            window.location = el.href;
+          }
+        });
+      } else {
+        // Non-external: fire non-blocking event
+        if (window.gtag) gtag('event', payload.event || 'link_click', payload);
+      }
+    }, false);
+  })();
   </script>
 </body>
 </html>
