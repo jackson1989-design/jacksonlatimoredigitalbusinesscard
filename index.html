@@ -26,16 +26,16 @@
     <script type="text/babel">
       const { useState, useEffect, useRef } = React;
 
-      // --- 1. THE DEEP KNOWLEDGE BASE (GFI Strategic Architecture) ---
+      // --- 1. THE STRATEGIC KNOWLEDGE REPOSITORY ---
       const KNOWLEDGE_BASE = {
         "Wealth Accumulation": {
-          title: "TAX-ADVANTAGED WEALTH ACCUMULATION",
-          content: "Strategic wealth accumulation is about shifting from level-growth to inflation-adjusted growth. We use the Rule of 72 to calculate doubling periods: divide 72 by your interest rate to see your timeline. Most people save in the Tax-Later bucket (401k/IRA); we specialize in the Tax-Never bucket, utilizing Indexed Universal Life to build a harvest you can access tax-free.",
+          title: "TAX ADVANTAGED WEALTH ACCUMULATION",
+          content: "Strategic wealth accumulation is about shifting from level growth to inflation adjusted growth. We use the Rule of 72 to calculate doubling periods: divide 72 by your interest rate to see your timeline. Most people save in the Tax Later bucket like 401ks. We specialize in the Tax Never bucket, utilizing Indexed Universal Life to build a harvest you can access tax free.",
           next: "Ask me how the Rule of 72 changes your retirement timeline."
         },
         "Asset Protection": {
           title: "PRINCIPAL PROTECTION AND THE 0% FLOOR",
-          content: "Asset protection is designed to solve the volatility problem. Traditional portfolios risk the 4% rule, where market drops can deplete your savings. We utilize Fixed Indexed strategies that provide a 0% Floor—ensuring that when the market drops, you lose nothing, and when it rises, you participate in the gains. This creates a foundation of safe, predictable growth.",
+          content: "Asset protection is designed to solve the volatility problem. Traditional portfolios risk the 4% rule, where market drops can deplete your savings. We utilize Fixed Indexed strategies that provide a 0% Floor. This ensures that when the market drops, you lose nothing, and when it rises, you participate in the gains. This creates a foundation of safe, predictable growth.",
           next: "Ask how a rollover can secure your current retirement balance."
         },
         "Living Benefits": {
@@ -45,38 +45,38 @@
         },
         "Debt Management": {
           title: "REDIRECTING THE INTEREST DRAG",
-          content: "Debt acts as a wealth destroyer by creating an interest drag on your cash flow. Our 'Debt Shredder' strategy focuses on redirecting the interest you currently pay to banks back into your own Family Bank. By utilizing participating policy loans, families can often pay off 30-year mortgages and consumer debt in approximately 9 to 12 years without increasing their monthly budget.",
+          content: "Debt acts as a wealth destroyer by creating an interest drag on your cash flow. Our Debt Shredder strategy focuses on redirecting the interest you currently pay to banks back into your own Family Bank. By utilizing participating policy loans, families can often pay off 30 year mortgages and consumer debt in approximately 9 to 12 years without increasing their monthly budget.",
           next: "Run your numbers through the scorecard to see your potential payoff date."
         },
         "Estate Planning": {
           title: "CREATING YOUR LEGACY PORTRAIT",
-          content: "Estate planning ensures your values and assets transition to the next generation without the delay of probate. Through our partnership with Ethos, we provide free Will and Trust tools to help you document your Legacy Portrait. This goes beyond money—it is about clarity, stewardship, and ensuring your family is protected legally and financially.",
+          content: "Estate planning ensures your values and assets transition to the next generation without the delay of probate. Through our partnership with Ethos, we provide free Will and Trust tools to help you document your Legacy Portrait. This goes beyond money. It is about clarity, stewardship, and ensuring your family is protected legally and financially.",
           next: "Access the Planning Portal to begin your free estate documentation."
         },
         "Mortgage Protection": {
           title: "SECURE HOUSING STRATEGY",
-          content: "Your home is typically your largest liability until the deed is clear. Mortgage protection ensures that if the primary breadwinner passes away or becomes ill, the home is paid off for the family. Unlike lender-owned insurance, you own this plan, you choose the beneficiary, and the coverage remains in force even if you sell the home or refinance.",
-          next: "Ask me about the D.I.M.E. calculation for your home."
+          content: "Your home is typically your largest liability until the deed is clear. Mortgage protection ensures that if the primary breadwinner passes away or becomes ill, the home is paid off for the family. Unlike lender owned insurance, you own this plan, you choose the beneficiary, and the coverage remains in force even if you sell the home or refinance.",
+          next: "Ask me about the DIME calculation for your home."
         },
         "College Funding": {
           title: "THE MILLION DOLLAR BABY CONCEPT",
-          content: "Traditional 529 plans are restricted to education. We utilize juvenile Indexed Universal Life (IUL) policies to create a tax-free cash pile for your children. This can be used for college, a down payment on a home, or kept as a lifelong head start. It provides guaranteed insurability for their future regardless of their later health status.",
+          content: "Traditional 529 plans are restricted to education. We utilize juvenile Indexed Universal Life policies to create a tax free cash pile for your children. This can be used for college, a down payment on a home, or kept as a lifelong head start. It provides guaranteed insurability for their future regardless of their later health status.",
           next: "Ask how a juvenile plan grows over 20 years."
         },
         "Indexed Growth": {
           title: "THE POWER OF THE ANNUAL RESET",
-          content: "Indexed growth offers the 'Smart Money' advantage: market-linked gains without market-linked risk. Through the Annual Reset feature, your gains are locked in every year. If the index goes up, your account value increases. If the index goes down, you stay at your current level (Zero is your Hero). You never have to earn back losses from previous years.",
+          content: "Indexed growth offers the Smart Money advantage: market linked gains without market linked risk. Through the Annual Reset feature, your gains are locked in every year. If the index goes up, your account value increases. If the index goes down, you stay at your current level. Zero is your Hero. You never have to earn back losses from previous years.",
           next: "Ask how indexing compares to traditional stock market investing."
         },
         "Business Strategies": {
           title: "BUSINESS CONTINUITY AND SUCCESSION",
-          content: "Business owners face unique risks, specifically 'Key Person' loss. We design strategies using life insurance to provide immediate liquidity to a business if a partner or vital employee passes. This funds Buy-Sell agreements, allowing surviving owners to buy out heirs fairly and keep the business operating without forced liquidation.",
+          content: "Business owners face unique risks, specifically Key Person loss. We design strategies using life insurance to provide immediate liquidity to a business if a partner or vital employee passes. This funds Buy-Sell agreements, allowing surviving owners to buy out heirs fairly and keep the business operating without forced liquidation.",
           next: "Ask about Key Person protection for your leadership team."
         },
         "Final Expense": {
           title: "PLANNING FOR DIGNITY",
-          content: "Final expense planning removes the financial burden of funeral and end-of-life costs from your family. We utilize simplified whole life plans that offer immediate coverage with no medical exams. This ensures your legacy is defined by peace and preparedness, providing your loved ones with the funds they need during a difficult time without delay.",
-          next: "Ask about instant-decision burial and final cost plans."
+          content: "Final expense planning removes the financial burden of funeral and end of life costs from your family. We utilize simplified whole life plans that offer immediate coverage with no medical exams. This ensures your legacy is defined by peace and preparedness, providing your loved ones with the funds they need during a difficult time.",
+          next: "Ask about instant decision burial and final cost plans."
         }
       };
 
@@ -84,13 +84,15 @@
         name: "Jackson M. Latimore Sr.",
         title: "Founder & CEO",
         company: "Latimore Life & Legacy LLC",
-        license: "PA License #1268820 • NIPR #21638507",
+        license: "PA License #1268820",
+        nipr: "NIPR #21638507",
         phone: "(856) 895-1457",
         email: "jackson1989@latimorelegacy.com",
         links: {
           main: window.location.href,
           scorecard: "https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus",
           portal: "https://globalfinancialimpact.fillout.com/latimorelifelegacy",
+          verification: "https://www.insurance.pa.gov/Licensing/CheckLicStatus/Pages/default.aspx",
           linkedin: "https://www.linkedin.com/in/startwithjacksongfi/",
           facebook: "https://www.facebook.com/LatimoreLegacyLLC",
           instagram: "https://www.instagram.com/jacksonlatimore.global"
@@ -122,22 +124,21 @@
             let data = foundKey ? KNOWLEDGE_BASE[foundKey] : null;
             if (text.toLowerCase().includes("dime")) {
                 data = {
-                    title: "THE D.I.M.E. METHOD",
-                    content: "The D.I.M.E. method is the gold standard for calculating financial need:\n\nDEBT: Total payoff of all high-interest loans.\nINCOME: 10x your salary to replace your earning power.\nMORTGAGE: The balance required to clear the deed.\nEDUCATION: College or trade school funding for children.\n\nThis calculation ensures your family remains in their home and maintains their standard of living.",
-                    next: "Check your Financial Score to run your personalized D.I.M.E. analysis."
+                    title: "THE DIME METHOD",
+                    content: "The DIME method is the gold standard for calculating financial need:\n\nDEBT: Total payoff of all high interest loans.\nINCOME: 10x your salary to replace your earning power.\nMORTGAGE: The balance required to clear the deed.\nEDUCATION: College or trade school funding for children.\n\nThis calculation ensures your family remains in their home and maintains their standard of living.",
+                    next: "Check your Financial Score to run your personalized DIME analysis."
                 };
             }
 
             if (!data) {
               data = {
                 title: "STRATEGY INSIGHT",
-                content: "I specialize in the Three Rules of Money: Compound Interest (Rule of 72), Indexing (Zero is your Hero), and Tax-Free Retirement. Which strategy would you like to master today?",
+                content: "I specialize in the Three Rules of Money: Compound Interest, Indexing, and Tax Free Retirement. Which strategy would you like to master today?",
                 next: "Type a topic above to begin."
               };
             }
 
-            const cleanResponse = `${data.title}\n\n${data.content}\n\nNext Step: ${data.next}`;
-            setMessages(prev => [...prev, { role: "assistant", content: cleanResponse }]);
+            setMessages(prev => [...prev, { role: "assistant", content: `${data.title}\n\n${data.content}\n\nNext Step: ${data.next}` }]);
             setIsTyping(false);
             scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
           }, 800);
@@ -228,7 +229,12 @@
                 </div>
                 <h1 className="text-2xl font-black text-[#1D3A5F] tracking-tighter uppercase">{APP_DATA.name}</h1>
                 <p className="text-[#C29D6F] font-bold text-[10px] uppercase tracking-[0.2em] mt-1">{APP_DATA.title}</p>
-                <p className="text-slate-400 text-[9px] font-bold mt-1 uppercase leading-none">{APP_DATA.license}</p>
+                <div className="flex flex-col items-center mt-1">
+                   <a href={APP_DATA.links.verification} target="_blank" className="text-slate-400 text-[9px] font-bold uppercase hover:text-[#C29D6F] transition-colors decoration-dotted underline underline-offset-2">
+                     {APP_DATA.license}
+                   </a>
+                   <p className="text-slate-400 text-[9px] font-bold uppercase mt-0.5">{APP_DATA.nipr}</p>
+                </div>
               </div>
 
               {/* ACTION FUNNEL */}
@@ -247,7 +253,7 @@
               {/* SERVICE GRID (10 CARDS) */}
               <div className="px-6 mb-24">
                 <div className="bg-slate-50 rounded-[2.5rem] p-6 border border-slate-100">
-                   <h2 className="text-[#1D3A5F] text-center font-black text-[10px] uppercase tracking-[0.25em] mb-6">Expert Consulting Services</h2>
+                   <h2 className="text-[#1D3A5F] text-center font-black text-[10px] uppercase tracking-[0.25em] mb-6">Consulting Services</h2>
                    <div className="grid grid-cols-2 gap-3">
                       {Object.keys(KNOWLEDGE_BASE).map(service => (
                         <button key={service} onClick={() => openStrategy(service)} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center hover:border-[#C29D6F] transition-all active:scale-95">
