@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Jackson M. Latimore Sr. | Life & Legacy</title>
 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TVNBL24V1W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TVNBL24V1W');
+  </script>
+
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -12,23 +20,12 @@
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; }
-    
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; scroll-behavior: smooth; }
     .gold-gradient { background: linear-gradient(135deg, #C29D6F 0%, #a37e53 100%); }
     .navy-gradient { background: linear-gradient(135deg, #1D3A5F 0%, #132742 100%); }
-    
-    /* Sticky AI Header logic */
-    .sticky-ai {
-      position: sticky;
-      top: 0.75rem;
-      z-index: 40;
-      transition: all 0.3s ease;
-    }
-
+    .sticky-ai { position: sticky; top: 0.75rem; z-index: 40; transition: all 0.3s ease; }
     .animate-in { animation: slideUp 0.4s ease-out forwards; }
     @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    
-    .no-scrollbar::-webkit-scrollbar { display: none; }
   </style>
 </head>
 <body>
@@ -38,11 +35,11 @@
     const { useState, useEffect } = React;
 
     const APP_DATA = {
-      name: "Jackson M. Latimore Sr.",
-      title: "Founder & CEO",
-      company: "Latimore Life & Legacy LLC",
-      license: "PA License #1268820",
-      headshot: "jackson-headshot.jpg", 
+      name: "Jackson M. Latimore Sr.", //
+      title: "Founder & CEO", //
+      company: "Latimore Life & Legacy LLC", //
+      license: "PA License #1268820", //
+      headshot: "jackson-headshot.jpg", //
       links: {
         main: "https://jackson1989-design.github.io/latimore-life-legacy-site/",
         ethos: "https://agents.ethoslife.com/invite/29ad1",
@@ -75,10 +72,21 @@
 
     const analyzeLegacy = (input) => {
       const q = input.toLowerCase();
-      if (q.includes('tax')) return "STRATEGY: Shift from tax-deferred (401k) to tax-free (IUL) to prevent the IRS from being your primary beneficiary.";
-      if (q.includes('market') || q.includes('loss')) return "STRATEGY: Indexed Protection. We use a '0% Floor'—when the market drops, you lose nothing.";
-      if (q.includes('debt')) return "STRATEGY: The Debt-Free Life sequence. We zero out balances using mathematical interest redirection.";
-      return "Jackson specializes in legacy conversion. I recommend a 15-minute Discovery Call to identify your specific protection gaps.";
+      let response = "Jackson specializes in legacy conversion. I recommend a Discovery Call to identify your protection gaps.";
+      
+      if (q.includes('tax')) response = "STRATEGY: Transition from tax-deferred (401k) to tax-free (IUL) to prevent the IRS from being your primary beneficiary.";
+      if (q.includes('market') || q.includes('loss')) response = "STRATEGY: Indexed Protection. We use a '0% Floor'—when the market drops, you lose nothing.";
+      if (q.includes('debt')) response = "STRATEGY: The Debt-Free Life sequence. We zero out balances using mathematical interest redirection.";
+
+      // TRACKING EVENT: Strategy Generated
+      if (window.gtag) {
+        gtag('event', 'strategy_generated', {
+          'search_term': input,
+          'response_type': q.includes('tax') ? 'tax' : q.includes('market') ? 'market' : 'general'
+        });
+      }
+
+      return response;
     };
 
     const App = () => {
@@ -87,22 +95,17 @@
       const [aiResponse, setAiResponse] = useState('');
       const [showScrollTop, setShowScrollTop] = useState(false);
 
-      // Handle Scroll for "Scroll to Top" button
       useEffect(() => {
         const handleScroll = () => setShowScrollTop(window.scrollY > 400);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
       }, []);
 
-      const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-
       return (
         <div className="min-h-screen flex flex-col items-center p-0 sm:p-6">
           <div className="w-full max-w-[480px] bg-white shadow-2xl overflow-hidden relative sm:rounded-[2.5rem] border border-slate-200">
             
-            {/* 1. Header Section */}
             <div className="h-60 navy-gradient relative flex items-center justify-center">
-              <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
               <div className="w-36 h-36 rounded-full border-4 border-[#C29D6F] overflow-hidden shadow-2xl bg-white relative z-10">
                 <img src={APP_DATA.headshot} alt={APP_DATA.name} className="w-full h-full object-cover" />
               </div>
@@ -111,96 +114,65 @@
             <div className="text-center px-6 mt-4 mb-6">
               <h1 className="text-2xl font-extrabold text-[#1D3A5F]">{APP_DATA.name}</h1>
               <p className="text-[#C29D6F] font-bold text-xs uppercase tracking-widest">{APP_DATA.title}</p>
-              <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">{APP_DATA.license}</p>
+              <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase">{APP_DATA.license}</p>
             </div>
 
-            {/* 2. Floating/Sticky AI Strategy Engine */}
+            {/* Sticky AI */}
             <div className="px-6 mb-8 sticky-ai">
               <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 border border-[#C29D6F]/40 shadow-xl">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-7 h-7 gold-gradient rounded-lg flex items-center justify-center text-white text-sm">💡</div>
-                  <h3 className="font-bold text-[#1D3A5F] text-xs uppercase italic">Legacy Strategy Engine</h3>
+                <div className="flex items-center gap-2 mb-3 text-[#1D3A5F]">
+                  <span className="text-sm">💡</span>
+                  <h3 className="font-bold text-xs uppercase italic">Strategy Engine</h3>
                 </div>
-                
                 {aiResponse ? (
                   <div className="bg-slate-50 p-4 rounded-2xl border-l-4 border-[#C29D6F] animate-in">
-                    <p className="text-[13px] text-slate-700 leading-relaxed font-medium">{aiResponse}</p>
-                    <button onClick={() => setAiResponse('')} className="mt-3 text-[10px] font-black text-[#C29D6F] uppercase">← Ask Another</button>
+                    <p className="text-[13px] text-slate-700 font-medium">{aiResponse}</p>
+                    <button onClick={() => setAiResponse('')} className="mt-3 text-[10px] font-black text-[#C29D6F] uppercase">← Ask New Question</button>
                   </div>
                 ) : (
                   <div className="flex gap-2">
-                    <input 
-                      type="text"
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      placeholder="Ask about 'Taxes' or 'Market'..."
-                      className="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-xs focus:ring-1 focus:ring-[#C29D6F] outline-none transition-all"
-                    />
-                    <button 
-                      onClick={() => setAiResponse(analyzeLegacy(query))}
-                      className="w-12 navy-gradient text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-transform"
-                    >
-                      🚀
-                    </button>
+                    <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Taxes? Market? Debt?" className="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-xs outline-none focus:ring-1 focus:ring-[#C29D6F]" />
+                    <button onClick={() => setAiResponse(analyzeLegacy(query))} className="w-12 navy-gradient text-white rounded-xl flex items-center justify-center shadow-lg">🚀</button>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* 3. Detailed Services */}
+            {/* Services */}
             <div className="px-6 pb-24">
-              <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Core Portfolio</h2>
               <div className="grid gap-4">
                 {APP_DATA.services.map((s, i) => (
-                  <div key={i} onClick={() => setSelectedService(s)} className="p-4 bg-white border border-slate-100 rounded-2xl shadow-sm flex items-center gap-4 hover:border-[#C29D6F] transition-all cursor-pointer group">
+                  <div key={i} onClick={() => setSelectedService(s)} className="p-4 bg-white border border-slate-100 rounded-2xl shadow-sm flex items-center gap-4 hover:border-[#C29D6F] cursor-pointer group">
                     <div className="text-3xl p-2 bg-slate-50 rounded-xl group-hover:bg-[#C29D6F]/10">{s.icon}</div>
                     <div className="flex-1">
                       <h4 className="font-bold text-[#1D3A5F] text-sm uppercase">{s.title}</h4>
                       <p className="text-[11px] text-slate-500 line-clamp-1">{s.summary}</p>
                     </div>
-                    <span className="text-slate-300 group-hover:text-[#C29D6F]">❯</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* 4. Modal: Rich Service Data */}
+            {/* Modal */}
             {selectedService && (
               <div className="fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center">
                 <div className="absolute inset-0 bg-[#1D3A5F]/90 backdrop-blur-md" onClick={() => setSelectedService(null)}></div>
                 <div className="relative w-full max-w-sm bg-white rounded-[2rem] p-8 animate-in">
-                  <div className="text-5xl mb-4">{selectedService.icon}</div>
                   <h2 className="text-2xl font-black text-[#1D3A5F] mb-3">{selectedService.title}</h2>
-                  <p className="text-sm text-slate-600 mb-6 leading-relaxed">{selectedService.description}</p>
-                  <div className="space-y-3 mb-8">
-                    {selectedService.impacts.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded-full bg-[#C29D6F]/20 flex items-center justify-center text-[#C29D6F] text-[10px]">✓</div>
-                        <span className="text-xs font-bold text-slate-700">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <a href={APP_DATA.links.booking} className="block w-full gold-gradient text-white text-center py-4 rounded-2xl font-bold shadow-xl">Consult on Strategy</a>
+                  <p className="text-sm text-slate-600 mb-6">{selectedService.description}</p>
+                  <a href={APP_DATA.links.booking} className="block w-full gold-gradient text-white text-center py-4 rounded-2xl font-bold shadow-xl">Book Consultation</a>
                 </div>
               </div>
             )}
 
-            {/* 5. Sticky Bottom Action Bar */}
             <div className="absolute bottom-0 w-full p-4 bg-white/90 backdrop-blur-md border-t flex gap-3">
-              <a href={APP_DATA.links.booking} className="flex-1 navy-gradient text-white text-center py-4 rounded-xl font-bold text-[10px] uppercase tracking-widest shadow-lg">Schedule Review</a>
+              <a href={APP_DATA.links.booking} className="flex-1 navy-gradient text-white text-center py-4 rounded-xl font-bold text-[10px] uppercase tracking-widest">Schedule Review</a>
               <a href={APP_DATA.links.ethos} className="flex-1 border-2 border-[#1D3A5F] text-[#1D3A5F] text-center py-4 rounded-xl font-bold text-[10px] uppercase tracking-widest">Get Quote</a>
             </div>
 
-            {/* 6. Floating Scroll to Top Button */}
             {showScrollTop && (
-              <button 
-                onClick={scrollToTop}
-                className="fixed bottom-24 right-6 w-12 h-12 gold-gradient text-white rounded-full shadow-2xl flex items-center justify-center text-xl animate-in z-50"
-              >
-                ↑
-              </button>
+              <button onClick={() => window.scrollTo({top:0, behavior:'smooth'})} className="fixed bottom-24 right-6 w-12 h-12 gold-gradient text-white rounded-full shadow-2xl flex items-center justify-center text-xl z-50 animate-in">↑</button>
             )}
-
           </div>
         </div>
       );
@@ -208,6 +180,25 @@
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
+  </script>
+
+  <script>
+    (function(){
+      function buildPayload(el){
+        return {
+          event: 'link_click',
+          link_text: (el.textContent || '').trim().slice(0,100),
+          link_url: el.href || '',
+          page_path: location.pathname
+        };
+      }
+      document.addEventListener('click', function(e){
+        var el = e.target;
+        while (el && el.tagName !== 'A') el = el.parentElement;
+        if (!el || !el.href) return;
+        if (window.gtag) gtag('event', 'link_click', buildPayload(el));
+      }, false);
+    })();
   </script>
 </body>
 </html>
