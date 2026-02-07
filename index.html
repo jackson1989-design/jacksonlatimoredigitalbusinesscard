@@ -16,22 +16,55 @@
       @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
       .animate-slide-up { animation: slideUp 0.3s ease-out; }
       .strategy-gradient { background: linear-gradient(135deg, #1D3A5F 0%, #0F2036 100%); }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
   </head>
 
-  <body class="bg-slate-100">
+  <body class="bg-slate-100 font-sans antialiased">
     <div id="root"></div>
 
     <script type="text/babel">
       const { useState, useEffect, useRef } = React;
 
-      // --- 1. CORE DATA & KNOWLEDGE BASE ---
+      // --- 1. CLEAN KNOWLEDGE BASE (No Markdown) ---
+      const KNOWLEDGE_BASE = {
+        "Wealth Accumulation": {
+          title: "THE RULE OF 72 AND COMPOUND INTEREST",
+          content: "Wealth isn't about how much you make; it's about how your money grows. We use the Rule of 72 to determine how fast your money doubles. Simply divide 72 by your interest rate. For example, at 3%, it takes 24 years to double. At 12%, it takes only 6 years. My goal is to move you from Slow Money to Smart Money.",
+          next: "Ask me about the Three Tax Buckets to see how to keep more of that growth."
+        },
+        "Asset Protection": {
+          title: "SAFE MONEY AND MARKET VOLATILITY",
+          content: "Most people are concerned about the next market crash. We specialize in Fixed Indexed strategies that provide a Floor of 0%. This means when the market goes down, you lose nothing. When the market goes up, you participate in the gains. It is the power of the reset.",
+          next: "Would you like to know how to roll over an old 401k into a protected account?"
+        },
+        "Living Benefits": {
+          title: "LIFE INSURANCE YOU DONT HAVE TO DIE TO USE",
+          content: "Modern life insurance includes riders for Critical, Chronic, and Terminal illness. If you suffer a heart attack, stroke, or cancer diagnosis, you can access your death benefit while living to pay for treatment or replace lost income. Your health is your currency.",
+          next: "Ask me about Mortgage Protection to see how this keeps your family in their home."
+        },
+        "Debt Management": {
+          title: "REDIRECTING THE INTEREST DRAG",
+          content: "Debt is a wealth destroyer. We use the Debt Shredder concept to redirect interest payments away from the banks and back into your own Family Bank. This allows many families to pay off 30-year mortgages in 9-12 years without changing their lifestyle.",
+          next: "Ready to run your numbers through the scorecard?"
+        },
+        "Estate Planning": {
+          title: "LEGACY BEYOND MONEY",
+          content: "A legacy isn't just an inheritance; it's a plan. Through our partnership with Ethos, we provide Free Will and Trust tools to ensure your family avoids the cost and headache of probate. We protect your Legacy Portrait.",
+          next: "Click the Planning Portal button to access these tools."
+        },
+        "Mortgage Protection": {
+          title: "THE ROOF OVER THEIR HEAD",
+          content: "Your home is your family's sanctuary. Mortgage protection ensures that if a breadwinner passes away or gets sick, the mortgage is paid off. Unlike lender insurance, you own this policy, and the benefit goes to your family, not the bank.",
+          next: "Ask about Living Benefits to see how this covers you if you get sick but don't die."
+        }
+      };
+
       const APP_DATA = {
         name: "Jackson M. Latimore Sr.",
         title: "Founder & CEO",
         company: "Latimore Life & Legacy LLC",
         license: "PA License #1268820 • NIPR #21638507",
-        tagline: "Protecting Today. Securing Tomorrow.",
         phone: "(856) 895-1457",
         email: "jackson1989@latimorelegacy.com",
         links: {
@@ -44,44 +77,20 @@
         }
       };
 
-      const KNOWLEDGE_BASE = {
-        "Wealth Accumulation": {
-          title: "The Rule of 72 & Compound Interest",
-          content: "Wealth isn't about how much you make; it's about how your money grows. We use the **Rule of 72** to determine how fast your money doubles. Divide 72 by your interest rate. At 3%, it takes 24 years to double. At 12%, it takes only 6 years. My goal is to move you from 'Slow Money' to 'Smart Money'.",
-          next: "Ask me about the 'Three Tax Buckets' to see how to keep more of that growth."
-        },
-        "Asset Protection": {
-          title: "Safe Money & Market Volatility",
-          content: "Most people are terrified of the next market crash. We specialize in **Fixed Indexed strategies** that provide a 'Floor of 0%.' When the market goes down, you lose nothing. When the market goes up, you participate in the gains. It is the power of the reset.",
-          next: "Would you like to know how to roll over an old 401(k) into a protected account?"
-        },
-        "Living Benefits": {
-          title: "Life Insurance You Don't Have To Die To Use",
-          content: "Modern life insurance includes riders for **Critical, Chronic, and Terminal illness.** If you suffer a heart attack, stroke, or cancer diagnosis, you can access your death benefit while living to pay for treatment or replace lost income. Your health is your currency.",
-          next: "Ask me about 'Mortgage Protection' to see how this keeps your family in their home."
-        },
-        "Debt Management": {
-          title: "Redirecting the Interest Drag",
-          content: "Debt is a wealth destroyer. We use the **Debt Shredder** concept to redirect interest payments away from the banks and back into your own 'Family Bank.' This allows you to pay off 30-year mortgages in 9-12 years without changing your lifestyle.",
-          next: "Ready to run your numbers through the scorecard?"
-        },
-        "Estate Planning": {
-          title: "Legacy Beyond Money",
-          content: "A legacy isn't just an inheritance; it's a plan. Through our partnership with Ethos, we provide **Free Will and Trust tools** (a $898 value) to ensure your family avoids the cost and headache of probate. We protect your 'Legacy Portrait.'",
-          next: "Click the 'Planning Portal' button to access these tools."
-        },
-        "Mortgage Protection": {
-          title: "The Roof Over Their Head",
-          content: "Your home is your family's sanctuary. Mortgage protection ensures that if a breadwinner passes away or gets sick, the mortgage is paid off. Unlike lender insurance, *you* own this policy, and the benefit goes to your *family*, not the bank.",
-          next: "Ask about 'Living Benefits' to see how this covers you if you get sick but don't die."
-        }
+      // --- 2. THE ANALYTICS TRACKER ---
+      const trackActivity = (action) => {
+        const stats = JSON.parse(localStorage.getItem('legacy_stats') || '{"clicks":0, "topics":[]}');
+        stats.clicks += 1;
+        if (!stats.topics.includes(action)) stats.topics.push(action);
+        localStorage.setItem('legacy_stats', JSON.stringify(stats));
+        console.log("Activity Tracked:", action);
       };
 
-      // --- 2. COMPONENTS ---
+      // --- 3. COMPONENTS ---
 
       const Assistant = ({ onClose, initialQuery }) => {
         const [messages, setMessages] = useState([
-          { role: "assistant", content: "👋 I am the Legacy Strategy Engine. I don't just sell policies; I teach strategies. Select a topic below or ask me anything." }
+          { role: "assistant", content: "Hi, I'm Legacy AI. 👋 \n\nI am Jackson's expert strategy engine. I don't just sell policies; I teach strategies. Select a topic below or ask me anything." }
         ]);
         const [isTyping, setIsTyping] = useState(false);
         const scrollRef = useRef(null);
@@ -94,19 +103,19 @@
           if (!text.trim()) return;
           setMessages(prev => [...prev, { role: "user", content: text }]);
           setIsTyping(true);
+          trackActivity("AI Query: " + text);
 
           setTimeout(() => {
-            let found = Object.keys(KNOWLEDGE_BASE).find(k => text.toLowerCase().includes(k.toLowerCase()));
-            let response = found ? KNOWLEDGE_BASE[found] : {
-              title: "Strategy Insight",
-              content: "The best way to begin is by using the **D.I.M.E. Method** (Debt, Income, Mortgage, Education). This tells us exactly what your family needs to be 100% secure.",
-              next: "Check your 'Financial Score' using the gold button on my card."
+            let foundKey = Object.keys(KNOWLEDGE_BASE).find(k => text.toLowerCase().includes(k.toLowerCase()));
+            let data = foundKey ? KNOWLEDGE_BASE[foundKey] : {
+              title: "STRATEGY INSIGHT",
+              content: "The best way to begin is by using the D.I.M.E. Method (Debt, Income, Mortgage, Education). This tells us exactly what your family needs to be 100% secure.",
+              next: "Check your Financial Score using the gold button on my card."
             };
 
-            setMessages(prev => [...prev, { 
-              role: "assistant", 
-              content: `### ${response.title}\n\n${response.content}\n\n**Next Step:** ${found ? response.next : "Complete your Financial Scorecard."}` 
-            }]);
+            const cleanText = `${data.title}\n\n${data.content}\n\nNext Step: ${data.next}`;
+
+            setMessages(prev => [...prev, { role: "assistant", content: cleanText }]);
             setIsTyping(false);
             scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
           }, 800);
@@ -116,32 +125,32 @@
           <div className="flex flex-col h-full bg-white">
             <div className="p-5 strategy-gradient text-white flex justify-between items-center border-b-4 border-[#C29D6F]">
               <div>
-                <h3 className="font-black text-sm uppercase tracking-widest">Legacy Strategy Engine</h3>
-                <p className="text-[10px] text-[#C29D6F] font-bold">Jackson Latimore's Expert System</p>
+                <h3 className="font-black text-sm uppercase tracking-widest">Legacy AI</h3>
+                <p className="text-[10px] text-[#C29D6F] font-bold uppercase">Expert Strategy Engine</p>
               </div>
-              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center bg-white/10 rounded-full">×</button>
+              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-xl">×</button>
             </div>
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-slate-50">
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[90%] p-4 rounded-2xl text-sm shadow-sm ${m.role === 'user' ? 'bg-[#1D3A5F] text-white' : 'bg-white border border-slate-200 text-slate-800'}`}>
+                  <div className={`max-w-[90%] p-4 rounded-2xl text-sm shadow-sm leading-relaxed ${m.role === 'user' ? 'bg-[#1D3A5F] text-white rounded-tr-none' : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none'}`}>
                     <span className="whitespace-pre-wrap">{m.content}</span>
                   </div>
                 </div>
               ))}
-              {isTyping && <div className="text-[10px] text-slate-400 animate-pulse px-2">Strategist analyzing...</div>}
+              {isTyping && <div className="text-[10px] text-slate-400 animate-pulse px-2 italic font-bold uppercase">Legacy AI Analyzing...</div>}
             </div>
             <div className="p-4 bg-white border-t flex flex-col gap-2">
                <div className="flex overflow-x-auto gap-2 pb-2 no-scrollbar">
                   {["Rule of 72", "Living Benefits", "Tax Buckets", "DIME Method"].map(tag => (
-                    <button key={tag} onClick={() => handleSend(tag)} className="whitespace-nowrap px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-[#1D3A5F] border border-slate-200">
+                    <button key={tag} onClick={() => handleSend(tag)} className="whitespace-nowrap px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-[#1D3A5F] border border-slate-200 uppercase">
                       {tag}
                     </button>
                   ))}
                </div>
                <div className="flex gap-2">
                   <input id="chatInput" placeholder="Ask a strategy question..." className="flex-1 bg-slate-100 p-3 rounded-xl text-sm outline-none border focus:border-[#C29D6F]" onKeyDown={(e)=>e.key==='Enter' && handleSend(e.target.value)} />
-                  <button onClick={() => handleSend(document.getElementById('chatInput').value)} className="bg-[#1D3A5F] text-white px-5 rounded-xl font-bold">➡️</button>
+                  <button onClick={() => {const el=document.getElementById('chatInput'); handleSend(el.value); el.value='';}} className="bg-[#1D3A5F] text-white px-5 rounded-xl font-bold">➡️</button>
                </div>
             </div>
           </div>
@@ -152,10 +161,8 @@
         useEffect(() => {
           new QRCode(document.getElementById("qrcode"), {
             text: APP_DATA.links.main,
-            width: 200,
-            height: 200,
-            colorDark : "#1D3A5F",
-            colorLight : "#ffffff",
+            width: 200, height: 200,
+            colorDark : "#1D3A5F", colorLight : "#ffffff",
           });
         }, []);
         return (
@@ -170,10 +177,10 @@
         );
       };
 
-      // --- 3. MAIN APP ---
+      // --- 4. MAIN APP ---
 
       const App = () => {
-        const [view, setView] = useState(null); // 'ai', 'qr'
+        const [view, setView] = useState(null); 
         const [query, setQuery] = useState(null);
 
         const openStrategy = (topic) => {
@@ -183,16 +190,16 @@
 
         return (
           <div className="min-h-screen flex flex-col items-center sm:py-10 bg-slate-100">
-            <div className="w-full max-w-[440px] bg-white sm:rounded-[3rem] shadow-2xl relative overflow-visible border border-slate-200">
+            <div className="w-full max-w-[440px] bg-white sm:rounded-[3rem] shadow-2xl relative border border-slate-200 min-h-screen sm:min-h-[850px] overflow-visible">
               
-              {/* Header / Origin Story */}
+              {/* Header */}
               <div className="w-full h-72 relative bg-[#1D3A5F] sm:rounded-t-[3rem] overflow-hidden">
-                <img src="https://jackson1989-design.github.io/latimore-life-legacy-site/hero.jpg" className="w-full h-full object-cover opacity-60" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1D3A5F] via-[#1D3A5F]/20 to-transparent" />
+                <img src="https://jackson1989-design.github.io/latimore-life-legacy-site/hero.jpg" className="w-full h-full object-cover opacity-50" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1D3A5F] via-[#1D3A5F]/40 to-transparent" />
                 <div className="absolute bottom-6 px-8">
-                  <p className="text-[#C29D6F] text-[10px] font-black uppercase tracking-[0.3em] mb-1">Founded on Survival</p>
-                  <h2 className="text-white text-xs font-medium italic leading-relaxed opacity-90">
-                    "My life was saved by an AED because someone else planned ahead. I build legacies so your family never has to scramble."
+                  <p className="text-[#C29D6F] text-[10px] font-black uppercase tracking-[0.3em] mb-1">Preparedness is Everything</p>
+                  <h2 className="text-white text-[11px] font-medium italic leading-relaxed opacity-90 uppercase">
+                    My life was saved because someone else planned ahead. I build legacies so your family never has to scramble.
                   </h2>
                 </div>
               </div>
@@ -202,37 +209,37 @@
                 <div className="w-32 h-32 mx-auto rounded-full bg-white p-1 shadow-2xl mb-4 border-4 border-white">
                   <div className="w-full h-full rounded-full bg-[#1D3A5F] flex items-center justify-center text-3xl text-white font-black">JL</div>
                 </div>
-                <h1 className="text-2xl font-black text-[#1D3A5F] tracking-tighter">{APP_DATA.name}</h1>
+                <h1 className="text-2xl font-black text-[#1D3A5F] tracking-tighter uppercase">{APP_DATA.name}</h1>
                 <p className="text-[#C29D6F] font-bold text-[10px] uppercase tracking-[0.2em] mt-1">{APP_DATA.title}</p>
-                <p className="text-slate-400 text-[10px] mt-1">{APP_DATA.license}</p>
+                <p className="text-slate-400 text-[9px] font-bold mt-1 uppercase">{APP_DATA.license}</p>
               </div>
 
               {/* ACTION FUNNEL */}
               <div className="px-6 py-8 space-y-4">
-                <a href={APP_DATA.links.scorecard} target="_blank" className="flex flex-col items-center justify-center w-full py-5 bg-[#C29D6F] text-white rounded-3xl shadow-xl hover:scale-[1.02] transition-all">
+                <a href={APP_DATA.links.scorecard} onClick={()=>trackActivity("Scorecard Click")} target="_blank" className="flex flex-col items-center justify-center w-full py-5 bg-[#C29D6F] text-white rounded-3xl shadow-xl hover:scale-[1.02] transition-all">
                   <span className="font-black text-sm uppercase tracking-widest">🏆 Get Your Financial Score</span>
-                  <span className="text-[9px] font-bold opacity-80 uppercase mt-1 tracking-tighter">Official Assessment Tool</span>
+                  <span className="text-[9px] font-bold opacity-80 uppercase mt-1 tracking-tighter">Start Free Assessment</span>
                 </a>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <a href={APP_DATA.links.portal} target="_blank" className="flex items-center justify-center py-4 bg-[#1D3A5F] text-white rounded-2xl font-bold text-xs shadow-lg">Planning Portal</a>
-                  <button onClick={() => setView('qr')} className="flex items-center justify-center py-4 bg-slate-800 text-white rounded-2xl font-bold text-xs shadow-lg">Share Card</button>
+                  <a href={APP_DATA.links.portal} onClick={()=>trackActivity("Portal Click")} target="_blank" className="flex items-center justify-center py-4 bg-[#1D3A5F] text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg">Strategic Portal</a>
+                  <button onClick={() => {setView('qr'); trackActivity("QR Shared");}} className="flex items-center justify-center py-4 bg-slate-800 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg">Share Card</button>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <a href={`tel:${APP_DATA.phone.replace(/\D/g,'')}`} className="py-4 border-2 border-slate-100 rounded-2xl text-[#1D3A5F] font-black text-xs text-center">📞 CALL</a>
-                  <a href={`mailto:${APP_DATA.email}`} className="py-4 border-2 border-slate-100 rounded-2xl text-[#1D3A5F] font-black text-xs text-center">✉️ EMAIL</a>
+                  <a href={`tel:${APP_DATA.phone.replace(/\D/g,'')}`} className="py-4 border-2 border-slate-100 rounded-2xl text-[#1D3A5F] font-black text-[10px] uppercase tracking-widest text-center">📞 CALL</a>
+                  <a href={`mailto:${APP_DATA.email}`} className="py-4 border-2 border-slate-100 rounded-2xl text-[#1D3A5F] font-black text-[10px] uppercase tracking-widest text-center">✉️ EMAIL</a>
                 </div>
               </div>
 
-              {/* STRATEGIC SERVICES (Education Triggers) */}
+              {/* STRATEGIC SERVICES */}
               <div className="px-6 mb-24">
                 <div className="bg-slate-50 rounded-[2.5rem] p-6 border border-slate-100">
-                   <h2 className="text-[#1D3A5F] text-center font-black text-[10px] uppercase tracking-[0.25em] mb-6">Master Your Money</h2>
+                   <h2 className="text-[#1D3A5F] text-center font-black text-[10px] uppercase tracking-[0.25em] mb-6">Education First Planning</h2>
                    <div className="grid grid-cols-2 gap-3">
                       {Object.keys(KNOWLEDGE_BASE).map(service => (
                         <button key={service} onClick={() => openStrategy(service)} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center hover:border-[#C29D6F] transition-all active:scale-95">
-                           <div className="text-[10px] font-black text-[#1D3A5F] uppercase leading-tight">{service}</div>
+                           <div className="text-[9px] font-black text-[#1D3A5F] uppercase leading-tight">{service}</div>
                            <div className="text-[8px] text-slate-400 mt-2 font-bold uppercase tracking-tighter">Learn Strategy →</div>
                         </button>
                       ))}
@@ -240,10 +247,10 @@
                 </div>
               </div>
 
-              {/* Floating Chat */}
+              {/* Floating Chat Button */}
               <div className="sticky bottom-6 flex justify-end px-6 z-20 pointer-events-none pb-6">
                 <button onClick={() => setView('ai')} className="bg-[#1D3A5F] px-6 py-4 rounded-full text-white shadow-2xl border-2 border-[#C29D6F] pointer-events-auto flex items-center gap-2">
-                  <span className="text-xs font-black tracking-widest">💬 STRATEGY ENGINE</span>
+                  <span className="text-xs font-black tracking-widest">💬 LEGACY AI</span>
                 </button>
               </div>
 
@@ -259,7 +266,7 @@
               {view === 'qr' && <QRCodeModal onClose={() => setView(null)} />}
 
             </div>
-            <p className="text-[10px] text-slate-400 mt-8 font-bold uppercase tracking-widest">#TheBeatGoesOn</p>
+            <p className="text-[10px] text-slate-400 mt-8 font-bold uppercase tracking-[0.4em]">#TheBeatGoesOn</p>
           </div>
         );
       };
