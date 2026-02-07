@@ -25,6 +25,12 @@
         to { opacity: 1; transform: translateY(0); }
       }
       .animate-in { animation: fadeUp 220ms ease-out; }
+
+      @keyframes pulseSoft {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+      }
+      .pulse-soft { animation: pulseSoft 1.2s ease-in-out infinite; }
     </style>
   </head>
 
@@ -32,7 +38,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-      const { useState, useEffect, useRef, useCallback } = React;
+      const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
       // --- DATA & CONFIG ---
       const APP_DATA = {
@@ -58,173 +64,342 @@
           { title: "Wealth Accumulation", icon: "WA", description: "Education on tax-advantaged accumulation concepts and long-term planning considerations." },
           { title: "Asset Protection", icon: "AP", description: "Strategies designed to limit downside exposure and support disciplined planning." },
           { title: "Education Funding", icon: "EF", description: "Funding approaches focused on flexibility, control, and tax efficiency concepts." },
-          { title: "Debt Management", icon: "DM", description: "Cash-flow-based payoff sequencing to reduce interest drag and improve liquidity." },
-          { title: "Life Insurance", icon: "LI", description: "Coverage designed to create immediate liquidity for beneficiaries and protect income." },
-          { title: "Living Benefits", icon: "LB", description: "General education on riders that may allow early access to benefits under qualifying events." },
-          { title: "Estate Planning Support", icon: "EP", description: "Coordination support (attorney-led for legal documents) and final expense planning concepts." },
+          { title: "Debt Management", icon: "DM", description: "Cash-flow-based payoff sequencing to reduce interest drag and improve liquidity (results depend on income, rates, and consistency)." },
+          { title: "Life Insurance", icon: "LI", description: "Coverage designed to create liquidity for beneficiaries and protect income." },
+          { title: "Living Benefits", icon: "LB", description: "General education on riders that may allow early access to benefits under qualifying events (terms vary by policy)." },
+          { title: "Estate Planning Support", icon: "EP", description: "Coordination support (attorney-led for legal documents) and legacy planning concepts." },
           { title: "Indexed Strategies", icon: "IS", description: "Index-linked product education; features vary by carrier and policy, including caps/spreads/participation." },
           { title: "Mortgage Protection", icon: "MP", description: "Coverage structured to help protect the home and household stability if a covered event occurs." },
           { title: "Business Strategies", icon: "BS", description: "Key person coverage and executive benefit concepts for continuity and retention planning." }
         ]
       };
 
-      // --- PROFESSIONAL KNOWLEDGE BASE ---
-      // NOTE: This is educational content only, not individualized advice.
+      // --- LOCAL CONTEXT (Tri-County grounding) ---
+      const TRI_COUNTY_CONTEXT = `
+LOCAL CONTEXT (Schuylkill • Luzerne • Northumberland):
+- High homeownership → mortgage and income protection are practical priorities.
+- Aging population → retirement income, legacy planning, and final expense questions are common.
+- Blue-collar/logistics + small businesses → workplace coverage gaps and key person risk show up often.
+- Tight monthly cashflow → keep recommendations simple and budget-aware.
+Tone: preparation, protection, legacy — never fear-based.
+`;
+
+      // --- ANALYTICS (privacy-first) ---
+      // Stores anonymous category counts in localStorage. No names/emails stored in analytics.
+      const ANALYTICS_KEY = "latimore_analytics_v1";
+      const getAnalytics = () => {
+        try { return JSON.parse(localStorage.getItem(ANALYTICS_KEY) || "{}"); }
+        catch { return {}; }
+      };
+      const bumpAnalytics = (category) => {
+        const a = getAnalytics();
+        a[category] = (a[category] || 0) + 1;
+        localStorage.setItem(ANALYTICS_KEY, JSON.stringify(a));
+      };
+      const classifyQuestion = (text) => {
+        const t = (text || "").toLowerCase();
+        const rules = [
+          ["mortgage", ["mortgage","home","house"]],
+          ["workplace", ["work","employer","job","group","portable"]],
+          ["term", ["term","coverage amount","how much","need"]],
+          ["living_benefits", ["living benefits","critical","chronic","terminal","rider"]],
+          ["iul", ["iul","indexed universal","cash value","cap","floor","participation","spread"]],
+          ["annuity", ["annuity","fia","fixed indexed","income rider","lifetime income"]],
+          ["debt", ["debt","credit","loan","payoff","interest"]],
+          ["business", ["key person","buy-sell","succession","business"]],
+          ["final_expense", ["final expense","funeral","burial"]],
+          ["pricing", ["price","cost","premium","quote","rates"]],
+          ["booking_intent", ["book","schedule","appointment","meeting","call"]],
+          ["other", []]
+        ];
+        for (const [cat, kws] of rules) {
+          if (kws.some(k => t.includes(k))) return cat;
+        }
+        return "other";
+      };
+
+      // --- SPANISH QUICK SUMMARY (light) ---
+      const wantsSpanish = (text) => /\b(español|espanol|spanish|hola)\b/i.test(text || "");
+      const spanishSummary = () => (
+`Resumen breve (Español):
+Puedo explicar opciones de protección y retiro en palabras sencillas. Si quiere, puedo ayudarle a estimar una cantidad aproximada aquí mismo y explicarle los próximos pasos sin presión.`
+      );
+
+      // --- CONVERSATION MEMORY (session-only) ---
+      const blankMemory = () => ({ protect: "", priority: "", ageRange: "" });
+      const updateMemory = (mem, text) => {
+        const t = (text || "").toLowerCase();
+
+        if (!mem.protect) {
+          if (t.includes("family") || t.includes("kids") || t.includes("children")) mem.protect = "family";
+          else if (t.includes("mortgage") || t.includes("home") || t.includes("house")) mem.protect = "home";
+          else if (t.includes("income")) mem.protect = "income";
+          else if (t.includes("retire") || t.includes("retirement")) mem.protect = "retirement";
+          else if (t.includes("business") || t.includes("key person")) mem.protect = "business";
+        }
+
+        if (!mem.priority) {
+          if (t.includes("cheap") || t.includes("affordable") || t.includes("lowest cost") || t.includes("budget")) mem.priority = "lowest cost";
+          else if (t.includes("strong") || t.includes("most protection") || t.includes("maximize")) mem.priority = "strong protection";
+          else if (t.includes("flex") || t.includes("flexible")) mem.priority = "flexibility";
+        }
+
+        if (!mem.ageRange) {
+          const m = t.match(/\b(18-24|25-34|35-44|45-54|55-64|65\+)\b/);
+          if (m) mem.ageRange = m[1];
+          const m2 = t.match(/\b(i'?m|im|i am)\s(\d{2})\b/);
+          if (m2 && m2[2]) {
+            const age = parseInt(m2[2], 10);
+            if (!isNaN(age)) {
+              if (age < 25) mem.ageRange = "18-24";
+              else if (age < 35) mem.ageRange = "25-34";
+              else if (age < 45) mem.ageRange = "35-44";
+              else if (age < 55) mem.ageRange = "45-54";
+              else if (age < 65) mem.ageRange = "55-64";
+              else mem.ageRange = "65+";
+            }
+          }
+        }
+
+        return mem;
+      };
+
+      // --- EXPANDED KNOWLEDGE BASE (answer-first; booking only when appropriate) ---
+      // Each entry can include: headline, keyPoints, disclosure, nextStep (in-chat), bookingWhen (array of triggers)
       const KNOWLEDGE_BASE = [
         {
-          id: "rule_72",
-          keywords: ["rule of 72", "72", "doubling", "double", "compound", "compound interest"],
+          id: "workplace_gap",
+          keywords: ["work", "employer", "job", "group life", "workplace coverage", "portable"],
           answer: {
-            headline: "Rule of 72 — estimating how quickly money can double",
+            headline: "Workplace life insurance: helpful start, but often not the full plan",
             keyPoints: [
-              "Divide 72 by an annual rate of return to estimate the doubling timeframe.",
-              "Example: 6% ≈ 12 years (72 ÷ 6), 9% ≈ 8 years (72 ÷ 9).",
-              "This is a shortcut for basic comparisons—not a guarantee of results.",
-              "Inflation matters; if inflation exceeds growth, purchasing power can decline."
+              "Many employer plans are limited (often 1–2x salary) and may not follow you if you change jobs.",
+              "It can be smart to keep workplace coverage and add an individual policy to fill the gap and stay portable.",
+              "Your plan should match real obligations: mortgage/rent, childcare, debt, and income replacement."
             ],
-            disclosure: "General educational information only. Actual outcomes depend on product terms, costs, and market conditions.",
-            nextQuestion: "Are you applying this to savings growth, retirement planning, or debt interest comparison?"
+            disclosure: "Educational info only. Coverage features vary by policy and carrier.",
+            nextStep: "Next step: about how much coverage do you have at work (1x salary, 2x salary, or unknown), and do you have a mortgage?"
+          }
+        },
+        {
+          id: "coverage_amount",
+          keywords: ["how much", "coverage", "need", "amount", "life insurance amount"],
+          answer: {
+            headline: "How much life insurance is “enough”? A practical tri-county framework",
+            keyPoints: [
+              "Start with what you’re protecting: (1) income for 10–20 years, (2) mortgage/rent payoff, (3) childcare/education, (4) debts, (5) final costs.",
+              "If budget is tight, prioritize the biggest stability risk first (usually income + housing).",
+              "We can build a rough range right here without running an application."
+            ],
+            disclosure: "Educational info only. Not individualized financial advice.",
+            nextStep: "Next step: tell me (A) your household income, (B) years left on mortgage/rent plan, and (C) number of dependents."
           }
         },
         {
           id: "term_vs_perm",
           keywords: ["term", "permanent", "whole life", "universal life", "term vs", "difference", "which is better"],
           answer: {
-            headline: "Term vs. Permanent life insurance — a practical framework",
+            headline: "Term vs Permanent life insurance — how to choose without overcomplicating it",
             keyPoints: [
-              "Term insurance is coverage for a set period (e.g., 10/20/30 years) and is often used for income and mortgage protection.",
-              "Permanent insurance is designed to last longer and may include cash value, depending on the type.",
-              "Many plans start with protection needs first, then evaluate permanent features if the budget and goals support it.",
-              "The right fit depends on timeframe, obligations, and long-term objectives."
+              "Term = coverage for a set period (often best for the ‘big responsibility years’ like mortgage/kids).",
+              "Permanent = longer-term coverage; some types can build cash value, but costs/charges matter.",
+              "A common approach: start with term to protect the basics, then add permanent only if it fits goals and budget."
             ],
-            disclosure: "General educational information only. Policy features and costs vary by product and underwriting class.",
-            nextQuestion: "What are you primarily protecting: family income, mortgage, or final expenses?"
-          }
-        },
-        {
-          id: "pricing",
-          keywords: ["cost", "price", "quote", "premium", "rates", "how much", "expensive"],
-          answer: {
-            headline: "What determines life insurance pricing",
-            keyPoints: [
-              "Premiums are individualized based on age, health, tobacco status, coverage amount, and product type.",
-              "Underwriting class can materially impact pricing (when underwriting applies).",
-              "A quick estimate can provide a starting point, then a review clarifies design and options."
-            ],
-            disclosure: "General educational information only. Quotes are not binding and are subject to eligibility and underwriting (if applicable).",
-            nextQuestion: "If you want a fast baseline estimate, use the instant estimate link below:\n" + APP_DATA.links.ethos
+            disclosure: "Educational info only. Product terms and costs vary by carrier and underwriting class.",
+            nextStep: "Next step: are you mainly protecting your income/mortgage for the next 20–30 years, or planning for lifetime legacy?"
           }
         },
         {
           id: "mortgage_protection",
-          keywords: ["mortgage", "house", "home", "protect", "mortgage protection", "keep the house"],
+          keywords: ["mortgage", "home", "house", "protect the house", "keep the house", "mortgage protection"],
           answer: {
-            headline: "Mortgage protection — what it is designed to solve",
+            headline: "Mortgage protection: designed to keep the home stable for the family",
             keyPoints: [
-              "Mortgage protection is typically structured so the household can keep the home if a death occurs (and sometimes if disability riders apply, depending on product).",
-              "Coverage is often aligned to the mortgage term (e.g., 20–30 years).",
-              "The goal is benefit adequacy (enough coverage) and duration alignment (long enough term).",
-              "Beneficiary and ownership structure should match the household plan."
+              "Typically structured as term life aligned with the mortgage timeline (10/20/30 years).",
+              "Goal: enough benefit to protect housing stability and reduce financial shock.",
+              "Beneficiary/ownership should match the household plan (who needs the funds to keep the home)."
             ],
-            disclosure: "General educational information only. Product availability and features vary by carrier and policy.",
-            nextQuestion: "Approximately how many years remain on your mortgage: 10, 20, or 30?"
-          }
-        },
-        {
-          id: "iul_basics",
-          keywords: ["iul", "indexed universal life", "cash value", "cap", "floor", "participation", "spread", "s&p", "index"],
-          answer: {
-            headline: "Indexed Universal Life (IUL) — high-level overview",
-            keyPoints: [
-              "IUL is permanent life insurance that may accumulate cash value using an index crediting strategy (not a direct market investment).",
-              "Crediting is product-dependent and may include caps, participation rates, or spreads.",
-              "Downside protection is typically described as a floor on index crediting; policy charges still apply.",
-              "Loans and withdrawals can impact policy values and performance over time.",
-              "Policy design and ongoing management affect outcomes materially."
-            ],
-            disclosure: "General educational information only. Product terms, costs, and crediting methods vary by carrier and policy. Not tax or legal advice.",
-            nextQuestion: "Is your interest in IUL primarily for lifetime coverage, accumulation concepts, or retirement income planning?"
-          }
-        },
-        {
-          id: "fia_basics",
-          keywords: ["annuity", "fia", "fixed indexed annuity", "indexed annuity", "income rider", "guaranteed income"],
-          answer: {
-            headline: "Fixed Indexed Annuity (FIA) — high-level overview",
-            keyPoints: [
-              "An FIA is an insurance product that credits interest using an index-linked method, subject to caps/spreads/participation.",
-              "It is generally designed for principal protection from index losses, but results depend on crediting terms and costs.",
-              "Most contracts include surrender schedules and liquidity rules; it is typically long-term money.",
-              "Income riders (when elected) are designed to support predictable income features, subject to contract terms."
-            ],
-            disclosure: "General educational information only. Contract features, surrender periods, and rider costs vary by carrier and product.",
-            nextQuestion: "Are you evaluating an annuity for accumulation, or specifically for lifetime income?"
+            disclosure: "Educational info only. Features vary by policy/carrier.",
+            nextStep: "Next step: about how many years remain on your mortgage (10/20/30) and what’s the approximate balance?"
           }
         },
         {
           id: "living_benefits",
           keywords: ["living benefits", "critical illness", "chronic illness", "terminal", "accelerated", "rider"],
           answer: {
-            headline: "Living benefits — general explanation",
+            headline: "Living benefits: a policy feature that may help during a serious health event",
             keyPoints: [
-              "Some life policies include riders that may allow access to benefits early under defined qualifying events.",
-              "Eligibility, definitions, and payout structures vary by carrier and policy.",
-              "This is not a substitute for health insurance; it is a policy feature with specific terms.",
-              "Always review rider language and limitations in writing."
+              "Some life policies include riders that may allow early access to benefits under defined qualifying events.",
+              "Definitions and payout rules vary by carrier and contract—always review the rider language.",
+              "It’s not a replacement for health insurance; it’s a separate feature with specific terms."
             ],
-            disclosure: "General educational information only. Coverage and rider availability vary by policy and underwriting.",
-            nextQuestion: "Are you exploring living benefits primarily for household protection or business continuity concerns?"
+            disclosure: "Educational info only. Rider availability varies by product and underwriting.",
+            nextStep: "Next step: are you thinking about living benefits mainly for household stability (bills/income), or business continuity?"
           }
         },
         {
-          id: "debt",
-          keywords: ["debt", "loan", "credit", "card", "student", "payoff", "interest"],
+          id: "pricing",
+          keywords: ["cost", "price", "quote", "premium", "rates", "how much does it cost", "expensive"],
           answer: {
-            headline: "Debt management — what a structured plan typically addresses",
+            headline: "What drives pricing (and how to estimate without pressure)",
             keyPoints: [
-              "The objective is reducing interest drag while maintaining sufficient cash reserves.",
-              "A plan usually sequences payoff by rate, risk, and cash-flow impact.",
-              "Small optimizations (payment timing, consolidation evaluation, budgeting) can improve speed and control.",
-              "The right approach depends on income stability and the type of debt."
+              "Pricing depends on age range, health history, tobacco status, state, coverage amount, and product type.",
+              "Underwriting class can materially change the premium when underwriting applies.",
+              "We can do a rough estimate here, then you can choose whether to run a formal quote."
             ],
-            disclosure: "General educational information only. Not legal, tax, or credit counseling advice.",
-            nextQuestion: "Which debt category is primary: credit cards, auto, student loans, or mortgage?"
+            disclosure: "Educational info only. Quotes aren’t binding and depend on eligibility/underwriting.",
+            nextStep: "Next step: share your age range (25–34/35–44/45–54/55–64/65+), tobacco yes/no, and the coverage amount you’re considering."
+          },
+          bookingWhen: ["apply", "application", "start", "enroll", "run a quote", "get a quote"]
+        },
+        {
+          id: "iul_basics",
+          keywords: ["iul", "indexed universal life", "cash value", "cap", "floor", "participation", "spread", "index"],
+          answer: {
+            headline: "IUL (Indexed Universal Life): what it is and what it isn’t",
+            keyPoints: [
+              "IUL is permanent life insurance that may build cash value using index-linked crediting (not a direct stock investment).",
+              "Index crediting may use caps/participation/spreads; policy charges still apply even in flat markets.",
+              "Loans/withdrawals can reduce values and change performance; design and funding level matter."
+            ],
+            disclosure: "Educational info only. Not tax/legal advice. Product terms vary by carrier and policy.",
+            nextStep: "Next step: is your interest mostly lifetime protection, cash value concepts, or retirement income planning?"
           }
         },
         {
-          id: "booking",
-          keywords: ["book", "schedule", "appointment", "meeting", "call", "calendar", "time", "talk"],
+          id: "fia_basics",
+          keywords: ["annuity", "fia", "fixed indexed annuity", "indexed annuity", "income rider", "lifetime income"],
           answer: {
-            headline: "Schedule a review",
+            headline: "Fixed Indexed Annuity (FIA): principal protection + index-linked crediting (contract details matter)",
             keyPoints: [
-              "A short review clarifies goals, time horizon, and next best steps.",
-              "Education-first discussion; no pressure.",
-              "You can request a needs-based review for protection, mortgage coverage, or retirement strategy concepts."
+              "An FIA credits interest linked to an index with limits; it’s not a stock investment.",
+              "Most contracts have surrender periods and liquidity rules—typically long-term money.",
+              "Income features (when elected) are contract-based and depend on terms and rider costs."
             ],
-            disclosure: "General educational information only. Specific recommendations require a fact-finding review.",
-            nextQuestion: "Schedule here:\n" + APP_DATA.links.booking
+            disclosure: "Educational info only. Features, surrender periods, and rider costs vary by product.",
+            nextStep: "Next step: are you looking for accumulation, or specifically for predictable lifetime income?"
           }
         },
         {
-          id: "about",
-          keywords: ["who", "jackson", "latimore", "bio", "background", "company"],
+          id: "debt_strategy",
+          keywords: ["debt", "credit card", "loan", "payoff", "interest", "student loan"],
           answer: {
-            headline: "About Jackson and Latimore Life & Legacy LLC",
+            headline: "Debt strategy: reduce interest drag while protecting cashflow",
             keyPoints: [
-              "Founder-led planning focused on protection-first education and clear next steps.",
-              "Services include life insurance education, indexed strategy concepts, and retirement planning discussions.",
-              "The objective is to help households understand options and make informed decisions."
+              "The goal is to lower interest waste without draining emergency reserves.",
+              "Payoff sequencing often prioritizes highest-rate debt while keeping minimums elsewhere.",
+              "Small changes (payment timing, budgeting, refinance evaluation) can improve control."
             ],
-            disclosure: "General educational information only. Products and features vary by carrier and policy.",
-            nextQuestion: "What are you planning for right now: family protection, mortgage coverage, or retirement income?"
+            disclosure: "Educational info only. Not legal, tax, or credit counseling advice.",
+            nextStep: "Next step: which is biggest right now—credit cards, auto, student loans, or mortgage?"
+          }
+        },
+        {
+          id: "final_expense",
+          keywords: ["final expense", "funeral", "burial", "cremation", "end of life"],
+          answer: {
+            headline: "Final expense coverage: planning for dignity and fewer financial surprises",
+            keyPoints: [
+              "Typically smaller permanent coverage meant to help with funeral and final costs.",
+              "Helps loved ones avoid scrambling or taking on high-interest debt.",
+              "The right amount depends on your preferences and existing savings."
+            ],
+            disclosure: "Educational info only. Availability varies by health and product.",
+            nextStep: "Next step: are you aiming to cover funeral only, or also leave a small cushion for family expenses?"
+          }
+        },
+        {
+          id: "business_key_person",
+          keywords: ["key person", "buy-sell", "succession", "business", "partner", "executive benefits"],
+          answer: {
+            headline: "Business protection: key person + continuity planning in plain language",
+            keyPoints: [
+              "Key person coverage can help a business keep operating if a key leader is lost.",
+              "Buy-sell planning sets a clear ownership transition path and funding can create real liquidity.",
+              "The right design depends on revenue dependence, partners, and time horizon."
+            ],
+            disclosure: "Educational info only. Not legal advice; attorney drafts legal agreements.",
+            nextStep: "Next step: is this a solo owner, or do you have partners who would need a clear transition plan?"
+          }
+        },
+        {
+          id: "rule_72",
+          keywords: ["rule of 72", "72", "doubling", "double", "compound", "compound interest"],
+          answer: {
+            headline: "Rule of 72: estimating how quickly money can double",
+            keyPoints: [
+              "Divide 72 by an annual rate to estimate the doubling timeframe.",
+              "Example: 6% ≈ 12 years (72 ÷ 6), 9% ≈ 8 years (72 ÷ 9).",
+              "It’s a shortcut for comparisons—not a guarantee.",
+              "Inflation matters; purchasing power can still fall if inflation is higher than growth."
+            ],
+            disclosure: "Educational info only. Actual outcomes depend on product terms, costs, and market conditions.",
+            nextStep: "Next step: are you using this for savings growth, retirement planning, or comparing debt interest?"
           }
         }
       ];
 
-      // --- LOGIC: TYPEWRITER EFFECT COMPONENT ---
+      // --- helper: normalize + matching ---
+      const normalize = (s) =>
+        (s || "")
+          .toLowerCase()
+          .replace(/[^\w\s]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+
+      const scoreEntry = (text, entry) => {
+        const t = normalize(text);
+        let score = 0;
+
+        for (const kw of entry.keywords || []) {
+          const k = normalize(kw);
+          if (!k) continue;
+
+          if (t.includes(k)) score += Math.min(10, 3 + k.split(" ").length);
+          if (k.split(" ").length === 1 && t.split(" ").includes(k)) score += 2;
+        }
+
+        if (/[?]/.test(text)) score += 1;
+        if (/\b(compare|difference|pros|cons|best|should|recommend)\b/i.test(text)) score += 1;
+        if (/\b(mortgage|work|quote|premium|annuity|iul|living)\b/i.test(text)) score += 1;
+
+        return score;
+      };
+
+      const formatAnswer = (entry, memory) => {
+        const a = entry.answer || {};
+        const bullets = (a.keyPoints || []).map((p) => `• ${p}`).join("\n");
+        const disclosure = a.disclosure ? `\n\n${a.disclosure}` : "";
+        const next = a.nextStep ? `\n\n${a.nextStep}` : "";
+
+        // Gentle local grounding (short; not spammy)
+        const local = `\n\n(Quick local note: ${TRI_COUNTY_CONTEXT.split("\n").filter(Boolean)[1] || ""})`;
+
+        // Memory-aware personalization (small)
+        const memLineParts = [];
+        if (memory?.protect) memLineParts.push(`protecting: ${memory.protect}`);
+        if (memory?.priority) memLineParts.push(`priority: ${memory.priority}`);
+        if (memory?.ageRange) memLineParts.push(`age range: ${memory.ageRange}`);
+        const memLine = memLineParts.length ? `\n\nWhat I’m tracking so far: ${memLineParts.join(" • ")}.` : "";
+
+        return `${a.headline || "Information"}\n\n${bullets}${disclosure}${memLine}${local}${next}`;
+      };
+
+      // Booking should be OPTIONAL and only when user is asking for personalization/apply/quote.
+      const shouldSuggestBooking = (text) => {
+        const t = normalize(text);
+        const triggers = [
+          "apply","application","enroll","start","sign up",
+          "quote","premium","rates","price","how much will it cost",
+          "recommend","best for me","compare options","review my policy",
+          "underwriting","denied","medical exam"
+        ];
+        return triggers.some(k => t.includes(k));
+      };
+
+      // --- TYPEWRITER ---
       const Typewriter = ({ text, onComplete }) => {
         const [displayedText, setDisplayedText] = useState("");
-
         useEffect(() => {
           let index = 0;
           const timer = setInterval(() => {
@@ -234,14 +409,13 @@
               clearInterval(timer);
               if (onComplete) onComplete();
             }
-          }, 12);
+          }, 10);
           return () => clearInterval(timer);
         }, [text]);
-
         return <span className="whitespace-pre-wrap">{displayedText}</span>;
       };
 
-      // --- COMPONENT: SOCIAL BUTTON ---
+      // --- SOCIAL BUTTON ---
       const SocialBtn = ({ href, label }) => (
         <a
           href={href}
@@ -254,54 +428,34 @@
         </a>
       );
 
-      // --- PROFESSIONAL MATCHING ---
-      const normalize = (s) =>
-        (s || "")
-          .toLowerCase()
-          .replace(/[^\w\s]/g, " ")
-          .replace(/\s+/g, " ")
-          .trim();
-
-      const scoreEntry = (text, entry) => {
-        const t = normalize(text);
-        let score = 0;
-
-        for (const kw of entry.keywords) {
-          const k = normalize(kw);
-          if (!k) continue;
-
-          if (t.includes(k)) score += Math.min(10, 3 + k.split(" ").length);
-          if (k.split(" ").length === 1 && t.split(" ").includes(k)) score += 2;
-        }
-
-        // Slight boost for question phrasing
-        if (/[?]/.test(text)) score += 1;
-
-        // Slight boost for intent words
-        if (/\b(compare|difference|pros|cons|best|should|recommend)\b/i.test(text)) score += 1;
-
-        return score;
+      // --- SAVE PLAN (soft lead capture) ---
+      // Stores the saved plan locally; can optionally open email compose.
+      const SAVED_PLANS_KEY = "latimore_saved_plans_v1";
+      const getSavedPlans = () => {
+        try { return JSON.parse(localStorage.getItem(SAVED_PLANS_KEY) || "[]"); }
+        catch { return []; }
+      };
+      const savePlanLocal = (plan) => {
+        const existing = getSavedPlans();
+        existing.unshift({ ...plan, savedAt: new Date().toISOString() });
+        localStorage.setItem(SAVED_PLANS_KEY, JSON.stringify(existing.slice(0, 25)));
       };
 
-      const formatAnswer = (entry) => {
-        const a = entry.answer || {};
-        const bullets = (a.keyPoints || []).map((p) => `• ${p}`).join("\n");
-        const disclosure = a.disclosure ? `\n\n${a.disclosure}` : "";
-        const next = a.nextQuestion ? `\n\n${a.nextQuestion}` : "";
-        return `${a.headline || "Information"}\n\n${bullets}${disclosure}${next}`;
-      };
-
-      // --- COMPONENT: AI CHAT ASSISTANT ---
+      // --- COMPONENT: ASSISTANT ---
       const Assistant = ({ onClose, initialQuery }) => {
         const [messages, setMessages] = useState([
           {
             role: "assistant",
             content:
-              "Welcome. Ask a question about life insurance, indexed strategies, mortgage protection, or the Rule of 72. I provide general educational information and next-step guidance."
+              "Hey — I’m the Latimore Life & Legacy assistant. I can explain coverage options in plain language (life insurance, living benefits, mortgage protection, retirement income, and business continuity).\n\nWhat are you trying to protect right now: your family, your home, your income, your retirement, or your business?"
           }
         ]);
         const [input, setInput] = useState("");
         const [isTyping, setIsTyping] = useState(false);
+        const [memory, setMemory] = useState(blankMemory());
+        const [showSave, setShowSave] = useState(false);
+        const [savedToast, setSavedToast] = useState(false);
+        const [saveEmail, setSaveEmail] = useState("");
         const scrollRef = useRef(null);
         const hasAutoQueried = useRef(false);
 
@@ -310,23 +464,48 @@
         }, [messages, isTyping]);
 
         const generateResponse = (userText) => {
+          // analytics
+          bumpAnalytics(classifyQuestion(userText));
+
+          // pick best KB entry
           const ranked = KNOWLEDGE_BASE
             .map((entry) => ({ entry, score: scoreEntry(userText, entry) }))
             .sort((a, b) => b.score - a.score);
 
           const best = ranked[0];
+          const matched = best && best.score >= 3 ? best.entry : null;
 
-          if (best && best.score >= 3) return formatAnswer(best.entry);
+          if (!matched) {
+            return (
+              "I can help—pick the closest option and I’ll outline the key considerations:\n\n" +
+              "• Family protection (life insurance basics)\n" +
+              "• Mortgage protection\n" +
+              "• Living benefits (serious illness riders)\n" +
+              "• Retirement income concepts (annuities)\n" +
+              "• IUL basics (cash value life insurance)\n" +
+              "• Business planning (key person / buy-sell)\n\n" +
+              "Reply with one, and tell me what matters most: lowest cost, strongest protection, or flexibility."
+            );
+          }
 
-          return (
-            "I can help—one quick clarifier so I answer precisely:\n\n" +
-            "Which area applies most right now?\n" +
-            "• Family protection (life insurance)\n" +
-            "• Mortgage protection\n" +
-            "• Retirement planning concepts (indexed strategies)\n" +
-            "• Debt payoff strategy\n\n" +
-            "Reply with one, and I will outline the core considerations."
-          );
+          let response = formatAnswer(matched, memory);
+
+          // Spanish quick summary only when asked
+          if (wantsSpanish(userText)) {
+            response += "\n\n" + spanishSummary();
+          }
+
+          // Booking suggestion ONLY when appropriate
+          if (shouldSuggestBooking(userText)) {
+            response += `\n\nIf you want a personalized plan (amount, options, and next steps), you can schedule a no-pressure review here:\n${APP_DATA.links.booking}`;
+          } else {
+            response += "\n\nNext best step (in chat): share your age range and what matters most (lowest cost, strongest protection, or flexibility).";
+          }
+
+          // Soft lead capture prompt
+          response += "\n\nIf you’d like, I can save a quick summary of this plan for you.";
+
+          return response;
         };
 
         const handleSend = useCallback(
@@ -336,15 +515,21 @@
 
             setInput("");
             setMessages((prev) => [...prev, { role: "user", content: text }]);
+
+            // update memory
+            setMemory((prev) => updateMemory({ ...prev }, text));
+
             setIsTyping(true);
+            setShowSave(false);
 
             setTimeout(() => {
               const responseText = generateResponse(text);
               setMessages((prev) => [...prev, { role: "assistant", content: responseText, type: "typewriter" }]);
               setIsTyping(false);
-            }, 650);
+              setShowSave(true); // show opt-in save after assistant answers
+            }, 550);
           },
-          [input, isTyping]
+          [input, isTyping, memory]
         );
 
         useEffect(() => {
@@ -363,6 +548,41 @@
           return () => window.removeEventListener("keydown", onKey);
         }, [onClose]);
 
+        const saveCurrentPlan = () => {
+          const lastAssistant = [...messages].reverse().find(m => m.role === "assistant");
+          if (!lastAssistant) return;
+
+          const plan = {
+            memory,
+            summary: lastAssistant.content,
+            source: "assistant",
+          };
+          savePlanLocal(plan);
+
+          // optional email (opens user's mail client; no server)
+          if (saveEmail.trim()) {
+            const subject = encodeURIComponent("Saved Plan Summary • Latimore Life & Legacy");
+            const body = encodeURIComponent(
+              `Here’s your saved summary:\n\n${lastAssistant.content}\n\n— ${APP_DATA.company}\n${APP_DATA.tagline}\n${APP_DATA.links.main}`
+            );
+            window.location.href = `mailto:${saveEmail.trim()}?subject=${subject}&body=${body}`;
+          }
+
+          setSavedToast(true);
+          setTimeout(() => setSavedToast(false), 1800);
+          setShowSave(false);
+          setSaveEmail("");
+        };
+
+        const viewAnalytics = () => {
+          const a = getAnalytics();
+          const lines = Object.entries(a)
+            .sort(([,v1],[,v2]) => (v2||0)-(v1||0))
+            .map(([k,v]) => `${k}: ${v}`)
+            .join("\n");
+          alert(lines ? `Anonymous question categories (this device):\n\n${lines}` : "No analytics recorded yet on this device.");
+        };
+
         return (
           <div className="flex flex-col h-full bg-slate-50">
             <div className="p-5 bg-[#1D3A5F] text-white flex justify-between items-center shrink-0">
@@ -373,13 +593,22 @@
                   <p className="text-[10px] text-[#C29D6F] font-bold uppercase tracking-widest">Education-First Assistant</p>
                 </div>
               </div>
-              <button
-                onClick={onClose}
-                className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-full transition-colors text-xl"
-                aria-label="Close assistant"
-              >
-                ×
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={viewAnalytics}
+                  className="text-[10px] px-3 py-2 rounded-full bg-white/10 hover:bg-white/15"
+                  title="View anonymous analytics (this device)"
+                >
+                  Analytics
+                </button>
+                <button
+                  onClick={onClose}
+                  className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-full transition-colors text-xl"
+                  aria-label="Close assistant"
+                >
+                  ×
+                </button>
+              </div>
             </div>
 
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
@@ -404,13 +633,39 @@
               {isTyping && (
                 <div className="flex justify-start animate-in">
                   <div className="bg-white border border-slate-200 p-3 rounded-2xl flex items-center space-x-2 shadow-sm">
-                    <span className="w-2 h-2 bg-[#C29D6F] rounded-full animate-bounce" style={{ animationDelay: "0s" }}></span>
-                    <span className="w-2 h-2 bg-[#C29D6F] rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></span>
-                    <span className="w-2 h-2 bg-[#C29D6F] rounded-full animate-bounce" style={{ animationDelay: "0.4s" }}></span>
+                    <span className="w-2 h-2 bg-[#C29D6F] rounded-full pulse-soft"></span>
+                    <span className="w-2 h-2 bg-[#C29D6F] rounded-full pulse-soft" style={{ animationDelay: "0.15s" }}></span>
+                    <span className="w-2 h-2 bg-[#C29D6F] rounded-full pulse-soft" style={{ animationDelay: "0.3s" }}></span>
                   </div>
                 </div>
               )}
             </div>
+
+            {/* Soft lead capture (Save plan) */}
+            {showSave && !isTyping && (
+              <div className="px-4 pb-2 bg-white border-t">
+                <div className="mt-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                  <div className="text-xs font-bold text-[#1D3A5F]">Save this plan summary?</div>
+                  <div className="text-[11px] text-slate-500 mt-1">
+                    Optional: add your email to send a copy. (No pressure — you can skip this.)
+                  </div>
+                  <div className="flex gap-2 mt-2">
+                    <input
+                      value={saveEmail}
+                      onChange={(e) => setSaveEmail(e.target.value)}
+                      placeholder="Optional email (for your copy)"
+                      className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#C29D6F]/40"
+                    />
+                    <button
+                      onClick={saveCurrentPlan}
+                      className="px-4 py-2 rounded-xl bg-[#C29D6F] text-white text-xs font-bold hover:opacity-90"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="p-4 border-t bg-white shrink-0">
               <div className="flex space-x-2">
@@ -431,6 +686,13 @@
                   →
                 </button>
               </div>
+
+              {savedToast && (
+                <div className="mt-2 text-[11px] text-emerald-700 font-semibold">
+                  Saved locally ✅
+                </div>
+              )}
+
               <p className="text-[10px] text-slate-400 mt-3 leading-relaxed">
                 Educational information only. No individualized financial, tax, or legal advice is provided here. Policy features vary by carrier and product.
               </p>
@@ -658,7 +920,7 @@
                   onClick={() => setShowAssistant(false)}
                 >
                   <div
-                    className="bg-white w-full max-w-sm h-[560px] rounded-[2rem] overflow-hidden shadow-2xl animate-in"
+                    className="bg-white w-full max-w-sm h-[600px] rounded-[2rem] overflow-hidden shadow-2xl animate-in"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <Assistant
