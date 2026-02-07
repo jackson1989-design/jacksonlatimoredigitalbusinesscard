@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Latimore Life & Legacy - Protecting Today. Securing Tomorrow. Financial services, insurance, and legacy planning.">
+  <meta property="og:title" content="Latimore Life & Legacy">
+  <meta property="og:image" content="https://jackson1989-design.github.io/latimore-life-legacy-site/hero.jpg">
+  <title>Latimore Life & Legacy - Digital Portfolio</title>
+  
+  <!-- React & Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#1D3A5F',
+              gold: '#C29D6F',
+              slate: '#64748b'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: #f1f5f9;
+    }
+    
+    /* Custom Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #C29D6F;
+      border-radius: 3px;
+    }
+    
+    /* Animations */
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slide-up {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-in {
+      animation: fade-in 0.4s ease-out, slide-up 0.4s ease-out forwards;
+    }
+    
+    /* Hide scrollbar for seamless mobile look */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+    
+    // --- DATA ---
+    const APP_DATA = {
+      name: "Jackson M. Latimore Sr.",
+      title: "Founder & CEO",
+      company: "Latimore Life & Legacy LLC",
+      license: "PA License #1268820",
+      tagline: "Protecting Today. Securing Tomorrow.",
+      hashtag: "#TheBeatGoesOn",
+      bio: "To empower every family with the financial tools and protection strategies necessary to turn hard work into a lasting legacy, ensuring financial security is a foundation for generations to come.",
+      phone: "(856) 895-1457",
+      email: "jackson1989@latimorelegacy.com",
+      bannerUrl: "./hero.png",
+      links: {
+        main: "https://jackson1989-design.github.io/jacksonlatimoredigitalbusinesscard/",
+        ethos: "https://agents.ethoslife.com/invite/29ad1",
+        booking: "https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus",
+        linkedin: "https://www.linkedin.com/in/startwithjacksongfi/",
+        facebook: "https://www.facebook.com/LatimoreLegacyLLC",
+        instagram: "https://www.instagram.com/jacksonlatimore.global"
+      },
+      services: [
+        { 
+          title: "Wealth Accumulation",
+          icon: "💰",
+          description: "We utilize advanced tax-advantaged vehicles like Indexed Universal Life (IUL) and modern annuities to create a robust growth engine for your family's future."
+        },
+        { 
+          title: "Asset Protection",
+          icon: "🛡️",
+          description: "Wealth isn't just about what you make; it's about what you keep. We implement specialized structures to safeguard your retirement savings from market volatility."
+        },
+        { 
+          title: "Education Funds",
+          icon: "🎓",
+          description: "Move beyond the limitations of standard 529 plans. We design flexible education funding strategies that offer tax-free growth and liquidity."
+        },
+        { 
+          title: "Debt Management",
+          icon: "⏰",
+          description: "Debt is often the biggest obstacle to legacy building. Our data-driven 'Debt-Free Life' strategies focus on eliminating interest waste."
+        },
+        { 
+          title: "Life Insurance",
+          icon: "❤️",
+          description: "More than just a death benefit, our life insurance solutions act as a financial safety net and a legacy multiplier."
+        },
+        { 
+          title: "Living Benefits",
+          icon: "🔗",
+          description: "Traditional insurance only pays if you die; our modern 'Living Benefits' policies pay you while you're still here if you face a critical illness."
+        },
+        { 
+          title: "Estate Planning",
+          icon: "💝",
+          description: "We help you navigate the complexities of wills, trusts, and final expense planning to ensure a seamless transfer of wealth."
+        },
+        { 
+          title: "Indexed Growth",
+          icon: "📈",
+          description: "Experience the growth of the stock market without the fear of a crash. Our indexed financial products provide a '0% Floor' safety net."
+        },
+        { 
+          title: "Mortgage Protection",
+          icon: "🏠",
+          description: "Ensure that in the event of disability or death, your mortgage is paid off, allowing your family to remain in their home."
+        },
+        { 
+          title: "Business Strategies",
+          icon: "🏭",
+          description: "Key person insurance, buy-sell agreement funding, and executive bonus plans for entrepreneurs and small business owners."
+        }
+      ]
+    };
+
+    // --- COMPONENTS ---
+
+    // Social Button
+    const SocialBtn = ({ href, icon }) => (
+      <a 
+        href={href} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="p-3 bg-white border-2 border-slate-100 rounded-2xl text-brand-navy hover:border-brand-gold hover:bg-brand-gold/5 transition-all shadow-sm active:scale-90 text-xl flex items-center justify-center h-12 w-12"
+      >
+        {icon}
+      </a>
+    );
+
+    // AI Legacy Blueprint
+    const LegacyBlueprint = () => {
+      const [goal, setGoal] = useState('');
+      const [blueprint, setBlueprint] = useState('');
+      const [loading, setLoading] = useState(false);
+
+      const generateBlueprint = () => {
+        if (!goal.trim()) return;
+        setLoading(true);
+        
+        setTimeout(() => {
+          const blueprints = [
+            `Based on your goal to "${goal}", here is a suggested strategy:\n\n1. **Tax-Free Growth:** Leverage ${APP_DATA.services[0].title} with indexed products.\n2. **Security:** Implement ${APP_DATA.services[1].title} to shield assets.\n3. **Transfer:** Establish ${APP_DATA.services[6].title}.\n\n👉 Book a legacy review to activate this.`,
+            `To achieve "${goal}", we recommend:\n\n1. **Protection:** Secure ${APP_DATA.services[4].title} immediately.\n2. **Health:** Utilize ${APP_DATA.services[5].title} for crisis coverage.\n3. **Future:** Create ${APP_DATA.services[2].title} for the next generation.\n\n👉 Book a legacy review to activate this.`
+          ];
+          setBlueprint(blueprints[Math.floor(Math.random() * blueprints.length)]);
+          setLoading(false);
+        }, 1500);
+      };
+
+      return (
+        <div className="bg-brand-navy/5 rounded-3xl p-6 border border-brand-navy/10 mb-10">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="bg-brand-gold p-2 rounded-xl text-white text-xl">💡</div>
+            <h2 className="text-brand-navy text-lg font-bold">AI Legacy Blueprint</h2>
+          </div>
+
+          {!blueprint ? (
+            <div className="space-y-4">
+              <p className="text-sm text-slate-600">Enter a financial goal (e.g., "Retire tax-free" or "Pay off mortgage").</p>
+              <textarea 
+                value={goal}
+                onChange={(e) => setGoal(e.target.value)}
+                placeholder="What is your legacy goal?"
+                className="w-full p-4 text-sm rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-gold/50 h-24 resize-none bg-white"
+              />
+              <button 
+                onClick={generateBlueprint}
+                disabled={loading || !goal.trim()}
+                className="w-full py-4 bg-brand-navy text-white rounded-2xl text-sm font-bold flex items-center justify-center space-x-2 disabled:opacity-50 hover:bg-[#152a45] active:scale-95 transition-all shadow-lg"
+              >
+                {loading ? <span className="animate-spin">⚙️</span> : <span>✨ Generate Strategy</span>}
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4 animate-in">
+              <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap bg-white p-5 rounded-2xl border border-brand-gold/30 shadow-sm">
+                {blueprint}
+              </div>
+              <button 
+                onClick={() => { setBlueprint(''); setGoal(''); }} 
+                className="text-xs text-brand-navy font-bold uppercase tracking-widest hover:text-brand-gold flex items-center"
+              >
+                ↺ Reset Tool
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    // Chat Assistant
+    const Assistant = ({ onClose, initialQuery }) => {
+      const [messages, setMessages] = useState([
+        { role: 'assistant', content: `Hello! I'm your Legacy Advisor. How can I help you secure your financial future?` }
+      ]);
+      const [input, setInput] = useState('');
+      const [isLoading, setIsLoading] = useState(false);
+      const scrollRef = useRef(null);
+      const hasAutoQueried = useRef(false);
+
+      useEffect(() => {
+        if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }, [messages]);
+
+      // Handle Initial Query from Service Cards
+      useEffect(() => {
+        if (initialQuery && !hasAutoQueried.current) {
+          hasAutoQueried.current = true;
+          setMessages(prev => [...prev, { role: 'user', content: initialQuery }]);
+          setIsLoading(true);
+          setTimeout(() => {
+            setMessages(prev => [...prev, { 
+              role: 'assistant', 
+              content: `That's a great question about ${initialQuery.includes('"') ? initialQuery.split('"')[1] : 'our services'}. This service is designed to provide security and liquidity. Jackson can customize this specifically for your situation. Would you like to schedule a quick 15-minute review?` 
+            }]);
+            setIsLoading(false);
+          }, 1000);
+        }
+      }, [initialQuery]);
+
+      const handleSend = () => {
+        if (!input.trim() || isLoading) return;
+        const text = input;
+        setInput('');
+        setMessages(prev => [...prev, { role: 'user', content: text }]);
+        setIsLoading(true);
+
+        setTimeout(() => {
+          const responses = [
+            `I recommend scheduling a personalized review with Jackson at ${APP_DATA.links.booking}. It's the best way to get exact numbers. 📞`,
+            `Jackson specializes in that area. You can check instant quotes here: ${APP_DATA.links.ethos} or book a time to chat. 🛡️`,
+            `This strategy helps families break the cycle of financial vulnerability. Let's get you connected with Jackson: ${APP_DATA.links.booking} 🎓`
+          ];
+          setMessages(prev => [...prev, { role: 'assistant', content: responses[Math.floor(Math.random() * responses.length)] }]);
+          setIsLoading(false);
+        }, 1200);
+      };
+
+      return (
+        <div className="flex flex-col h-full bg-slate-50">
+          <div className="p-5 bg-brand-navy text-white flex justify-between items-center shrink-0">
+            <div className="flex items-center space-x-3">
+              <div className="bg-brand-gold p-1.5 rounded-lg text-xl">🤖</div>
+              <div>
+                <h3 className="font-bold text-base">Legacy Advisor AI</h3>
+                <p className="text-[10px] text-brand-gold font-bold uppercase tracking-widest">24/7 Support</p>
+              </div>
+            </div>
+            <button onClick={onClose} className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-full transition-colors text-xl">✕</button>
+          </div>
+
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+            {messages.map((msg, idx) => (
+              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in`}>
+                <div className={`max-w-[85%] p-3.5 rounded-2xl shadow-sm text-sm ${msg.role === 'user' ? 'bg-brand-navy text-white rounded-tr-none' : 'bg-white border border-slate-200 text-slate-700 rounded-tl-none'}`}>
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-white border border-slate-200 p-3 rounded-2xl flex items-center space-x-2 shadow-sm">
+                  <span className="text-brand-gold animate-pulse text-lg">●●●</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="p-4 border-t bg-white shrink-0">
+            <div className="flex space-x-2">
+              <input 
+                type="text" 
+                value={input} 
+                onChange={(e) => setInput(e.target.value)} 
+                onKeyDown={(e) => e.key === 'Enter' && handleSend()} 
+                placeholder="Type your question..." 
+                className="flex-1 bg-slate-100 px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold/50" 
+              />
+              <button 
+                onClick={handleSend} 
+                disabled={isLoading || !input.trim()} 
+                className="w-12 bg-brand-navy text-white rounded-xl shadow-md hover:bg-[#152a45] active:scale-95 transition-all flex items-center justify-center disabled:opacity-50"
+              >
+                ➤
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // --- MAIN APP ---
+    const App = () => {
+      const [showAssistant, setShowAssistant] = useState(false);
+      const [assistantQuery, setAssistantQuery] = useState(null);
+      const [selectedService, setSelectedService] = useState(null);
+      const [copied, setCopied] = useState(false);
+
+      const handleCopyLink = () => {
+        navigator.clipboard.writeText(window.location.href);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      };
+
+      // Optimized vCard Generator (Fixed formatting issues)
+      const handleSaveContact = () => {
+        const vcardRows = [
+          "BEGIN:VCARD",
+          "VERSION:3.0",
+          `FN:${APP_DATA.name}`,
+          `ORG:${APP_DATA.company}`,
+          `TITLE:${APP_DATA.title}`,
+          `TEL;TYPE=WORK,VOICE:${APP_DATA.phone}`,
+          `EMAIL;TYPE=WORK,INTERNET:${APP_DATA.email}`,
+          `URL:${APP_DATA.links.main}`,
+          `NOTE:${APP_DATA.license} - ${APP_DATA.tagline}`,
+          "END:VCARD"
+        ];
+        
+        const blob = new Blob([vcardRows.join("\n")], { type: 'text/vcard' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = "Latimore_Legacy.vcf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+
+      return (
+        <div className="min-h-screen flex flex-col items-center sm:py-10">
+          <div className="w-full max-w-[440px] bg-white sm:rounded-[3rem] shadow-2xl overflow-hidden relative sm:border border-slate-200 min-h-screen sm:min-h-[800px]">
+            
+            {/* Banner */}
+            <div className="w-full h-80 relative flex items-center justify-center overflow-hidden bg-brand-navy">
+              <img src={APP_DATA.bannerUrl} alt="Hero" className="w-full h-full object-cover opacity-90" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 to-transparent" />
+              <div className="absolute bottom-0 w-full h-1.5 bg-brand-gold" />
+            </div>
+
+            {/* Profile */}
+            <div className="text-center px-6 -mt-20 relative z-10 pb-8">
+               <div className="w-32 h-32 mx-auto rounded-full bg-white p-1 shadow-xl mb-4">
+                 <div className="w-full h-full rounded-full bg-brand-navy flex items-center justify-center text-4xl overflow-hidden">
+                   {/* Fallback avatar if no specific profile pic provided */}
+                   <span className="text-white">JL</span>
+                 </div>
+               </div>
+              
+              <h1 className="text-2xl font-black text-brand-navy tracking-tight">{APP_DATA.name}</h1>
+              <p className="text-brand-gold font-bold text-xs uppercase tracking-widest mt-1 mb-2">{APP_DATA.title}</p>
+              <div className="inline-flex items-center space-x-1 bg-brand-navy/5 px-3 py-1 rounded-full">
+                <span className="text-slate-600 font-medium text-xs">{APP_DATA.company}</span>
+                <span className="text-brand-gold text-xs">✓</span>
+              </div>
+              
+              {/* Socials */}
+              <div className="flex justify-center space-x-3 mt-6">
+                <SocialBtn href={APP_DATA.links.linkedin} icon="💼" />
+                <SocialBtn href={APP_DATA.links.facebook} icon="📘" />
+                <SocialBtn href={APP_DATA.links.instagram} icon="📷" />
+                <SocialBtn href={APP_DATA.links.main} icon="🌐" />
+              </div>
+
+              {/* Bio Quote */}
+              <div className="mt-8 mx-2 px-6 py-6 bg-slate-50 rounded-3xl border border-slate-100 relative">
+                <span className="absolute -top-3 left-4 text-brand-gold text-5xl font-serif">"</span>
+                <p className="text-brand-navy text-sm leading-relaxed italic font-medium relative z-10">
+                  {APP_DATA.bio}
+                </p>
+              </div>
+            </div>
+
+            {/* Main Actions */}
+            <div className="px-6 space-y-3 mb-10">
+              <a href={`mailto:${APP_DATA.email}`} className="flex items-center justify-center space-x-3 w-full py-4 bg-brand-navy text-white rounded-2xl shadow-lg hover:bg-[#152a45] transition-all font-bold text-sm active:scale-[0.98]">
+                <span>✉️ Send Secure Email</span>
+              </a>
+              <a href={APP_DATA.links.booking} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center space-x-3 w-full py-4 bg-brand-gold text-white rounded-2xl shadow-lg hover:opacity-90 transition-all font-bold text-sm active:scale-[0.98]">
+                <span>📅 Schedule Legacy Review</span>
+              </a>
+              <a href={APP_DATA.links.ethos} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center space-x-3 w-full py-4 bg-white border-2 border-brand-navy text-brand-navy rounded-2xl hover:bg-slate-50 transition-all font-bold text-sm active:scale-[0.98]">
+                <span>🔍 Get Instant Quote</span>
+              </a>
+            </div>
+
+            {/* Util Actions */}
+            <div className="grid grid-cols-2 gap-3 px-6 mb-10">
+              <button onClick={handleCopyLink} className="flex items-center justify-center space-x-2 py-3 border border-slate-200 rounded-xl text-slate-500 font-semibold text-xs hover:bg-slate-50 transition-all">
+                <span>{copied ? '✓ Copied' : '📋 Copy Link'}</span>
+              </button>
+              <button onClick={handleSaveContact} className="flex items-center justify-center space-x-2 py-3 bg-slate-800 text-white rounded-xl shadow-md font-semibold text-xs hover:bg-slate-900 transition-all">
+                <span>➕ Save Contact</span>
+              </button>
+            </div>
+
+            {/* AI Tool */}
+            <div className="px-6">
+              <LegacyBlueprint />
+            </div>
+
+            {/* Services Grid */}
+            <div className="px-4 mb-16">
+              <div className="bg-slate-50 rounded-[2.5rem] p-6 pb-10 border border-slate-100 shadow-inner">
+                <h2 className="text-brand-navy text-center font-black text-[10px] uppercase tracking-[0.25em] mb-8 pb-4 border-b border-brand-gold/20">Full Portfolio</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  {APP_DATA.services.map((service, i) => (
+                    <button 
+                      key={i} 
+                      onClick={() => setSelectedService(service)}
+                      className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center hover:border-brand-gold hover:shadow-md transition-all active:scale-95 h-32 justify-center"
+                    >
+                      <div className="text-2xl mb-2">{service.icon}</div>
+                      <span className="text-[10px] font-bold text-brand-navy uppercase leading-tight">{service.title}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-8 pb-24 text-center">
+               <div className="text-4xl font-black text-brand-navy/10 italic select-none mb-4">{APP_DATA.hashtag}</div>
+               <p className="text-slate-400 text-[10px] uppercase tracking-widest">&copy; {new Date().getFullYear()} {APP_DATA.company}</p>
+            </div>
+
+            {/* Floating Chat Button */}
+            <button 
+              onClick={() => setShowAssistant(true)} 
+              className="absolute bottom-6 right-6 bg-brand-navy p-4 rounded-full text-white shadow-2xl hover:scale-105 transition-all z-20 border-2 border-brand-gold group"
+            >
+              <span className="text-3xl block group-hover:rotate-12 transition-transform">🤖</span>
+              <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border border-white animate-pulse"></span>
+            </button>
+
+            {/* Modal: Service Details */}
+            {selectedService && (
+              <div className="absolute inset-0 z-40 flex items-end sm:items-center justify-center p-4">
+                <div className="absolute inset-0 bg-brand-navy/60 backdrop-blur-sm" onClick={() => setSelectedService(null)} />
+                <div className="bg-white w-full max-w-sm rounded-[2rem] overflow-hidden shadow-2xl z-50 animate-in relative">
+                  <div className="p-8">
+                    <button onClick={() => setSelectedService(null)} className="absolute top-6 right-6 p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors">✕</button>
+                    <div className="w-14 h-14 bg-brand-navy text-white rounded-2xl flex items-center justify-center text-2xl mb-5 shadow-lg">
+                      {selectedService.icon}
+                    </div>
+                    <h3 className="text-xl font-black text-brand-navy mb-3">{selectedService.title}</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-6">{selectedService.description}</p>
+                    <div className="space-y-3">
+                      <a href={APP_DATA.links.booking} className="flex items-center justify-center w-full py-3.5 bg-brand-gold text-white rounded-xl font-bold text-sm">
+                        Inquire About This
+                      </a>
+                      <button 
+                        onClick={() => {
+                          setAssistantQuery(`Explain the importance of "${selectedService.title}" for my family legacy.`);
+                          setSelectedService(null);
+                          setShowAssistant(true);
+                        }}
+                        className="flex items-center justify-center space-x-2 w-full py-3.5 bg-slate-50 text-brand-navy rounded-xl font-bold text-sm border border-slate-200"
+                      >
+                        <span>🤖 Ask AI Advisor</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Modal: Assistant */}
+            {showAssistant && (
+              <div className="absolute inset-0 z-50 flex flex-col bg-slate-50 animate-in">
+                 <Assistant 
+                  onClose={() => {
+                    setShowAssistant(false);
+                    setAssistantQuery(null);
+                  }} 
+                  initialQuery={assistantQuery} 
+                />
+              </div>
+            )}
+
+          </div>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
