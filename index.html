@@ -500,3 +500,47 @@
 
       window.location.href = "mailto:?subject=" + subject + "&body=" + body;
     }
+// --- AI CHAT FRONTEND LOGIC ---
+
+    const chatBubble = document.getElementById('ai-chat-bubble');
+    const chatPanel = document.getElementById('ai-chat-panel');
+    const chatClose = document.getElementById('ai-chat-close');
+    const chatMessages = document.getElementById('ai-chat-messages');
+    const chatForm = document.getElementById('ai-chat-form');
+    const chatInput = document.getElementById('ai-chat-input');
+
+    function addMessage(role, text) {
+      const div = document.createElement('div');
+      div.className = `ai-msg ${role}`;
+
+      const span = document.createElement('span');
+      span.textContent = text;
+
+      div.appendChild(span);
+      chatMessages.appendChild(div);
+
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    chatBubble.addEventListener('click', () => {
+      chatPanel.style.display = 'flex';
+      chatBubble.style.display = 'none';
+
+      gtag('event', 'strategic_advisor_open', {
+        event_category: 'engagement',
+        event_label: 'AI Chat Opened'
+      });
+
+      if (!chatMessages.dataset.initialized) {
+        addMessage(
+          'bot',
+          "Welcome. I’m your Strategic Advisor. You can ask about protection, legacy planning, Living Benefits, or how to turn your hard work into a lasting legacy."
+        );
+        chatMessages.dataset.initialized = 'true';
+      }
+    });
+
+    chatClose.addEventListener('click', () => {
+      chatPanel.style.display = 'none';
+      chatBubble.style.display = 'block';
+    });
