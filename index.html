@@ -7,7 +7,7 @@
 
   <!-- Social Preview -->
   <meta property="og:title" content="Latimore Life & Legacy LLC – Digital Card" />
-  <meta property="og:description" content="🛡️ Protection • 📈 Strategy • 🏛️ Legacy — Tap to connect." />
+  <meta property="og:description" content="🛡️ Protection • 📈 Strategy • 🏛️ Legacy — Talk with Jackson." />
   <meta property="og:image" content="https://raw.githubusercontent.com/jackson1989-design/1/main/hero.png" />
   <meta property="og:type" content="website" />
 
@@ -37,7 +37,7 @@
     }
 
     body {
-      background: #000000;
+      background: #000;
       color: var(--white);
       display: flex;
       justify-content: center;
@@ -51,7 +51,7 @@
       border-radius: 20px;
       border: 1px solid #222;
       padding: 18px 18px 24px;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 18px 40px rgba(0,0,0,.7);
       overflow: hidden;
     }
 
@@ -59,72 +59,49 @@
       width: calc(100% + 36px);
       margin: -18px -18px 14px;
       border-bottom: 1px solid #222;
-      background: #0a0a0a;
     }
 
     .hero img {
       width: 100%;
-      display: block;
-      height: auto;
       max-height: 220px;
       object-fit: cover;
+      display: block;
     }
 
     .profile {
       margin-top: 10px;
       padding: 14px 12px;
       border-radius: var(--radius);
-      background: linear-gradient(135deg, #111111, #1b1b1b);
+      background: linear-gradient(135deg, #111, #1b1b1b);
       border: 1px solid #2a2a2a;
     }
 
-    .name {
-      font-weight: 650;
-      font-size: 1.12rem;
-      letter-spacing: 0.01em;
-    }
+    .name { font-size: 1.12rem; font-weight: 700; }
+    .title { font-size: .86rem; color: var(--text-muted); margin-top: 2px; }
+    .license { font-size: .78rem; margin-top: 6px; }
 
-    .title {
-      font-size: 0.86rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-      line-height: 1.35;
-    }
-
-    .license {
-      font-size: 0.78rem;
-      color: #cfcfcf;
-      margin-top: 6px;
-      line-height: 1.35;
-    }
-
-    .services-section {
-      margin-top: 18px;
-    }
-
+    .services-section { margin-top: 18px; }
     .services-title {
-      font-size: 0.75rem;
+      font-size: .75rem;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
+      letter-spacing: .16em;
       color: var(--gold);
       margin-bottom: 10px;
     }
 
     .services-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2,1fr);
       gap: 10px;
     }
 
     .service-item {
-      background: #111111;
+      background: #111;
       border: 1px solid #2a2a2a;
       padding: 12px;
       border-radius: var(--radius);
-      font-size: 0.85rem;
+      font-size: .85rem;
       text-align: center;
-      color: #e6e6e6;
-      letter-spacing: 0.04em;
     }
 
     .cta-group {
@@ -136,507 +113,128 @@
 
     .cta-btn {
       width: 100%;
-      padding: 12px 14px;
+      padding: 12px;
       border-radius: 999px;
       border: 1px solid #2a2a2a;
       background: #141414;
-      color: var(--white);
-      font-size: 0.82rem;
+      color: #fff;
+      font-size: .82rem;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: .12em;
       text-align: center;
       text-decoration: none;
-      transition: all 0.18s ease;
       cursor: pointer;
     }
 
     .cta-btn.primary {
       background: var(--gold);
-      color: var(--black);
-      border-color: var(--gold);
+      color: #000;
       font-weight: 800;
-    }
-
-    .cta-btn:hover {
-      filter: brightness(1.08);
-      transform: translateY(-1px);
+      border-color: var(--gold);
     }
 
     .section-label {
-      font-size: 0.75rem;
+      font-size: .75rem;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
+      letter-spacing: .16em;
       color: var(--text-muted);
-      margin-top: 18px;
-      margin-bottom: 6px;
+      margin: 18px 0 6px;
     }
 
-    .share-block,
-    .sacrifice-block,
-    .anchor-block {
-      padding: 12px 12px;
+    .block {
+      padding: 12px;
       border-radius: var(--radius);
       background: #101010;
       border: 1px solid #262626;
-      font-size: 0.82rem;
-      color: #dcdcdc;
+      font-size: .82rem;
       line-height: 1.45;
-    }
-
-    .share-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .share-btn {
-      flex: 1 1 calc(33.33% - 8px);
-      padding: 8px 8px;
-      border-radius: 999px;
-      border: 1px solid #2a2a2a;
-      background: #181818;
-      color: var(--white);
-      font-size: 0.75rem;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      transition: all 0.18s ease;
-      cursor: pointer;
-    }
-
-    .share-btn:hover {
-      background: var(--gold);
-      color: var(--black);
-      border-color: var(--gold);
-    }
-
-    .sacrifice-block strong {
-      color: var(--gold);
-      font-weight: 800;
     }
 
     .footer-tagline {
       margin-top: 20px;
       text-align: center;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
+      font-size: .78rem;
+      letter-spacing: .18em;
       color: var(--text-muted);
+      text-transform: uppercase;
     }
 
     .footer-hashtag {
       margin-top: 4px;
       text-align: center;
-      font-size: 0.78rem;
-      letter-spacing: 0.16em;
+      font-size: .78rem;
+      letter-spacing: .16em;
       color: var(--gold);
     }
 
-    /* AI Chat Bubble */
     #ai-chat-bubble {
       position: fixed;
       bottom: 80px;
       right: 18px;
       background: var(--gold);
-      color: var(--black);
+      color: #000;
       padding: 10px 14px;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: .78rem;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: .12em;
       cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
       z-index: 9999;
-      user-select: none;
-    }
-
-    #ai-chat-panel {
-      position: fixed;
-      bottom: 80px;
-      right: 18px;
-      width: 320px;
-      max-height: 70vh;
-      background: #050505;
-      border-radius: 16px;
-      border: 1px solid #333;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 10000;
-    }
-
-    #ai-chat-header {
-      background: #111111;
-      padding: 10px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.82rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    #ai-chat-header span { color: var(--gold); }
-
-    #ai-chat-header button {
-      background: transparent;
-      border: none;
-      color: #888;
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-
-    #ai-chat-messages {
-      padding: 10px 10px 6px;
-      font-size: 0.82rem;
-      line-height: 1.4;
-      overflow-y: auto;
-      max-height: 50vh;
-    }
-
-    .ai-msg { margin-bottom: 8px; }
-    .ai-msg.user { text-align: right; }
-
-    .ai-msg.user span {
-      display: inline-block;
-      background: #1f1f1f;
-      color: #f5f5f5;
-      padding: 6px 8px;
-      border-radius: 10px;
-    }
-
-    .ai-msg.bot span {
-      display: inline-block;
-      background: #101010;
-      color: #f5f5f5;
-      padding: 6px 8px;
-      border-radius: 10px;
-      border: 1px solid #2a2a2a;
-    }
-
-    #ai-chat-form { display: flex; border-top: 1px solid #222; }
-
-    #ai-chat-input {
-      flex: 1;
-      border: none;
-      padding: 8px 10px;
-      font-size: 0.82rem;
-      background: #080808;
-      color: #f5f5f5;
-    }
-    #ai-chat-input:focus { outline: none; }
-
-    #ai-chat-form button {
-      border: none;
-      background: var(--gold);
-      color: var(--black);
-      padding: 0 12px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
-  <main class="card">
-    <!-- HERO IMAGE -->
-    <div class="hero">
-      <img
-        src="https://raw.githubusercontent.com/jackson1989-design/1/main/hero.png"
-        alt="Latimore Life & Legacy"
-        loading="eager"
-      />
-    </div>
+<main class="card">
 
-    <!-- PROFILE -->
-    <section class="profile">
-      <div class="name">Jackson M. Latimore Sr.</div>
-      <div class="title">Independent Financial Consultant • Latimore Life & Legacy LLC<br/>Schuylkill County, PA</div>
-      <div class="license">🛡️ Protection • 📈 Strategy • 🏛️ Legacy</div>
-    </section>
-
-    <!-- Services -->
-    <section class="services-section">
-      <div class="services-title">💼 Full Portfolio of Services</div>
-
-      <div class="services-grid">
-        <div class="service-item">💰 Wealth Accumulation</div>
-        <div class="service-item">🛡️ Asset Protection</div>
-        <div class="service-item">🎓 Education Funds</div>
-        <div class="service-item">💳 Debt Management</div>
-        <div class="service-item">🧾 Life Insurance</div>
-        <div class="service-item">❤️ Living Benefits</div>
-        <div class="service-item">🏛️ Estate Planning</div>
-        <div class="service-item">📈 Indexed Growth</div>
-        <div class="service-item">🏠 Mortgage Protection</div>
-        <div class="service-item">🏢 Business Strategies</div>
-      </div>
-    </section>
-
-    <!-- CTAs (Aligned with Hub) -->
-    <section class="cta-group">
-      <!-- Primary: Talk (Fillout intake -> Google booking) -->
-      <a
-        href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus"
-        class="cta-btn primary"
-        target="_blank"
-        rel="noopener"
-        onclick="trackCta('talk_with_jackson')"
-      >🗣️ Talk with Jackson</a>
-
-      <!-- Secondary: Quick contact options -->
-      <a href="mailto:jackson1989@latimorelegacy.com" class="cta-btn" onclick="trackCta('send_email')">📩 Send Secure Email</a>
-      <a href="tel:+18568951457" class="cta-btn" onclick="trackCta('call_now')">📞 Call Now</a>
-      <a
-        href="sms:+18568951457?&body=Hi%20Jackson%20—%20I%20just%20viewed%20your%20digital%20card%20and%20would%20like%20to%20talk."
-        class="cta-btn"
-        onclick="trackCta('text_me')"
-      >💬 Text Me</a>
-
-      <!-- Anchor for people who want to read then act -->
-      <a href="#schedule" class="cta-btn" onclick="trackCta('schedule_anchor')">📅 Legacy Review</a>
-
-      <!-- Keep this (but remove “instant” language) -->
-      <a
-        href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus"
-        class="cta-btn"
-        target="_blank"
-        rel="noopener"
-        onclick="trackCta('get_started')"
-      >⚡ Get Started</a>
-
-      <button type="button" class="cta-btn" onclick="downloadVCard(); trackCta('save_contact');">💾 Save Contact</button>
-    </section>
-
-    <!-- Share -->
-    <div class="section-label">📣 Share This Card</div>
-
-    <section class="share-block">
-      <p>
-        Know someone who could benefit from financial clarity or protection?
-        Share my digital card with them. 🤝
-      </p>
-
-      <div class="share-actions">
-        <button class="share-btn" type="button" onclick="copyCardLink()">🔗 Copy Link</button>
-        <button class="share-btn" type="button" onclick="shareByText()">💬 Text</button>
-        <button class="share-btn" type="button" onclick="shareByEmail()">✉️ Email</button>
-      </div>
-    </section>
-
-    <!-- Commitment -->
-    <div class="section-label">🤝 My Commitment</div>
-
-    <section class="sacrifice-block">
-      <p>
-        <strong>I’m not here to sell products — I’m here to deliver solutions.</strong>
-        My mission is to help families protect what they’ve built, grow what they have,
-        and create a legacy that lasts. Every conversation is about clarity, strategy,
-        and empowerment — never pressure.
-        <br/><br/>
-        I work with local families and individuals who value calm guidance, honest answers,
-        and getting protection handled the right way.
-      </p>
-    </section>
-
-    <!-- Anchor: Schedule -->
-    <div class="section-label" id="schedule">📅 Legacy Review</div>
-    <section class="anchor-block">
-      <p>Start with a quick legacy review (15–20 minutes). ✅</p>
-      <a
-        class="cta-btn primary"
-        href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus"
-        target="_blank"
-        rel="noopener"
-        onclick="trackCta('start_here')"
-      >🗓️ Start Here</a>
-      <p style="margin-top:10px; color:#bdbdbd; font-size:0.78rem;">
-        Prefer email first? Use “Send Secure Email” above.
-      </p>
-    </section>
-
-    <!-- Footer -->
-    <div class="footer-tagline">🔐 Protecting Today. Securing Tomorrow.</div>
-    <div class="footer-hashtag">✨ #TheBeatGoesOn</div>
-  </main>
-
-  <!-- AI Strategic Advisor Chat -->
-  <div id="ai-chat-bubble">🤖 Strategic Advisor</div>
-
-  <div id="ai-chat-panel">
-    <div id="ai-chat-header">
-      <span>Latimore Strategic Advisor</span>
-      <button id="ai-chat-close" aria-label="Close chat">&times;</button>
-    </div>
-
-    <div id="ai-chat-messages"></div>
-
-    <form id="ai-chat-form">
-      <input
-        type="text"
-        id="ai-chat-input"
-        placeholder="Ask about protection, legacy, or strategy…"
-        autocomplete="off"
-        required
-      />
-      <button type="submit">Send</button>
-    </form>
+  <div class="hero">
+    <img src="https://raw.githubusercontent.com/jackson1989-design/1/main/hero.png" alt="Latimore Life & Legacy" />
   </div>
 
-  <script>
-    // === Keep these consistent with your live hub/card domain ===
-    const CARD_URL = "https://ancient-rain-caf9.jackson1989.workers.dev/";
-    const FILLOUT_URL = "https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus";
-    const PHONE_E164 = "+18568951457";
-    const EMAIL = "jackson1989@latimorelegacy.com";
+  <section class="profile">
+    <div class="name">Jackson M. Latimore Sr.</div>
+    <div class="title">Independent Financial Consultant • Latimore Life & Legacy LLC<br>Schuylkill County, PA</div>
+    <div class="license">🛡️ Protection • 📈 Strategy • 🏛️ Legacy</div>
+  </section>
 
-    // GA helper
-    function trackCta(label) {
-      try {
-        gtag('event', 'cta_click', { event_category: 'cta', event_label: label });
-      } catch (_) {}
-    }
+  <section class="services-section">
+    <div class="services-title">Full Portfolio of Services</div>
+    <div class="services-grid">
+      <div class="service-item">Wealth Accumulation</div>
+      <div class="service-item">Asset Protection</div>
+      <div class="service-item">Education Funds</div>
+      <div class="service-item">Debt Management</div>
+      <div class="service-item">Life Insurance</div>
+      <div class="service-item">Living Benefits</div>
+      <div class="service-item">Estate Planning</div>
+      <div class="service-item">Indexed Growth</div>
+      <div class="service-item">Mortgage Protection</div>
+      <div class="service-item">Business Strategies</div>
+    </div>
+  </section>
 
-    function copyCardLink() {
-      navigator.clipboard.writeText(CARD_URL).then(() => {
-        trackCta('copy_link');
-        alert("✅ Card link copied to clipboard.");
-      });
-    }
+  <!-- CTAs -->
+  <section class="cta-group">
+    <a href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus" class="cta-btn primary" target="_blank">🗣️ Talk with Jackson</a>
+    <a href="mailto:jackson1989@latimorelegacy.com" class="cta-btn">Send Secure Email</a>
+    <a href="tel:+18568951457" class="cta-btn">Call Now</a>
+    <a href="sms:+18568951457" class="cta-btn">Text Me</a>
+    <a href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus" class="cta-btn" target="_blank">Get Started</a>
+  </section>
 
-    function shareByText() {
-      trackCta('share_text');
-      const text = encodeURIComponent("Check out this digital card: " + CARD_URL);
-      window.location.href = "sms:?&body=" + text;
-    }
+  <div class="section-label">My Commitment</div>
+  <section class="block">
+    <strong>I’m not here to sell products — I’m here to deliver solutions.</strong>
+    I help local families protect what they’ve built, grow with intention,
+    and create a legacy that lasts — calmly and without pressure.
+  </section>
 
-    function shareByEmail() {
-      trackCta('share_email');
-      const subject = encodeURIComponent("Latimore Life & Legacy Digital Card");
-      const body = encodeURIComponent("I thought this might be helpful for you:\n\n" + CARD_URL);
-      window.location.href = "mailto:?subject=" + subject + "&body=" + body;
-    }
+  <div class="footer-tagline">Protecting Today. Securing Tomorrow.</div>
+  <div class="footer-hashtag">#TheBeatGoesOn</div>
 
-    // --- vCard download (Save Contact) ---
-    function downloadVCard() {
-      const vcf = [
-        "BEGIN:VCARD",
-        "VERSION:3.0",
-        "N:Latimore;Jackson;;;",
-        "FN:Jackson M. Latimore Sr.",
-        "ORG:Latimore Life & Legacy LLC",
-        "TITLE:Independent Financial Consultant",
-        "TEL;TYPE=CELL:" + PHONE_E164,
-        "EMAIL;TYPE=INTERNET,WORK:" + EMAIL,
-        "URL:" + CARD_URL,
-        "END:VCARD"
-      ].join("\n");
+</main>
 
-      const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "Latimore-Life-Legacy.vcf";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+<div id="ai-chat-bubble">🤖 Strategic Advisor</div>
 
-      try {
-        gtag('event', 'save_contact', { event_category: 'engagement', event_label: 'vCard Download' });
-      } catch (_) {}
-    }
-
-    // --- AI CHAT FRONTEND LOGIC ---
-    const chatBubble = document.getElementById('ai-chat-bubble');
-    const chatPanel = document.getElementById('ai-chat-panel');
-    const chatClose = document.getElementById('ai-chat-close');
-    const chatMessages = document.getElementById('ai-chat-messages');
-    const chatForm = document.getElementById('ai-chat-form');
-    const chatInput = document.getElementById('ai-chat-input');
-
-    function addMessage(role, text, meta = {}) {
-      const div = document.createElement('div');
-      div.className = `ai-msg ${role}`;
-      if (meta.kind) div.dataset.kind = meta.kind;
-
-      const span = document.createElement('span');
-      span.textContent = text;
-
-      div.appendChild(span);
-      chatMessages.appendChild(div);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    chatBubble.addEventListener('click', () => {
-      chatPanel.style.display = 'flex';
-      chatBubble.style.display = 'none';
-
-      try {
-        gtag('event', 'strategic_advisor_open', { event_category: 'engagement', event_label: 'AI Chat Opened' });
-      } catch (_) {}
-
-      if (!chatMessages.dataset.initialized) {
-        addMessage(
-          'bot',
-          "👋🏿 Welcome. I’m your Strategic Advisor. I help you think through protection, legacy planning, and long-term strategy — calmly, clearly, and without pressure."
-        );
-        chatMessages.dataset.initialized = 'true';
-      }
-    });
-
-    chatClose.addEventListener('click', () => {
-      chatPanel.style.display = 'none';
-      chatBubble.style.display = 'block';
-    });
-
-    chatForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const text = chatInput.value.trim();
-      if (!text) return;
-
-      addMessage('user', text);
-      chatInput.value = '';
-
-      try {
-        gtag('event', 'strategic_advisor_message', { event_category: 'engagement', event_label: 'User Message' });
-      } catch (_) {}
-
-      addMessage('bot', '🧠 Thinking through your strategy…', { kind: "thinking" });
-
-      try {
-        // Keep your existing endpoint (unchanged)
-        const res = await fetch("https://digitalbusiness-gsg9.vercel.app/api/strategic-advisor", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
-        });
-
-        let data = {};
-        try { data = await res.json(); } catch (_) {}
-
-        const thinking = chatMessages.querySelector('.ai-msg.bot[data-kind="thinking"]:last-of-type');
-        if (thinking) thinking.remove();
-
-        if (!res.ok) {
-          addMessage('bot', "⚠️ I hit a server issue. Please try again in a moment.");
-          return;
-        }
-
-        addMessage('bot', data.reply || "✅ I’m here to help you think through your legacy, protection, and strategy.");
-      } catch (err) {
-        const thinking = chatMessages.querySelector('.ai-msg.bot[data-kind="thinking"]:last-of-type');
-        if (thinking) thinking.remove();
-
-        addMessage('bot', "📶 Connection issue — please try again in a moment.");
-      }
-    });
-  </script>
 </body>
 </html>
