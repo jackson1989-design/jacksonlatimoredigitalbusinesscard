@@ -124,6 +124,7 @@
       text-align: center;
       text-decoration: none;
       cursor: pointer;
+      user-select: none;
     }
 
     .cta-btn.primary {
@@ -167,6 +168,7 @@
       color: var(--gold);
     }
 
+    /* AI bubble */
     #ai-chat-bubble {
       position: fixed;
       bottom: 80px;
@@ -180,6 +182,123 @@
       letter-spacing: .12em;
       cursor: pointer;
       z-index: 9999;
+      box-shadow: 0 10px 30px rgba(0,0,0,.55);
+      border: 1px solid rgba(0,0,0,.25);
+    }
+
+    #ai-chat-bubble:active {
+      transform: translateY(1px);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 10000;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 520px;
+      background: #0b0b0b;
+      border: 1px solid #222;
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.75);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid #1e1e1e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .modal-title {
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-size: .86rem;
+      color: var(--gold);
+    }
+
+    .modal-close {
+      appearance: none;
+      border: 1px solid #2a2a2a;
+      background: #141414;
+      color: #fff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: .8rem;
+    }
+
+    .modal-body {
+      padding: 14px;
+    }
+
+    .modal-text {
+      font-size: .9rem;
+      line-height: 1.45;
+      color: #ddd;
+      margin-bottom: 12px;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    @media (min-width: 460px) {
+      .quick-actions {
+        grid-template-columns: 1fr 1fr;
+      }
+      .quick-actions .full {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .mini-btn {
+      display: block;
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #2a2a2a;
+      background: #141414;
+      color: #fff;
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .mini-btn.primary {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+      font-weight: 800;
+    }
+
+    .modal-foot {
+      padding: 0 14px 14px;
+      color: #aaa;
+      font-size: .78rem;
+      line-height: 1.45;
+    }
+
+    .sr-only {
+      position:absolute;
+      width:1px;height:1px;
+      padding:0;margin:-1px;overflow:hidden;
+      clip:rect(0,0,0,0);white-space:nowrap;border:0;
     }
   </style>
 </head>
@@ -215,11 +334,11 @@
 
   <!-- CTAs -->
   <section class="cta-group">
-    <a href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus" class="cta-btn primary" target="_blank">🗣️ Talk with Jackson</a>
+    <a href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus" class="cta-btn primary" target="_blank" rel="noopener">🗣️ Talk with Jackson</a>
     <a href="mailto:jackson1989@latimorelegacy.com" class="cta-btn">Send Secure Email</a>
     <a href="tel:+18568951457" class="cta-btn">Call Now</a>
     <a href="sms:+18568951457" class="cta-btn">Text Me</a>
-    <a href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus" class="cta-btn" target="_blank">Get Started</a>
+    <a href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus" class="cta-btn" target="_blank" rel="noopener">Get Started</a>
   </section>
 
   <div class="section-label">My Commitment</div>
@@ -234,7 +353,71 @@
 
 </main>
 
-<div id="ai-chat-bubble">🤖 Strategic Advisor</div>
+<!-- AI Bubble -->
+<button id="ai-chat-bubble" type="button" aria-haspopup="dialog" aria-controls="ai-modal" aria-expanded="false">
+  🤖 Strategic Advisor
+</button>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="ai-backdrop" role="presentation" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title" id="ai-modal">
+    <div class="modal-header">
+      <div class="modal-title" id="ai-modal-title">Strategic Advisor</div>
+      <button class="modal-close" type="button" id="ai-close">Close</button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-text">
+        Want quick help? Pick an option below and I’ll connect you directly with Jackson.
+      </p>
+
+      <div class="quick-actions">
+        <a class="mini-btn primary full" href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus" target="_blank" rel="noopener">
+          📅 Book a Consultation
+        </a>
+        <a class="mini-btn" href="tel:+18568951457">📞 Call Now</a>
+        <a class="mini-btn" href="sms:+18568951457">💬 Text Now</a>
+      </div>
+    </div>
+
+    <div class="modal-foot">
+      No bots, no runaround — real help, real answers.
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const bubble = document.getElementById('ai-chat-bubble');
+    const backdrop = document.getElementById('ai-backdrop');
+    const closeBtn = document.getElementById('ai-close');
+
+    function openModal() {
+      backdrop.style.display = 'flex';
+      backdrop.setAttribute('aria-hidden', 'false');
+      bubble.setAttribute('aria-expanded', 'true');
+      closeBtn.focus();
+    }
+
+    function closeModal() {
+      backdrop.style.display = 'none';
+      backdrop.setAttribute('aria-hidden', 'true');
+      bubble.setAttribute('aria-expanded', 'false');
+      bubble.focus();
+    }
+
+    bubble.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+
+    backdrop.addEventListener('click', function (e) {
+      if (e.target === backdrop) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && backdrop.style.display === 'flex') closeModal();
+    });
+  })();
+</script>
 
 </body>
 </html>
