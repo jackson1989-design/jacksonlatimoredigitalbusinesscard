@@ -4,14 +4,24 @@
   <meta charset="UTF-8" />
   <title>Latimore Life & Legacy LLC – Digital Card</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TVNBL24V1W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TVNBL24V1W');
+  </script>
+
   <style>
     :root {
       --gold: #c9a24b;
-      --black: #111111;
+      --navy: #0a1a33;
+      --black: #000000;
       --white: #ffffff;
-      --gray: #f4f4f4;
-      --text-muted: #666666;
-      --radius: 10px;
+      --text-muted: #999999;
+      --radius: 12px;
     }
 
     * {
@@ -44,26 +54,10 @@
       margin-bottom: 18px;
     }
 
-    .logo-title {
-      font-size: 1.1rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .logo-sub {
-      font-size: 0.8rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-top: 4px;
-    }
-
-    .tagline {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--text-muted);
-      margin-top: 6px;
+    .logo img {
+      width: 100%;
+      max-width: 260px;
+      height: auto;
     }
 
     .profile {
@@ -76,11 +70,11 @@
 
     .name {
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 1.1rem;
     }
 
     .title {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
       margin-top: 2px;
     }
@@ -95,7 +89,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .social-btn {
@@ -103,7 +97,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-radius: 999px;
       border: 1px solid var(--gold);
       color: var(--gold);
@@ -136,21 +130,50 @@
     }
 
     .vision-statement {
-      font-size: 0.86rem;
+      font-size: 0.9rem;
       line-height: 1.5;
       color: #e6e6e6;
     }
 
+    .services-section {
+      margin-top: 22px;
+    }
+
+    .services-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .service-item {
+      background: #111111;
+      border: 1px solid #2a2a2a;
+      padding: 12px;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      text-align: center;
+      color: #e6e6e6;
+      letter-spacing: 0.04em;
+    }
+
     .cta-group {
-      margin-top: 18px;
+      margin-top: 22px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .cta-btn {
       width: 100%;
-      padding: 10px 12px;
+      padding: 12px 14px;
       border-radius: 999px;
       border: 1px solid #2a2a2a;
       background: #141414;
@@ -262,9 +285,6 @@
     }
 
     @media (max-width: 480px) {
-      .card {
-        padding: 18px 14px 22px;
-      }
       .social-btn {
         flex: 1 1 100%;
       }
@@ -279,27 +299,27 @@
     }
   </style>
 </head>
+
 <body>
   <main class="card">
-    <!-- Logo / Brand -->
+
+    <!-- Logo -->
     <section class="logo">
-      <div class="logo-title">LATIMORE</div>
-      <div class="logo-sub">LIFE &amp; LEGACY LLC</div>
-      <div class="tagline">Protecting Today. Securing Tomorrow.</div>
+      <img src="https://raw.githubusercontent.com/jackson1989-design/1/refs/heads/main/hero.png" alt="Latimore Life & Legacy Logo" />
     </section>
 
-    <!-- Profile / Identity -->
+    <!-- Profile -->
     <section class="profile">
       <div class="name">Jackson M. Latimore Sr.</div>
-      <div class="title">Founder &amp; CEO · Latimore Life &amp; Legacy LLC</div>
+      <div class="title">Founder & CEO · Latimore Life & Legacy LLC</div>
       <div class="license">PA License #1268820</div>
 
       <!-- Social Buttons -->
       <div class="social-row">
-        <a href="https://www.linkedin.com" target="_blank" class="social-btn">LinkedIn</a>
-        <a href="https://www.facebook.com" target="_blank" class="social-btn">Facebook</a>
-        <a href="https://www.instagram.com" target="_blank" class="social-btn">Instagram</a>
-        <a href="https://jackson1989-design.github.io/jacksonlatimoredigitalbusinesscard/" target="_blank" class="social-btn">Website</a>
+        <a href="https://www.instagram.com/jacksonlatimore.global" target="_blank" class="social-btn">Instagram</a>
+        <a href="https://jackson1989-design.github.io/latimore-life-legacy-site/" target="_blank" class="social-btn">Website</a>
+        <a href="https://agents.ethoslife.com/invite/29ad1" target="_blank" class="social-btn">Ethos</a>
+        <a href="https://www.linkedin.com/in/startwithjacksongfi" target="_blank" class="social-btn">LinkedIn</a>
       </div>
     </section>
 
@@ -311,7 +331,24 @@
       </p>
     </section>
 
-    <!-- Primary CTAs -->
+    <!-- Services -->
+    <section class="services-section">
+      <div class="services-title">Full Portfolio of Services</div>
+      <div class="services-grid">
+        <div class="service-item">Wealth Accumulation</div>
+        <div class="service-item">Asset Protection</div>
+        <div class="service-item">Education Funds</div>
+        <div class="service-item">Debt Management</div>
+        <div class="service-item">Life Insurance</div>
+        <div class="service-item">Living Benefits</div>
+        <div class="service-item">Estate Planning</div>
+        <div class="service-item">Indexed Growth</div>
+        <div class="service-item">Mortgage Protection</div>
+        <div class="service-item">Business Strategies</div>
+      </div>
+    </section>
+
+    <!-- CTAs -->
     <section class="cta-group">
       <a href="mailto:example@latimorelegacy.com" class="cta-btn primary">Send Secure Email</a>
       <a href="#schedule" class="cta-btn">Schedule Legacy Review</a>
@@ -319,12 +356,10 @@
       <a href="#save-contact" class="cta-btn">Save Contact</a>
     </section>
 
-    <!-- Share the Card -->
+    <!-- Share -->
     <div class="section-label">Share This Card</div>
     <section class="share-block">
-      <p>
-        Know someone who could benefit from financial clarity or protection? Share my digital card with them.
-      </p>
+      <p>Know someone who could benefit from financial clarity or protection? Share my digital card with them.</p>
       <div class="share-actions">
         <button class="share-btn" type="button" onclick="copyCardLink()">Copy Link</button>
         <button class="share-btn" type="button" onclick="shareByText()">Text</button>
@@ -332,8 +367,8 @@
       </div>
     </section>
 
-    <!-- Sacrifice Statement -->
-    <div class="section-label">Sacrifice &amp; Commitment</div>
+    <!-- Sacrifice -->
+    <div class="section-label">Sacrifice & Commitment</div>
     <section class="sacrifice-block">
       <p>
         <strong>Legacy requires sacrifice.</strong> I’ve sacrificed comfort, time, and certainty so families don’t have to sacrifice their future—committing my work to protecting what matters most for generations to come.
@@ -343,9 +378,10 @@
     <!-- Footer -->
     <div class="footer-tagline">Protecting Today. Securing Tomorrow.</div>
     <div class="footer-hashtag">#TheBeatGoesOn</div>
+
   </main>
 
-  <!-- Strategic Advisor Floating Button -->
+  <!-- Strategic Advisor Button -->
   <button class="strategic-advisor" type="button">
     Strategic Advisor
   </button>
@@ -353,24 +389,72 @@
   <script>
     const CARD_URL = "https://jackson1989-design.github.io/jacksonlatimoredigitalbusinesscard/";
 
+    // GA4 Event Tracking
+
+    document.querySelector('.cta-btn.primary')?.addEventListener('click', () => {
+      gtag('event', 'email_click', {
+        event_category: 'engagement',
+        event_label: 'Send Secure Email'
+      });
+    });
+
+    document.querySelector('a[href="#schedule"]')?.addEventListener('click', () => {
+      gtag('event', 'schedule_review', {
+        event_category: 'engagement',
+        event_label: 'Schedule Legacy Review'
+      });
+    });
+
+    document.querySelector('a[href="#quote"]')?.addEventListener('click', () => {
+      gtag('event', 'instant_quote', {
+        event_category: 'engagement',
+        event_label: 'Get Instant Quote'
+      });
+    });
+
+    document.querySelector('a[href="#save-contact"]')?.addEventListener('click', () => {
+      gtag('event', 'save_contact', {
+        event_category: 'engagement',
+        event_label: 'Save Contact'
+      });
+    });
+
+    document.querySelector('.strategic-advisor')?.addEventListener('click', () => {
+      gtag('event', 'strategic_advisor', {
+        event_category: 'engagement',
+        event_label: 'Strategic Advisor Button'
+      });
+    });
+
     function copyCardLink() {
       navigator.clipboard.writeText(CARD_URL).then(() => {
+        gtag('event', 'copy_link', {
+          event_category: 'share',
+          event_label: 'Copy Card Link'
+        });
         alert("Card link copied to clipboard.");
-      }).catch(() => {
-        alert("Unable to copy link. Please copy it manually.");
       });
     }
 
     function shareByText() {
+      gtag('event', 'share_text', {
+        event_category: 'share',
+        event_label: 'Share via Text'
+      });
       const text = encodeURIComponent("Check out this digital card: " + CARD_URL);
       window.location.href = "sms:?&body=" + text;
     }
 
     function shareByEmail() {
+      gtag('event', 'share_email', {
+        event_category: 'share',
+        event_label: 'Share via Email'
+      });
       const subject = encodeURIComponent("Latimore Life & Legacy Digital Card");
       const body = encodeURIComponent("I thought this might be helpful for you:\n\n" + CARD_URL);
       window.location.href = "mailto:?subject=" + subject + "&body=" + body;
     }
   </script>
+
 </body>
 </html>
