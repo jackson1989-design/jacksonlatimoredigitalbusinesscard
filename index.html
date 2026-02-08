@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+8<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -213,4 +213,86 @@
       font-size: 0.82rem;
       color: #dcdcdc;
       line-height: 1.45;
+    }
+.share-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .share-btn {
+      flex: 1 1 calc(33.33% - 8px);
+      padding: 8px 8px;
+      border-radius: 999px;
+      border: 1px solid #2a2a2a;
+      background: #181818;
+      color: var(--white);
+      font-size: 0.75rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
+
+    .share-btn:hover {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+    }
+
+    .sacrifice-block strong {
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .footer-tagline {
+      margin-top: 22px;
+      text-align: center;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+    }
+
+    .footer-hashtag {
+      margin-top: 4px;
+      text-align: center;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      color: var(--gold);
+    }
+
+    /* AI Chat Bubble */
+    #ai-chat-bubble {
+      position: fixed;
+      bottom: 80px;
+      right: 18px;
+      background: var(--gold);
+      color: var(--black);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+    }
+
+    #ai-chat-panel {
+      position: fixed;
+      bottom: 80px;
+      right: 18px;
+      width: 320px;
+      max-height: 70vh;
+      background: #050505;
+      border-radius: 16px;
+      border: 1px solid #333;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 10000;
     }
