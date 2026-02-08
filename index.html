@@ -26,57 +26,57 @@
     <script type="text/babel">
       const { useState, useEffect, useRef } = React;
 
-      // --- 1. STRATEGIC KNOWLEDGE BASE (Mapped to Power of Zero & Retirement Miracle) ---
+      // --- 1. STRATEGIC KNOWLEDGE REPOSITORY (Educational Frameworks) ---
       const KNOWLEDGE_BASE = {
         "Wealth Accumulation": {
-          title: "TAX-ADVANTAGED WEALTH & THE POWER OF ZERO",
-          content: "Most savers are 'Tax Procrastinators' placing money in 401ks. As David McKnight teaches, if tax rates double, your retirement is cut in half. We focus on the Tax-Never bucket, utilizing North American Builder Plus IUL to get you to the 0% tax bracket. This ensures that even if tax rates rise, your harvest remains 100% yours.",
-          next: "Ask me about the 'Tax Bucket Audit' to see your future liability."
+          title: "THE 0% TAX BRACKET STRATEGY",
+          content: "Most families save in Tax-Later accounts, essentially giving the government a lien on their retirement harvest. If tax rates rise, your net income falls. We focus on the Tax-Never bucket. By utilizing specialized accumulation vehicles, we aim to position you in a 0% tax bracket in retirement. This ensures that when you harvest your life savings, the results remain 100% yours regardless of future tax laws.",
+          next: "Ask me about the Tax Bucket Audit."
         },
         "Asset Protection": {
-          title: "THE RETIREMENT MIRACLE & 0% FLOOR",
-          content: "Patrick Kelly identifies the 'Retirement Miracle' as the ability to participate in market gains without ever suffering a loss. We utilize AssetShield strategies with a 0% Floor. When the market crashes, you lose nothing. When it recovers, you start growing immediately from your highest point—no 'making up' lost ground.",
-          next: "Ask how a 0% floor prevents 'Sequence of Returns' risk."
+          title: "THE VOLATILITY SHIELD & 0% FLOOR",
+          content: "Market volatility is the primary threat to retirement math. We provide a Volatility Shield through the Power of Indexing. This provides a 0% Floor, meaning when the market drops, your principal and previous gains are 100% protected. When the market rises, you participate in the growth. Zero is your Hero because you never have to spend years just earning back a loss.",
+          next: "Ask how a 0% floor prevents Sequence of Returns risk."
         },
         "Living Benefits": {
-          title: "LIVING BENEFITS: PROTECTION FOR THE LIVING",
-          content: "Traditional life insurance is 'Death Insurance'. We provide 'Life Preservation Insurance'. If you suffer a heart attack, stroke, or cancer, you can accelerate your death benefit while alive to pay for specialized care or replace lost income. Your health is your currency, and this strategy protects it.",
+          title: "LIFE PRESERVATION & MODERN PROTECTION",
+          content: "Traditional planning focuses on 'Death Insurance.' Modern planning utilizes 'Life Preservation' riders. If you face a major health crisis like a heart attack, stroke, or chronic illness, you can access your benefit while alive. This provides immediate liquidity for home care or lost income, preventing a medical crisis from becoming a financial one. Your health is your currency.",
           next: "Ask about the conditions covered by Living Benefits."
         },
         "Debt Management": {
-          title: "PRIVATE FAMILY BANKING & DEBT SHREDDER",
-          content: "As taught in 'Money. Wealth. Life Insurance.', the wealthy use cash value as a private bank. Our Debt Shredder strategy redirects the interest you currently pay to banks back into your own policy. You can pay off a 30-year mortgage in 9-12 years by 'borrowing from yourself' and keeping the interest in the family.",
-          next: "Ready to run your numbers through the Private Bank calculator?"
+          title: "THE PRIVATE FAMILY BANK",
+          content: "Debt is a wealth destroyer due to the interest drag. Our strategy redirects the interest you currently pay to institutions back into your own Private Bank. By utilizing high-liquidity strategies, you can systematically pay off high-interest debt and mortgages in nearly half the time while simultaneously building a compounding retirement fund. You stop being a debtor and start being the bank.",
+          next: "Run your Financial Score to see your Debt-Free date."
         },
         "Estate Planning": {
-          title: "THE LEGACY PORTRAIT & PROBATE AVOIDANCE",
-          content: "A legacy isn't just an inheritance; it's a plan. Through Ethos Perks, we provide free Will and Trust tools to ensure your family avoids the delay of probate. We help you create your Legacy Portrait to ensure your values transition to the next generation with absolute clarity and legal standing.",
-          next: "Access the Planning Portal to secure your free Will today."
+          title: "THE LEGACY PORTRAIT",
+          content: "Estate planning ensures your values and assets transition to the next generation without the delay and cost of probate. We provide access to legal documentation tools to help you design your Legacy Portrait. This goes beyond money—it is about providing clarity, stewardship, and the legal protection of your family's future wishes.",
+          next: "Access the Planning Portal to start your documentation."
         },
         "Mortgage Protection": {
-          title: "SECURE HOUSING & THE D.I.M.E. METHOD",
-          content: "Your home is likely your biggest liability. We use the D.I.M.E. Method (Debt, Income, Mortgage, Education) to calculate exactly what is needed to clear your deed if a breadwinner passes or gets sick. Unlike lender insurance, YOU own this plan and it stays with you if you refinance.",
-          next: "Ask me to explain the D.I.M.E. calculation."
+          title: "SECURE HOUSING & THE DIME METHOD",
+          content: "Your home is likely your family's largest liability. We use the DIME Method—Debt, Income, Mortgage, and Education—to calculate the exact amount needed to clear your deed. This ensures that if the primary breadwinner passes or becomes ill, the home is paid off in full and the 'roof' remains over your family's heads. Unlike bank insurance, YOU own and control this plan.",
+          next: "Ask me to explain the DIME calculation."
         },
         "College Funding": {
-          title: "THE MILLION DOLLAR BABY STRATEGY",
-          content: "529 plans are restricted. We use juvenile IULs to create a tax-free cash pile for your children. This funds college, a first home, or a retirement head start. It guarantees their insurability for life, giving them a 'Family Bank' they can use before they ever graduate.",
-          next: "Ask how a juvenile plan grows over 20 years."
+          title: "THE GENERATIONAL HEAD START",
+          content: "Traditional college funds are often restrictive and tax-exposed. We utilize tax-advantaged tools to create a tax-free cash pile for your children. This funds education, a first home, or a retirement head start. It also guarantees their insurability for life, giving them a private family bank they can use before they ever graduate.",
+          next: "Ask how this grows over 20 years."
         },
         "Indexed Growth": {
-          title: "SMART MONEY INDEXING POTENTIAL",
-          content: "You get market-linked gains without market-linked risk. Through the Power of Reset, your gains are locked in every year. If the index drops 20%, you stay at 0%. You participate in the upside of the market while the carrier absorbs the downside risk. This is how the wealthy protect their wealth.",
+          title: "THE POWER OF ANNUAL RESET",
+          content: "Indexing provides market-linked growth potential without market-linked risk. Through the Annual Reset feature, your gains are locked in every year. If the index drops 20% next year, you stay at 0%. You never start a year in the red. You participate in the upside of the market while the institution absorbs the downside risk. This is how the wealthy protect their growth.",
           next: "Ask about the difference between indexing and investing."
         },
         "Business Strategies": {
           title: "BUSINESS CONTINUITY & KEY PERSON",
-          content: "We protect business owners from Key Person risk. If a vital partner passes, the business can collapse. We design Buy-Sell agreements funded by life insurance to provide immediate liquidity, allowing surviving owners to buy out heirs and keep the business operating smoothly.",
-          next: "Ask about Executive Bonus plans to retain your top talent."
+          content: "We protect business owners from the risk of losing vital leadership. If a key partner passes, the business can collapse due to debt calls or ownership disputes. We design continuity agreements that provide immediate liquidity, allowing surviving owners to buy out heirs fairly and keep the business operating smoothly without forced liquidation.",
+          next: "Ask about strategies to retain your top talent."
         },
         "Final Expense": {
-          title: "FINAL EXPENSE & FAMILY DIGNITY",
-          content: "Don't leave your family with a GoFundMe page. We offer simplified whole life with instant decisions and no medical exams. This covers burial, medical bills, and final costs, ensuring your legacy is defined by preparedness and peace for those you leave behind.",
-          next: "Ask about instant-decision final expense plans."
+          title: "PLANNING FOR FAMILY DIGNITY",
+          content: "Planning for final costs is an act of love and preparedness. We offer simplified plans that provide immediate coverage for burial and final medical bills. This ensures your legacy is defined by peace, rather than leaving a financial scramble or a GoFundMe page for your loved ones to manage during a time of grief.",
+          next: "Ask about instant-decision planning."
         }
       };
 
@@ -103,7 +103,7 @@
 
       const Assistant = ({ onClose, initialQuery }) => {
         const [messages, setMessages] = useState([
-          { role: "assistant", content: "Hi, I'm Legacy AI. 👋 \n\nI am Jackson's expert strategy engine. I specialize in the Rule of 72, the Power of Zero, and the D.I.M.E. Method. Select a card or ask me a strategy question." }
+          { role: "assistant", content: "Hi, I'm Legacy AI. 👋 \n\nI am Jackson's expert strategy engine. I specialize in the Rule of 72, the X-Curve Theory, and the DIME Method. Select a card or ask me a strategy question." }
         ]);
         const [isTyping, setIsTyping] = useState(false);
         const scrollRef = useRef(null);
@@ -123,14 +123,14 @@
 
             if (text.toLowerCase().includes("dime")) {
               data = {
-                title: "THE D.I.M.E. METHOD",
-                content: "D.I.M.E. stands for Debt, Income replacement, Mortgage, and Education. This formula determines your family's exact protection gap to ensure they never have to change their standard of living if the unexpected happens.",
-                next: "Run your Financial Score to calculate your D.I.M.E. total."
+                title: "THE DIME METHOD",
+                content: "DIME is the architectural framework for protection: Debt (payoff total), Income replacement (10x annual), Mortgage (clear the deed), and Education (future tuition). This determines your family's exact protection gap.",
+                next: "Run your Financial Score to calculate your DIME total."
               };
             } else if (text.toLowerCase().includes("x-curve") || text.toLowerCase().includes("x curve")) {
               data = {
                 title: "THE X-CURVE THEORY",
-                content: "The X-Curve shows your financial life in two lines: 1. Decreasing Responsibility (mortgage, kids) and 2. Increasing Wealth (retirement). We use insurance to protect the first line and annuities to build the second.",
+                content: "The X-Curve shows financial life in two intersecting lines: 1. Decreasing Responsibility (as debt and kids' needs fall) and 2. Increasing Wealth (as retirement savings rise). We use specific strategies to protect the first line and build the second simultaneously.",
                 next: "Ask about the 3 Rules of Money to see how we build the wealth line."
               };
             }
@@ -138,7 +138,7 @@
             if (!data) {
               data = {
                 title: "STRATEGY INSIGHT",
-                content: "I am programmed with the Power of Zero, the Rule of 72, and Private Family Banking strategies. Which would you like to master today?",
+                content: "I am programmed with the Rule of 72, the Volatility Shield, and Private Banking strategies. Which would you like to master today?",
                 next: "Type a strategy name above to begin."
               };
             }
@@ -166,19 +166,19 @@
                   </div>
                 </div>
               ))}
-              {isTyping && <div className="text-[10px] text-slate-400 animate-pulse px-2 font-bold uppercase">Legacy AI Analyzing...</div>}
+              {isTyping && <div className="text-[10px] text-slate-400 animate-pulse px-2 font-bold uppercase italic">Analyzing Strategy...</div>}
             </div>
             <div className="p-4 bg-white border-t flex flex-col gap-2">
                <div className="flex overflow-x-auto gap-2 pb-2 no-scrollbar">
-                  {["Rule of 72", "DIME Method", "Tax Buckets", "X-Curve"].map(tag => (
-                    <button key={tag} onClick={() => handleSend(tag)} className="whitespace-nowrap px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-[#1D3A5F] border border-slate-200 uppercase tracking-tighter">
+                  {["Rule of 72", "DIME Method", "X-Curve", "Tax Buckets"].map(tag => (
+                    <button key={tag} onClick={() => handleSend(tag)} className="whitespace-nowrap px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-[#1D3A5F] border border-slate-200 uppercase tracking-tighter active:scale-95">
                       {tag}
                     </button>
                   ))}
                </div>
                <div className="flex gap-2">
                   <input id="chatInput" placeholder="Ask about the Rule of 72..." className="flex-1 bg-slate-100 p-3 rounded-xl text-sm outline-none border focus:border-[#C29D6F]" onKeyDown={(e)=>e.key==='Enter' && handleSend(e.target.value)} />
-                  <button onClick={() => {const el=document.getElementById('chatInput'); handleSend(el.value); el.value='';}} className="bg-[#1D3A5F] text-white px-5 rounded-xl font-bold">➡️</button>
+                  <button onClick={() => {const el=document.getElementById('chatInput'); handleSend(el.value); el.value='';}} className="bg-[#1D3A5F] text-white px-5 rounded-xl font-bold active:scale-95 transition-all">➡️</button>
                </div>
             </div>
           </div>
@@ -191,10 +191,10 @@
         }, []);
         return (
           <div className="fixed inset-0 z-50 bg-[#1D3A5F]/90 backdrop-blur-md flex items-center justify-center p-6" onClick={onClose}>
-            <div className="bg-white p-8 rounded-[3rem] text-center animate-slide-up" onClick={e=>e.stopPropagation()}>
+            <div className="bg-white p-8 rounded-[3rem] text-center animate-slide-up shadow-2xl" onClick={e=>e.stopPropagation()}>
               <h3 className="font-black text-[#1D3A5F] mb-2 uppercase tracking-widest text-sm">Share My Legacy Card</h3>
               <div id="qrcode" className="mx-auto border-8 border-slate-50 p-2 rounded-2xl mb-4"></div>
-              <button onClick={onClose} className="mt-6 w-full py-3 bg-slate-100 rounded-xl text-[#1D3A5F] font-black text-xs uppercase tracking-widest">Close</button>
+              <button onClick={onClose} className="mt-6 w-full py-3 bg-slate-100 rounded-xl text-[#1D3A5F] font-black text-xs uppercase active:scale-95 transition-all">Close</button>
             </div>
           </div>
         );
@@ -240,14 +240,14 @@
 
               {/* ACTION FUNNEL */}
               <div className="px-6 py-8 space-y-4">
-                <a href={APP_DATA.links.scorecard} target="_blank" className="flex flex-col items-center justify-center w-full py-5 bg-[#C29D6F] text-white rounded-3xl shadow-xl hover:scale-[1.02] transition-all">
+                <a href={APP_DATA.links.scorecard} target="_blank" className="flex flex-col items-center justify-center w-full py-5 bg-[#C29D6F] text-white rounded-3xl shadow-xl hover:scale-[1.02] transition-all active:scale-95">
                   <span className="font-black text-sm uppercase tracking-widest leading-none">🏆 Get Your Financial Score</span>
                   <span className="text-[9px] font-bold opacity-80 uppercase mt-1 tracking-tighter">Start Free Assessment</span>
                 </a>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <a href={APP_DATA.links.portal} target="_blank" className="flex items-center justify-center py-4 bg-[#1D3A5F] text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg">Strategic Portal</a>
-                  <button onClick={() => setView('qr')} className="flex items-center justify-center py-4 bg-slate-800 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg">Share Card</button>
+                  <a href={APP_DATA.links.portal} target="_blank" className="flex items-center justify-center py-4 bg-[#1D3A5F] text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg active:scale-95 transition-all">Strategic Portal</a>
+                  <button onClick={() => setView('qr')} className="flex items-center justify-center py-4 bg-slate-800 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg active:scale-95 transition-all">Share Card</button>
                 </div>
               </div>
 
@@ -268,7 +268,7 @@
 
               {/* STICKY CHAT */}
               <div className="sticky bottom-6 flex justify-end px-6 z-20 pointer-events-none pb-6">
-                <button onClick={() => setView('ai')} className="bg-[#1D3A5F] px-6 py-4 rounded-full text-white shadow-2xl border-2 border-[#C29D6F] pointer-events-auto flex items-center gap-2">
+                <button onClick={() => setView('ai')} className="bg-[#1D3A5F] px-6 py-4 rounded-full text-white shadow-2xl border-2 border-[#C29D6F] pointer-events-auto flex items-center gap-2 active:scale-95 transition-all">
                   <span className="text-xs font-black tracking-widest">💬 LEGACY AI</span>
                 </button>
               </div>
