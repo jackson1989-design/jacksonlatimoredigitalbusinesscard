@@ -537,4 +537,63 @@
     const chatClose = document.getElementById('ai-chat-close');
     const chatMessages = document.getElementById('ai-chat-messages');
     const chatForm = document.getElementById('ai-chat-form');
-    const
+    const chatInput = document.getElementById('ai-chat-input');
+
+function addMessage(role, text) {
+  const div = document.createElement('div');
+  div.className = `ai-msg ${role}`;
+  const span = document.createElement('span');
+  span.textContent = text;
+  div.appendChild(span);
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+chatBubble.addEventListener('click', () => {
+  chatPanel.style.display = 'flex';
+  chatBubble.style.display = 'none';
+  gtag('event', 'strategic_advisor_open', {
+    event_category: 'engagement',
+    event_label: 'AI Chat Opened'
+  });
+  if (!chatMessages.dataset.initialized) {
+    addMessage('bot', "Welcome. I’m your Strategic Advisor. You can ask about protection, legacy planning, Living Benefits, or how to turn your hard work into a lasting legacy.");
+    chatMessages.dataset.initialized = 'true';
+  }
+});
+
+chatClose.addEventListener('click', () => {
+  chatPanel.style.display = 'none';
+  chatBubble.style.display = 'block';
+});
+
+chatForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = chatInput.value.trim();
+  if (!text) return;
+  addMessage('user', text);
+  chatInput.value = '';
+
+  gtag('event', 'strategic_advisor_message', {
+    event_category: 'engagement',
+    event_label: 'User Message'
+  });
+
+  addMessage('bot', 'Thinking through your strategy…');
+
+  try {
+    const res = await fetch('https://digitalbusiness-gsg9.vercel.app/api/strategic-advisor', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text })
+    });
+    const data = await res.json();
+    const last = chatMessages.lastElementChild;
+    if (last && last.classList.contains('bot')) {
+      chatMessages.removeChild(last);
+    }
+    addMessage('bot', data.reply || "I’m here to help you think through your legacy, protection, and strategy.");
+  } catch (err) {
+    addMessage('bot', "I ran into an issue responding. Please try again in a moment.");
+  }
+});
