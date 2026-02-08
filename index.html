@@ -544,3 +544,48 @@
       chatPanel.style.display = 'none';
       chatBubble.style.display = 'block';
     });
+chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      addMessage('user', text);
+      chatInput.value = '';
+
+      gtag('event', 'strategic_advisor_message', {
+        event_category: 'engagement',
+        event_label: 'User Message'
+      });
+
+      addMessage('bot', 'Thinking through your strategy…');
+
+      try {
+        const res = await fetch(
+          "https://digitalbusiness-gsg9.vercel.app/api/strategic-advisor",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text })
+          }
+        );
+
+        const data = await res.json();
+
+        const last = chatMessages.lastElementChild;
+        if (last && last.classList.contains('bot')) {
+          chatMessages.removeChild(last);
+        }
+
+        addMessage(
+          'bot',
+          data.reply ||
+            "I’m here to help you think through your legacy, protection, and strategy."
+        );
+      } catch (err) {
+        addMessage(
+          'bot',
+          "I ran into an issue responding. Please try again in a moment."
+        );
+      }
+    });
