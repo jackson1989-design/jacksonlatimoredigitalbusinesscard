@@ -88,6 +88,7 @@
       font-size: 0.86rem;
       color: var(--text-muted);
       margin-top: 2px;
+      line-height: 1.35;
     }
 
     .license {
@@ -153,7 +154,7 @@
       background: var(--gold);
       color: var(--black);
       border-color: var(--gold);
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .cta-btn:hover {
@@ -213,7 +214,7 @@
 
     .sacrifice-block strong {
       color: var(--gold);
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .footer-tagline {
@@ -355,7 +356,7 @@
     <!-- PROFILE -->
     <section class="profile">
       <div class="name">Jackson M. Latimore Sr.</div>
-      <div class="title">Latimore Life & Legacy LLC</div>
+      <div class="title">Independent Financial Consultant • Latimore Life & Legacy LLC<br/>Schuylkill County, PA</div>
       <div class="license">🛡️ Protection • 📈 Strategy • 🏛️ Legacy</div>
     </section>
 
@@ -377,18 +378,39 @@
       </div>
     </section>
 
-    <!-- CTAs -->
+    <!-- CTAs (Aligned with Hub) -->
     <section class="cta-group">
-      <a href="mailto:Jackson1989@latimorelegacy.com" class="cta-btn primary">📩 Send Email</a>
-      <a href="tel:+18568951457" class="cta-btn">📞 Call Now</a>
-      <a href="sms:+18568951457?&body=Hi%20Jackson%20—%20I%20just%20viewed%20your%20digital%20card%20and%20would%20like%20a%20quick%20legacy%20review."
-         class="cta-btn">💬 Text Me</a>
-      <a href="#schedule" class="cta-btn">📅 Schedule Legacy Review</a>
-      <a href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus"
-         class="cta-btn"
-         target="_blank"
-         rel="noopener">⚡ Get Instant Quote</a>
-      <button type="button" class="cta-btn" onclick="downloadVCard()">💾 Save Contact</button>
+      <!-- Primary: Talk (Fillout intake -> Google booking) -->
+      <a
+        href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus"
+        class="cta-btn primary"
+        target="_blank"
+        rel="noopener"
+        onclick="trackCta('talk_with_jackson')"
+      >🗣️ Talk with Jackson</a>
+
+      <!-- Secondary: Quick contact options -->
+      <a href="mailto:jackson1989@latimorelegacy.com" class="cta-btn" onclick="trackCta('send_email')">📩 Send Secure Email</a>
+      <a href="tel:+18568951457" class="cta-btn" onclick="trackCta('call_now')">📞 Call Now</a>
+      <a
+        href="sms:+18568951457?&body=Hi%20Jackson%20—%20I%20just%20viewed%20your%20digital%20card%20and%20would%20like%20to%20talk."
+        class="cta-btn"
+        onclick="trackCta('text_me')"
+      >💬 Text Me</a>
+
+      <!-- Anchor for people who want to read then act -->
+      <a href="#schedule" class="cta-btn" onclick="trackCta('schedule_anchor')">📅 Legacy Review</a>
+
+      <!-- Keep this (but remove “instant” language) -->
+      <a
+        href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus"
+        class="cta-btn"
+        target="_blank"
+        rel="noopener"
+        onclick="trackCta('get_started')"
+      >⚡ Get Started</a>
+
+      <button type="button" class="cta-btn" onclick="downloadVCard(); trackCta('save_contact');">💾 Save Contact</button>
     </section>
 
     <!-- Share -->
@@ -416,17 +438,26 @@
         My mission is to help families protect what they’ve built, grow what they have,
         and create a legacy that lasts. Every conversation is about clarity, strategy,
         and empowerment — never pressure.
+        <br/><br/>
+        I work with local families and individuals who value calm guidance, honest answers,
+        and getting protection handled the right way.
       </p>
     </section>
 
     <!-- Anchor: Schedule -->
-    <div class="section-label" id="schedule">📅 Schedule Legacy Review</div>
+    <div class="section-label" id="schedule">📅 Legacy Review</div>
     <section class="anchor-block">
-      <p>Tap below to book a quick legacy review (15–20 minutes). ✅</p>
-      <!-- Optional: add your booking link here later -->
-      <a class="cta-btn primary" href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus" target="_blank" rel="noopener">
-        🗓️ Start Here
-      </a>
+      <p>Start with a quick legacy review (15–20 minutes). ✅</p>
+      <a
+        class="cta-btn primary"
+        href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus"
+        target="_blank"
+        rel="noopener"
+        onclick="trackCta('start_here')"
+      >🗓️ Start Here</a>
+      <p style="margin-top:10px; color:#bdbdbd; font-size:0.78rem;">
+        Prefer email first? Use “Send Secure Email” above.
+      </p>
     </section>
 
     <!-- Footer -->
@@ -458,23 +489,34 @@
   </div>
 
   <script>
-    const CARD_URL = "https://jackson1989-design.github.io/jacksonlatimoredigitalbusinesscard/";
+    // === Keep these consistent with your live hub/card domain ===
+    const CARD_URL = "https://ancient-rain-caf9.jackson1989.workers.dev/";
+    const FILLOUT_URL = "https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus";
+    const PHONE_E164 = "+18568951457";
+    const EMAIL = "jackson1989@latimorelegacy.com";
+
+    // GA helper
+    function trackCta(label) {
+      try {
+        gtag('event', 'cta_click', { event_category: 'cta', event_label: label });
+      } catch (_) {}
+    }
 
     function copyCardLink() {
       navigator.clipboard.writeText(CARD_URL).then(() => {
-        gtag('event', 'copy_link', { event_category: 'share', event_label: 'Copy Card Link' });
+        trackCta('copy_link');
         alert("✅ Card link copied to clipboard.");
       });
     }
 
     function shareByText() {
-      gtag('event', 'share_text', { event_category: 'share', event_label: 'Share via Text' });
+      trackCta('share_text');
       const text = encodeURIComponent("Check out this digital card: " + CARD_URL);
       window.location.href = "sms:?&body=" + text;
     }
 
     function shareByEmail() {
-      gtag('event', 'share_email', { event_category: 'share', event_label: 'Share via Email' });
+      trackCta('share_email');
       const subject = encodeURIComponent("Latimore Life & Legacy Digital Card");
       const body = encodeURIComponent("I thought this might be helpful for you:\n\n" + CARD_URL);
       window.location.href = "mailto:?subject=" + subject + "&body=" + body;
@@ -488,9 +530,9 @@
         "N:Latimore;Jackson;;;",
         "FN:Jackson M. Latimore Sr.",
         "ORG:Latimore Life & Legacy LLC",
-        "TITLE:Strategic Advisor",
-        "TEL;TYPE=CELL:+1-856-895-1457",
-        "EMAIL;TYPE=INTERNET,WORK:Jackson1989@latimorelegacy.com",
+        "TITLE:Independent Financial Consultant",
+        "TEL;TYPE=CELL:" + PHONE_E164,
+        "EMAIL;TYPE=INTERNET,WORK:" + EMAIL,
         "URL:" + CARD_URL,
         "END:VCARD"
       ].join("\n");
@@ -505,7 +547,9 @@
       a.remove();
       URL.revokeObjectURL(url);
 
-      gtag('event', 'save_contact', { event_category: 'engagement', event_label: 'vCard Download' });
+      try {
+        gtag('event', 'save_contact', { event_category: 'engagement', event_label: 'vCard Download' });
+      } catch (_) {}
     }
 
     // --- AI CHAT FRONTEND LOGIC ---
@@ -533,12 +577,14 @@
       chatPanel.style.display = 'flex';
       chatBubble.style.display = 'none';
 
-      gtag('event', 'strategic_advisor_open', { event_category: 'engagement', event_label: 'AI Chat Opened' });
+      try {
+        gtag('event', 'strategic_advisor_open', { event_category: 'engagement', event_label: 'AI Chat Opened' });
+      } catch (_) {}
 
       if (!chatMessages.dataset.initialized) {
         addMessage(
           'bot',
-          "👋🏿 Welcome. I’m your Strategic Advisor. Ask about 🛡️ protection, 🏛️ legacy planning, ❤️ Living Benefits, or how to turn your hard work into a lasting legacy."
+          "👋🏿 Welcome. I’m your Strategic Advisor. I help you think through protection, legacy planning, and long-term strategy — calmly, clearly, and without pressure."
         );
         chatMessages.dataset.initialized = 'true';
       }
@@ -558,11 +604,14 @@
       addMessage('user', text);
       chatInput.value = '';
 
-      gtag('event', 'strategic_advisor_message', { event_category: 'engagement', event_label: 'User Message' });
+      try {
+        gtag('event', 'strategic_advisor_message', { event_category: 'engagement', event_label: 'User Message' });
+      } catch (_) {}
 
       addMessage('bot', '🧠 Thinking through your strategy…', { kind: "thinking" });
 
       try {
+        // Keep your existing endpoint (unchanged)
         const res = await fetch("https://digitalbusiness-gsg9.vercel.app/api/strategic-advisor", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
