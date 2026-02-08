@@ -268,33 +268,129 @@
       color: var(--gold);
     }
 
-    .strategic-advisor {
+    /* AI Chat Bubble */
+    #ai-chat-bubble {
       position: fixed;
-      bottom: 18px;
+      bottom: 80px;
       right: 18px;
-      padding: 10px 14px;
-      border-radius: 999px;
       background: var(--gold);
       color: var(--black);
+      padding: 10px 14px;
+      border-radius: 999px;
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      border: none;
       cursor: pointer;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+    }
+
+    #ai-chat-panel {
+      position: fixed;
+      bottom: 80px;
+      right: 18px;
+      width: 320px;
+      max-height: 70vh;
+      background: #050505;
+      border-radius: 16px;
+      border: 1px solid #333;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 10000;
+    }
+
+    #ai-chat-header {
+      background: #111111;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #ai-chat-header span {
+      color: var(--gold);
+    }
+
+    #ai-chat-header button {
+      background: transparent;
+      border: none;
+      color: #888;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    #ai-chat-messages {
+      padding: 10px 10px 6px;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      overflow-y: auto;
+      max-height: 50vh;
+    }
+
+    .ai-msg {
+      margin-bottom: 8px;
+    }
+
+    .ai-msg.user {
+      text-align: right;
+    }
+
+    .ai-msg.user span {
+      display: inline-block;
+      background: #1f1f1f;
+      color: #f5f5f5;
+      padding: 6px 8px;
+      border-radius: 10px;
+    }
+
+    .ai-msg.bot span {
+      display: inline-block;
+      background: #101010;
+      color: #f5f5f5;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+    }
+
+    #ai-chat-form {
+      display: flex;
+      border-top: 1px solid #222;
+    }
+
+    #ai-chat-input {
+      flex: 1;
+      border: none;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+      background: #080808;
+      color: #f5f5f5;
+    }
+
+    #ai-chat-input:focus {
+      outline: none;
+    }
+
+    #ai-chat-form button {
+      border: none;
+      background: var(--gold);
+      color: var(--black);
+      padding: 0 12px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
     }
 
     @media (max-width: 480px) {
-      .social-btn {
-        flex: 1 1 100%;
-      }
-      .share-btn {
-        flex: 1 1 calc(50% - 8px);
-      }
-      .strategic-advisor {
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
+      #ai-chat-panel {
+        right: 10px;
+        left: 10px;
+        width: auto;
       }
     }
   </style>
@@ -381,50 +477,29 @@
 
   </main>
 
-  <!-- Strategic Advisor Button -->
-  <button class="strategic-advisor" type="button">
-    Strategic Advisor
-  </button>
+  <!-- AI Strategic Advisor Chat -->
+  <div id="ai-chat-bubble">Strategic Advisor</div>
+
+  <div id="ai-chat-panel">
+    <div id="ai-chat-header">
+      <span>Latimore Strategic Advisor</span>
+      <button id="ai-chat-close">&times;</button>
+    </div>
+    <div id="ai-chat-messages"></div>
+    <form id="ai-chat-form">
+      <input
+        type="text"
+        id="ai-chat-input"
+        placeholder="Ask about protection, legacy, or strategy..."
+        autocomplete="off"
+        required
+      />
+      <button type="submit">Send</button>
+    </form>
+  </div>
 
   <script>
     const CARD_URL = "https://jackson1989-design.github.io/jacksonlatimoredigitalbusinesscard/";
-
-    // GA4 Event Tracking
-
-    document.querySelector('.cta-btn.primary')?.addEventListener('click', () => {
-      gtag('event', 'email_click', {
-        event_category: 'engagement',
-        event_label: 'Send Secure Email'
-      });
-    });
-
-    document.querySelector('a[href="#schedule"]')?.addEventListener('click', () => {
-      gtag('event', 'schedule_review', {
-        event_category: 'engagement',
-        event_label: 'Schedule Legacy Review'
-      });
-    });
-
-    document.querySelector('a[href="#quote"]')?.addEventListener('click', () => {
-      gtag('event', 'instant_quote', {
-        event_category: 'engagement',
-        event_label: 'Get Instant Quote'
-      });
-    });
-
-    document.querySelector('a[href="#save-contact"]')?.addEventListener('click', () => {
-      gtag('event', 'save_contact', {
-        event_category: 'engagement',
-        event_label: 'Save Contact'
-      });
-    });
-
-    document.querySelector('.strategic-advisor')?.addEventListener('click', () => {
-      gtag('event', 'strategic_advisor', {
-        event_category: 'engagement',
-        event_label: 'Strategic Advisor Button'
-      });
-    });
 
     function copyCardLink() {
       navigator.clipboard.writeText(CARD_URL).then(() => {
@@ -454,7 +529,12 @@
       const body = encodeURIComponent("I thought this might be helpful for you:\n\n" + CARD_URL);
       window.location.href = "mailto:?subject=" + subject + "&body=" + body;
     }
-  </script>
 
-</body>
-</html>
+    // --- AI CHAT FRONTEND LOGIC ---
+
+    const chatBubble = document.getElementById('ai-chat-bubble');
+    const chatPanel = document.getElementById('ai-chat-panel');
+    const chatClose = document.getElementById('ai-chat-close');
+    const chatMessages = document.getElementById('ai-chat-messages');
+    const chatForm = document.getElementById('ai-chat-form');
+    const
