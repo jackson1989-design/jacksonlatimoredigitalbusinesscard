@@ -11,12 +11,25 @@
     content="Independent Financial Consultant helping families in Schuylkill County, PA protect what they've built, grow with intention, and create lasting legacies."
   />
 
+  <meta name="author" content="Jackson M. Latimore Sr." />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Jackson M. Latimore Sr. | Latimore Life & Legacy LLC" />
+  <meta property="og:description" content="Helping families protect, grow, and create lasting legacies." />
+  <meta property="og:type" content="website" />
+  <meta
+    property="og:image"
+    content="https://raw.githubusercontent.com/jackson1989-design/1/main/hero.png"
+  />
+
+  <!-- Favicon -->
   <link
     rel="icon"
     type="image/png"
     href="https://raw.githubusercontent.com/jackson1989-design/1/main/hero.png"
   />
 
+  <!-- Base styles -->
   <style>
     * {
       margin: 0;
@@ -24,9 +37,16 @@
       box-sizing: border-box;
     }
 
+    html,
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      height: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #ffffff;
+      color: #111;
     }
 
     #root {
@@ -34,10 +54,15 @@
     }
   </style>
 
-  <!-- App entry -->
-  <script type="module" src="/index-BkdTHJLQ.js"></script>
+  <!-- React app entry -->
+  <!-- Use ./ for GitHub Pages or subdirectory hosting -->
+  <script type="module" src="./index-BkdTHJLQ.js"></script>
 </head>
 <body>
+  <noscript>
+    You need JavaScript enabled to run this application.
+  </noscript>
+
   <div id="root"></div>
 </body>
 </html>
