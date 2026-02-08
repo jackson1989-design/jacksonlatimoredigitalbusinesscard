@@ -1,9 +1,15 @@
-8<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Latimore Life & Legacy LLC – Digital Card</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Social Preview -->
+  <meta property="og:title" content="Latimore Life & Legacy LLC – Digital Card" />
+  <meta property="og:description" content="🛡️ Protection • 📈 Strategy • 🏛️ Legacy — Tap to connect." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/jackson1989-design/1/main/hero.png" />
+  <meta property="og:type" content="website" />
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TVNBL24V1W"></script>
@@ -44,22 +50,28 @@
       background: #050505;
       border-radius: 20px;
       border: 1px solid #222;
-      padding: 20px 18px 24px;
+      padding: 18px 18px 24px;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
-    }
-.logo {
-      text-align: center;
-      margin-bottom: 18px;
+      overflow: hidden;
     }
 
-    .logo img {
+    .hero {
+      width: calc(100% + 36px);
+      margin: -18px -18px 14px;
+      border-bottom: 1px solid #222;
+      background: #0a0a0a;
+    }
+
+    .hero img {
       width: 100%;
-      max-width: 260px;
+      display: block;
       height: auto;
+      max-height: 220px;
+      object-fit: cover;
     }
 
     .profile {
-      margin-top: 18px;
+      margin-top: 10px;
       padding: 14px 12px;
       border-radius: var(--radius);
       background: linear-gradient(135deg, #111111, #1b1b1b);
@@ -67,73 +79,26 @@
     }
 
     .name {
-      font-weight: 600;
-      font-size: 1.1rem;
+      font-weight: 650;
+      font-size: 1.12rem;
+      letter-spacing: 0.01em;
     }
 
     .title {
-      font-size: 0.85rem;
+      font-size: 0.86rem;
       color: var(--text-muted);
       margin-top: 2px;
     }
 
     .license {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .social-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .social-btn {
-      flex: 1 1 calc(50% - 8px);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--gold);
-      color: var(--gold);
       font-size: 0.78rem;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      transition: all 0.18s ease;
+      color: #cfcfcf;
+      margin-top: 6px;
+      line-height: 1.35;
     }
 
-    .social-btn:hover {
-      background: var(--gold);
-      color: var(--black);
-    }
-
-    .vision-block {
+    .services-section {
       margin-top: 18px;
-      padding: 14px 12px;
-      border-radius: var(--radius);
-      background: #101010;
-      border: 1px solid #262626;
-    }
-
-    .vision-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--gold);
-      margin-bottom: 6px;
-    }
-
-    .vision-statement {
-      font-size: 0.9rem;
-      line-height: 1.5;
-      color: #e6e6e6;
-    }
-.services-section {
-      margin-top: 22px;
     }
 
     .services-title {
@@ -162,7 +127,7 @@
     }
 
     .cta-group {
-      margin-top: 22px;
+      margin-top: 18px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -181,13 +146,14 @@
       text-align: center;
       text-decoration: none;
       transition: all 0.18s ease;
+      cursor: pointer;
     }
 
     .cta-btn.primary {
       background: var(--gold);
       color: var(--black);
       border-color: var(--gold);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .cta-btn:hover {
@@ -200,12 +166,13 @@
       text-transform: uppercase;
       letter-spacing: 0.16em;
       color: var(--text-muted);
-      margin-top: 20px;
+      margin-top: 18px;
       margin-bottom: 6px;
     }
 
     .share-block,
-    .sacrifice-block {
+    .sacrifice-block,
+    .anchor-block {
       padding: 12px 12px;
       border-radius: var(--radius);
       background: #101010;
@@ -214,7 +181,8 @@
       color: #dcdcdc;
       line-height: 1.45;
     }
-.share-actions {
+
+    .share-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
@@ -234,6 +202,7 @@
       letter-spacing: 0.08em;
       text-decoration: none;
       transition: all 0.18s ease;
+      cursor: pointer;
     }
 
     .share-btn:hover {
@@ -244,11 +213,11 @@
 
     .sacrifice-block strong {
       color: var(--gold);
-      font-weight: 500;
+      font-weight: 700;
     }
 
     .footer-tagline {
-      margin-top: 22px;
+      margin-top: 20px;
       text-align: center;
       font-size: 0.78rem;
       text-transform: uppercase;
@@ -279,6 +248,7 @@
       cursor: pointer;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
       z-index: 9999;
+      user-select: none;
     }
 
     #ai-chat-panel {
@@ -296,7 +266,8 @@
       overflow: hidden;
       z-index: 10000;
     }
-#ai-chat-header {
+
+    #ai-chat-header {
       background: #111111;
       padding: 10px 12px;
       display: flex;
@@ -307,9 +278,7 @@
       text-transform: uppercase;
     }
 
-    #ai-chat-header span {
-      color: var(--gold);
-    }
+    #ai-chat-header span { color: var(--gold); }
 
     #ai-chat-header button {
       background: transparent;
@@ -327,13 +296,8 @@
       max-height: 50vh;
     }
 
-    .ai-msg {
-      margin-bottom: 8px;
-    }
-
-    .ai-msg.user {
-      text-align: right;
-    }
+    .ai-msg { margin-bottom: 8px; }
+    .ai-msg.user { text-align: right; }
 
     .ai-msg.user span {
       display: inline-block;
@@ -352,10 +316,7 @@
       border: 1px solid #2a2a2a;
     }
 
-    #ai-chat-form {
-      display: flex;
-      border-top: 1px solid #222;
-    }
+    #ai-chat-form { display: flex; border-top: 1px solid #222; }
 
     #ai-chat-input {
       flex: 1;
@@ -365,10 +326,7 @@
       background: #080808;
       color: #f5f5f5;
     }
-
-    #ai-chat-input:focus {
-      outline: none;
-    }
+    #ai-chat-input:focus { outline: none; }
 
     #ai-chat-form button {
       border: none;
@@ -385,49 +343,72 @@
 
 <body>
   <main class="card">
-<!-- Services -->
+    <!-- HERO IMAGE -->
+    <div class="hero">
+      <img
+        src="https://raw.githubusercontent.com/jackson1989-design/1/main/hero.png"
+        alt="Latimore Life & Legacy"
+        loading="eager"
+      />
+    </div>
+
+    <!-- PROFILE -->
+    <section class="profile">
+      <div class="name">Jackson M. Latimore Sr.</div>
+      <div class="title">Latimore Life & Legacy LLC</div>
+      <div class="license">🛡️ Protection • 📈 Strategy • 🏛️ Legacy</div>
+    </section>
+
+    <!-- Services -->
     <section class="services-section">
-      <div class="services-title">Full Portfolio of Services</div>
+      <div class="services-title">💼 Full Portfolio of Services</div>
 
       <div class="services-grid">
-        <div class="service-item">Wealth Accumulation</div>
-        <div class="service-item">Asset Protection</div>
-        <div class="service-item">Education Funds</div>
-        <div class="service-item">Debt Management</div>
-        <div class="service-item">Life Insurance</div>
-        <div class="service-item">Living Benefits</div>
-        <div class="service-item">Estate Planning</div>
-        <div class="service-item">Indexed Growth</div>
-        <div class="service-item">Mortgage Protection</div>
-        <div class="service-item">Business Strategies</div>
+        <div class="service-item">💰 Wealth Accumulation</div>
+        <div class="service-item">🛡️ Asset Protection</div>
+        <div class="service-item">🎓 Education Funds</div>
+        <div class="service-item">💳 Debt Management</div>
+        <div class="service-item">🧾 Life Insurance</div>
+        <div class="service-item">❤️ Living Benefits</div>
+        <div class="service-item">🏛️ Estate Planning</div>
+        <div class="service-item">📈 Indexed Growth</div>
+        <div class="service-item">🏠 Mortgage Protection</div>
+        <div class="service-item">🏢 Business Strategies</div>
       </div>
     </section>
 
     <!-- CTAs -->
     <section class="cta-group">
-      <a href="mailto:example@latimorelegacy.com" class="cta-btn primary">Send Secure Email</a>
-      <a href="#schedule" class="cta-btn">Schedule Legacy Review</a>
-      <a href="#quote" class="cta-btn">Get Instant Quote</a>
-      <a href="#save-contact" class="cta-btn">Save Contact</a>
+      <a href="mailto:Jackson1989@latimorelegacy.com" class="cta-btn primary">📩 Send Email</a>
+      <a href="tel:+18568951457" class="cta-btn">📞 Call Now</a>
+      <a href="sms:+18568951457?&body=Hi%20Jackson%20—%20I%20just%20viewed%20your%20digital%20card%20and%20would%20like%20a%20quick%20legacy%20review."
+         class="cta-btn">💬 Text Me</a>
+      <a href="#schedule" class="cta-btn">📅 Schedule Legacy Review</a>
+      <a href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus"
+         class="cta-btn"
+         target="_blank"
+         rel="noopener">⚡ Get Instant Quote</a>
+      <button type="button" class="cta-btn" onclick="downloadVCard()">💾 Save Contact</button>
     </section>
 
     <!-- Share -->
-    <div class="section-label">Share This Card</div>
+    <div class="section-label">📣 Share This Card</div>
 
     <section class="share-block">
       <p>
-        Know someone who could benefit from financial clarity or protection  
-        Share my digital card with them.
+        Know someone who could benefit from financial clarity or protection?
+        Share my digital card with them. 🤝
       </p>
 
       <div class="share-actions">
-        <button class="share-btn" type="button" onclick="copyCardLink()">Copy Link</button>
-        <button class="share-btn" type="button" onclick="shareByText()">Text</button>
-        <button class="share-btn" type="button" onclick="shareByEmail()">Email</button>
+        <button class="share-btn" type="button" onclick="copyCardLink()">🔗 Copy Link</button>
+        <button class="share-btn" type="button" onclick="shareByText()">💬 Text</button>
+        <button class="share-btn" type="button" onclick="shareByEmail()">✉️ Email</button>
       </div>
     </section>
-<!-- Sacrifice / Commitment -->
-    <div class="section-label">My Commitment</div>
+
+    <!-- Commitment -->
+    <div class="section-label">🤝 My Commitment</div>
 
     <section class="sacrifice-block">
       <p>
@@ -438,19 +419,28 @@
       </p>
     </section>
 
-    <!-- Footer -->
-    <div class="footer-tagline">Protecting Today. Securing Tomorrow.</div>
-    <div class="footer-hashtag">#TheBeatGoesOn</div>
+    <!-- Anchor: Schedule -->
+    <div class="section-label" id="schedule">📅 Schedule Legacy Review</div>
+    <section class="anchor-block">
+      <p>Tap below to book a quick legacy review (15–20 minutes). ✅</p>
+      <!-- Optional: add your booking link here later -->
+      <a class="cta-btn primary" href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus" target="_blank" rel="noopener">
+        🗓️ Start Here
+      </a>
+    </section>
 
+    <!-- Footer -->
+    <div class="footer-tagline">🔐 Protecting Today. Securing Tomorrow.</div>
+    <div class="footer-hashtag">✨ #TheBeatGoesOn</div>
   </main>
 
   <!-- AI Strategic Advisor Chat -->
-  <div id="ai-chat-bubble">Strategic Advisor</div>
+  <div id="ai-chat-bubble">🤖 Strategic Advisor</div>
 
   <div id="ai-chat-panel">
     <div id="ai-chat-header">
       <span>Latimore Strategic Advisor</span>
-      <button id="ai-chat-close">&times;</button>
+      <button id="ai-chat-close" aria-label="Close chat">&times;</button>
     </div>
 
     <div id="ai-chat-messages"></div>
@@ -459,49 +449,66 @@
       <input
         type="text"
         id="ai-chat-input"
-        placeholder="Ask about protection, legacy, or strategy..."
+        placeholder="Ask about protection, legacy, or strategy…"
         autocomplete="off"
         required
       />
       <button type="submit">Send</button>
     </form>
   </div>
-<script>
+
+  <script>
     const CARD_URL = "https://jackson1989-design.github.io/jacksonlatimoredigitalbusinesscard/";
 
     function copyCardLink() {
       navigator.clipboard.writeText(CARD_URL).then(() => {
-        gtag('event', 'copy_link', {
-          event_category: 'share',
-          event_label: 'Copy Card Link'
-        });
-        alert("Card link copied to clipboard.");
+        gtag('event', 'copy_link', { event_category: 'share', event_label: 'Copy Card Link' });
+        alert("✅ Card link copied to clipboard.");
       });
     }
 
     function shareByText() {
-      gtag('event', 'share_text', {
-        event_category: 'share',
-        event_label: 'Share via Text'
-      });
-
+      gtag('event', 'share_text', { event_category: 'share', event_label: 'Share via Text' });
       const text = encodeURIComponent("Check out this digital card: " + CARD_URL);
       window.location.href = "sms:?&body=" + text;
     }
 
     function shareByEmail() {
-      gtag('event', 'share_email', {
-        event_category: 'share',
-        event_label: 'Share via Email'
-      });
-
+      gtag('event', 'share_email', { event_category: 'share', event_label: 'Share via Email' });
       const subject = encodeURIComponent("Latimore Life & Legacy Digital Card");
       const body = encodeURIComponent("I thought this might be helpful for you:\n\n" + CARD_URL);
-
       window.location.href = "mailto:?subject=" + subject + "&body=" + body;
     }
-// --- AI CHAT FRONTEND LOGIC ---
 
+    // --- vCard download (Save Contact) ---
+    function downloadVCard() {
+      const vcf = [
+        "BEGIN:VCARD",
+        "VERSION:3.0",
+        "N:Latimore;Jackson;;;",
+        "FN:Jackson M. Latimore Sr.",
+        "ORG:Latimore Life & Legacy LLC",
+        "TITLE:Strategic Advisor",
+        "TEL;TYPE=CELL:+1-856-895-1457",
+        "EMAIL;TYPE=INTERNET,WORK:Jackson1989@latimorelegacy.com",
+        "URL:" + CARD_URL,
+        "END:VCARD"
+      ].join("\n");
+
+      const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Latimore-Life-Legacy.vcf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      gtag('event', 'save_contact', { event_category: 'engagement', event_label: 'vCard Download' });
+    }
+
+    // --- AI CHAT FRONTEND LOGIC ---
     const chatBubble = document.getElementById('ai-chat-bubble');
     const chatPanel = document.getElementById('ai-chat-panel');
     const chatClose = document.getElementById('ai-chat-close');
@@ -509,16 +516,16 @@
     const chatForm = document.getElementById('ai-chat-form');
     const chatInput = document.getElementById('ai-chat-input');
 
-    function addMessage(role, text) {
+    function addMessage(role, text, meta = {}) {
       const div = document.createElement('div');
       div.className = `ai-msg ${role}`;
+      if (meta.kind) div.dataset.kind = meta.kind;
 
       const span = document.createElement('span');
       span.textContent = text;
 
       div.appendChild(span);
       chatMessages.appendChild(div);
-
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
@@ -526,15 +533,12 @@
       chatPanel.style.display = 'flex';
       chatBubble.style.display = 'none';
 
-      gtag('event', 'strategic_advisor_open', {
-        event_category: 'engagement',
-        event_label: 'AI Chat Opened'
-      });
+      gtag('event', 'strategic_advisor_open', { event_category: 'engagement', event_label: 'AI Chat Opened' });
 
       if (!chatMessages.dataset.initialized) {
         addMessage(
           'bot',
-          "Welcome. I’m your Strategic Advisor. You can ask about protection, legacy planning, Living Benefits, or how to turn your hard work into a lasting legacy."
+          "👋🏿 Welcome. I’m your Strategic Advisor. Ask about 🛡️ protection, 🏛️ legacy planning, ❤️ Living Benefits, or how to turn your hard work into a lasting legacy."
         );
         chatMessages.dataset.initialized = 'true';
       }
@@ -544,7 +548,8 @@
       chatPanel.style.display = 'none';
       chatBubble.style.display = 'block';
     });
-chatForm.addEventListener('submit', async (e) => {
+
+    chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const text = chatInput.value.trim();
@@ -553,43 +558,36 @@ chatForm.addEventListener('submit', async (e) => {
       addMessage('user', text);
       chatInput.value = '';
 
-      gtag('event', 'strategic_advisor_message', {
-        event_category: 'engagement',
-        event_label: 'User Message'
-      });
+      gtag('event', 'strategic_advisor_message', { event_category: 'engagement', event_label: 'User Message' });
 
-      addMessage('bot', 'Thinking through your strategy…');
+      addMessage('bot', '🧠 Thinking through your strategy…', { kind: "thinking" });
 
       try {
-        const res = await fetch(
-          "https://digitalbusiness-gsg9.vercel.app/api/strategic-advisor",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: text })
-          }
-        );
+        const res = await fetch("https://digitalbusiness-gsg9.vercel.app/api/strategic-advisor", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
 
-        const data = await res.json();
+        let data = {};
+        try { data = await res.json(); } catch (_) {}
 
-        const last = chatMessages.lastElementChild;
-        if (last && last.classList.contains('bot')) {
-          chatMessages.removeChild(last);
+        const thinking = chatMessages.querySelector('.ai-msg.bot[data-kind="thinking"]:last-of-type');
+        if (thinking) thinking.remove();
+
+        if (!res.ok) {
+          addMessage('bot', "⚠️ I hit a server issue. Please try again in a moment.");
+          return;
         }
 
-        addMessage(
-          'bot',
-          data.reply ||
-            "I’m here to help you think through your legacy, protection, and strategy."
-        );
+        addMessage('bot', data.reply || "✅ I’m here to help you think through your legacy, protection, and strategy.");
       } catch (err) {
-        addMessage(
-          'bot',
-          "I ran into an issue responding. Please try again in a moment."
-        );
+        const thinking = chatMessages.querySelector('.ai-msg.bot[data-kind="thinking"]:last-of-type');
+        if (thinking) thinking.remove();
+
+        addMessage('bot', "📶 Connection issue — please try again in a moment.");
       }
     });
-</script>
-
+  </script>
 </body>
 </html>
