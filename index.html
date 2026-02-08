@@ -466,3 +466,37 @@
       <button type="submit">Send</button>
     </form>
   </div>
+<script>
+    const CARD_URL = "https://jackson1989-design.github.io/jacksonlatimoredigitalbusinesscard/";
+
+    function copyCardLink() {
+      navigator.clipboard.writeText(CARD_URL).then(() => {
+        gtag('event', 'copy_link', {
+          event_category: 'share',
+          event_label: 'Copy Card Link'
+        });
+        alert("Card link copied to clipboard.");
+      });
+    }
+
+    function shareByText() {
+      gtag('event', 'share_text', {
+        event_category: 'share',
+        event_label: 'Share via Text'
+      });
+
+      const text = encodeURIComponent("Check out this digital card: " + CARD_URL);
+      window.location.href = "sms:?&body=" + text;
+    }
+
+    function shareByEmail() {
+      gtag('event', 'share_email', {
+        event_category: 'share',
+        event_label: 'Share via Email'
+      });
+
+      const subject = encodeURIComponent("Latimore Life & Legacy Digital Card");
+      const body = encodeURIComponent("I thought this might be helpful for you:\n\n" + CARD_URL);
+
+      window.location.href = "mailto:?subject=" + subject + "&body=" + body;
+    }
