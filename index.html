@@ -3,54 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Jackson M. Latimore Sr. | Latimore Life & Legacy LLC</title>
-
-  <meta
-    name="description"
-    content="Independent Financial Consultant helping families in Schuylkill County, PA protect what they've built, grow with intention, and create lasting legacies."
-  />
-
-  <meta name="author" content="Jackson M. Latimore Sr." />
-
-  <!-- Social preview -->
-  <meta property="og:title" content="Jackson M. Latimore Sr. | Latimore Life & Legacy LLC" />
-  <meta property="og:description" content="Helping families protect, grow, and create lasting legacies." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="./hero.png" />
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="./hero.png" />
-
+  <title>Latimore LIFE & LEGACY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    * {
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+      color: #001F3F;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+      line-height: 1.6;
     }
-
-    html,
-    body {
-      height: 100%;
+    header {
+      background-color: #001F3F;
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
     }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: #ffffff;
-      color: #111;
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
     }
-
-    #root {
-      min-height: 100vh;
+    header p {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+    .container {
+      padding: 1.5rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .cta-button {
+      background-color: #FFD700;
+      color: #001F3F;
+      font-weight: 600;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 12px;
+      text-decoration: none;
+      display: block;
+      margin: 1rem 0;
+    }
+    .services {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .service {
+      background: #F5F5F5;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    .testimonials {
+      margin-top: 2rem;
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.85rem;
+      background: #f9f9f9;
     }
   </style>
-
-  <!-- React bundle -->
-  <script type="module" src="./index-BkdTHJLQ.js"></script>
 </head>
 <body>
-  <noscript>You need JavaScript enabled to run this app.</noscript>
-  <div id="root"></div>
+  <header>
+    <h1>Latimore LIFE & LEGACY</h1>
+    <p>Coverage with Confidence. Care with Purpose.</p>
+  </header>
+
+  <div class="container">
+    <p><strong>Mission:</strong> Empowering working families with knowledge-driven, affordable life insurance solutions that build generational wealth and protect legacies.</p>
+
+    <a class="cta-button" href="https://globalfinancialimpact.fillout.com/t/tMz7ZcqpaZus" target="_blank">Get a Free Quote</a>
+
+    <div class="services">
+      <div class="service">Life Insurance</div>
+      <div class="service">Health Coverage</div>
+      <div class="service">Accident Protection</div>
+      <div class="service">Child Whole Life</div>
+      <div class="service">Final Expense</div>
+    </div>
+
+    <a class="cta-button" href="mailto:jacksonlatimoreglobal@gmail.com">Email Jackson</a>
+    <a class="cta-button" href="tel:+15704498387">Call Now: (570) 449-8387</a>
+
+    <div class="testimonials">
+      <strong>Testimonial:</strong>
+      <p>"Jackson walked us through everything with patience and clarity. We feel empowered and protected!"</p>
+    </div>
+
+    <a class="cta-button" href="https://calendly.com/jacksonlatimore" target="_blank">Schedule a Consultation</a>
+  </div>
+
+  <footer>
+    <p>NIPR #21638507 | PADOI #1268820<br/>Powered by Globe Life | Serving Pennsylvania and beyond</p>
+  </footer>
 </body>
 </html>
