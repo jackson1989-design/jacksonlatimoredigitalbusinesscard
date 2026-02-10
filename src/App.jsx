@@ -92,7 +92,7 @@ export default function App() {
         <header className="flex flex-col items-center mb-10 text-center">
           
         <div className="w-full mb-6  rounded-3xl border border-slate-800/60">
-          <img src="/hero.png" alt="Latimore Life & Legacy" className="w-full h-auto max-h-72 object-contain bg-white/90 p-2 rounded-2xl" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+          <img src={`${import.meta.env.BASE_URL}hero.png`} alt="Latimore Life & Legacy" className="w-full h-auto max-h-72 object-contain bg-white/90 p-2 rounded-2xl" onError={(e) => { e.currentTarget.style.display = "none"; }} />
         </div>
 <div className="bg-white p-5 rounded-3xl mb-7 shadow-2xl border border-slate-200 w-full">
             <div className="flex items-center gap-4 justify-between">
