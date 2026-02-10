@@ -121,7 +121,50 @@ const App: React.FC = () => {
           <span>🛡️ Protection</span>
           <span>📈 Strategy</span>
           <span>🏛️ Legacy</span>
+        </div>{/* === FEATURE BUTTONS === */}
+<div style={{ maxWidth: 1100, margin: '0 auto', padding: 16 }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+    {features.map(f => (
+      <button
+        key={f.id}
+        onClick={() => setActiveFeature(f.id)}
+        style={{
+          background: 'rgba(255,255,255,0.06)',
+          border: '1px solid rgba(201,162,95,0.3)',
+          borderRadius: 14,
+          padding: 14,
+          color: '#fff',
+          cursor: 'pointer',
+          textAlign: 'left'
+        }}
+      >
+        <div style={{ display: 'flex', gap: 10 }}>
+          {f.icon}
+          <div>
+            <div style={{ fontWeight: 700 }}>{f.label}</div>
+            <div style={{ fontSize: 12, opacity: 0.8 }}>{f.description}</div>
+          </div>
         </div>
+      </button>
+    ))}
+  </div>
+</div>
+
+{/* === FEATURE PANELS === */}
+{activeFeature === 'assistant' && <Assistant />}
+{activeFeature === 'blueprint' && <LegacyBlueprint />}
+{activeFeature === 'benefits' && <LivingBenefitsGuide />}
+{activeFeature === 'search' && (
+  <SearchBar
+    query={searchQuery}
+    setQuery={setSearchQuery}
+    services={services}
+    onSelect={handleSearchSelect}
+  />
+)}
+
+<AIDock onOpen={() => setActiveFeature('assistant')} />
+
       </div>
 
       {/* Quick Actions */}
