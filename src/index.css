@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth scrolling inside chat container */
+.custom-scrollbar::-webkit-scrollbar { width: 8px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(201, 162, 95, 0.35); border-radius: 999px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
