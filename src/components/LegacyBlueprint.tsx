@@ -1,7 +1,5 @@
-
 import React, { useState } from 'react';
-import { Lightbulb, Sparkles, Send } from 'lucide-react';
-import { geminiService } from '../services/geminiService';
+import { Lightbulb, Sparkles } from 'lucide-react';
 import { APP_DATA } from '../constants';
 
 const LegacyBlueprint: React.FC = () => {
@@ -12,16 +10,16 @@ const LegacyBlueprint: React.FC = () => {
   const generateBlueprint = async () => {
     if (!goal.trim()) return;
     setLoading(true);
-    
-    // Create a detailed map of services for the model to reference specific mechanics
-    const serviceContext = APP_DATA.services.map(s => 
-      `${s.title.toUpperCase()}: ${s.detailedDescription}`
-    ).join('\n');
+
+    // Build the service context exactly as before
+    const serviceContext = APP_DATA.services
+      .map(s => `${s.title.toUpperCase()}: ${s.detailedDescription}`)
+      .join('\n');
 
     const systemInstruction = `You are the lead Senior Legacy Architect for Latimore Life & Legacy LLC, working under CEO Jackson M. Latimore Sr.
-    
+
     TASK: Create a sophisticated, multi-layered "Legacy Protection Blueprint" for a client goal.
-    
+
     STRATEGIC CONTEXT (Use these specific mechanics):
     ${serviceContext}
 
@@ -35,10 +33,25 @@ const LegacyBlueprint: React.FC = () => {
     7. Use simple bullet points (-). Do not use Markdown headers.`;
 
     try {
-      const response = await geminiService.generateContent(goal, systemInstruction);
-      setBlueprint(response || "I couldn't generate a blueprint right now. Please connect with Jackson directly.");
+      // 🔥 CALL YOUR OPENAI BACKEND INSTEAD OF GEMINI
+      const res = await fetch("/api/strategic-advisor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: `${systemInstruction}\n\nClient Goal: ${goal}`
+        })
+      });
+
+      const data = await res.json();
+
+      setBlueprint(
+        data.reply ||
+        "I couldn't generate a blueprint right now. Please connect with Jackson directly."
+      );
     } catch (error) {
-      setBlueprint("We encountered an error. Please try again or contact Jackson directly for a consultation.");
+      setBlueprint(
+        "We encountered an error. Please try again or contact Jackson directly for a consultation."
+      );
     } finally {
       setLoading(false);
     }
@@ -50,28 +63,43 @@ const LegacyBlueprint: React.FC = () => {
         <div className="bg-[#C29D6F] p-2 rounded-xl text-white">
           <Lightbulb size={20} />
         </div>
-        <h2 className="text-[#1D3A5F] text-lg font-extrabold tracking-tight">AI Legacy Blueprint</h2>
+        <h2 className="text-[#1D3A5F] text-lg font-extrabold tracking-tight">
+          AI Legacy Blueprint
+        </h2>
       </div>
 
       {!blueprint ? (
         <div className="space-y-4">
           <p className="text-sm text-slate-600 leading-relaxed">
-            Describe a primary goal like <span className="font-semibold text-[#1D3A5F]">"Protecting my home for my children"</span> or <span className="font-semibold text-[#1D3A5F]">"Starting a tax-free retirement plan"</span>.
+            Describe a primary goal like{" "}
+            <span className="font-semibold text-[#1D3A5F]">
+              "Protecting my home for my children"
+            </span>{" "}
+            or{" "}
+            <span className="font-semibold text-[#1D3A5F]">
+              "Starting a tax-free retirement plan"
+            </span>.
           </p>
+
           <div className="relative group">
-            <textarea 
+            <textarea
               value={goal}
               onChange={(e) => setGoal(e.target.value)}
               placeholder="What is your legacy goal?"
               className="w-full p-4 text-sm rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#C29D6F]/50 h-28 resize-none bg-white/50 group-hover:bg-white transition-colors"
             />
           </div>
-          <button 
+
+          <button
             onClick={generateBlueprint}
             disabled={loading || !goal.trim()}
             className="w-full py-4 bg-[#1D3A5F] text-white rounded-2xl text-sm font-bold flex items-center justify-center space-x-2 disabled:opacity-50 hover:bg-[#152a45] transform active:scale-[0.98] transition-all shadow-lg"
           >
-            {loading ? <Sparkles className="animate-spin" size={18} /> : <Sparkles size={18} />}
+            {loading ? (
+              <Sparkles className="animate-spin" size={18} />
+            ) : (
+              <Sparkles size={18} />
+            )}
             <span>Generate My Blueprint</span>
           </button>
         </div>
@@ -80,8 +108,12 @@ const LegacyBlueprint: React.FC = () => {
           <div className="text-[14px] text-slate-700 leading-relaxed whitespace-pre-wrap bg-white p-5 rounded-2xl border border-[#C29D6F]/30 shadow-inner italic">
             {blueprint}
           </div>
-          <button 
-            onClick={() => { setBlueprint(''); setGoal(''); }} 
+
+          <button
+            onClick={() => {
+              setBlueprint("");
+              setGoal("");
+            }}
             className="text-xs text-[#1D3A5F] font-bold uppercase tracking-widest hover:text-[#C29D6F] flex items-center space-x-1"
           >
             <span>Reset Tool</span>
