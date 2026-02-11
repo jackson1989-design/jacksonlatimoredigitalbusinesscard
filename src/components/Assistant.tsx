@@ -1,9 +1,7 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, Sparkles, X, MessageSquare, ShieldCheck, UserPlus, Zap, Activity } from 'lucide-react';
 import { Message } from '../types';
 import { APP_DATA, PRODUCT_KNOWLEDGE } from '../constants';
-import { geminiService } from '../services/geminiService';
 
 interface AssistantProps {
   onClose: () => void;
@@ -25,11 +23,11 @@ const Assistant: React.FC<AssistantProps> = ({ onClose, initialQuery }) => {
 
   const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isLoading) return;
-    
+
     setMessages(prev => [...prev, { role: 'user', content: text }]);
     setIsLoading(true);
 
-    const servicesPortfolio = APP_DATA.services.map(s => 
+    const servicesPortfolio = APP_DATA.services.map(s =>
       `PILLAR: ${s.title}\nTAGLINE: ${s.description}\nTECHNICAL STRATEGY: ${s.detailedDescription}`
     ).join('\n\n');
 
@@ -55,10 +53,26 @@ const Assistant: React.FC<AssistantProps> = ({ onClose, initialQuery }) => {
     `;
 
     try {
-      const response = await geminiService.generateContent(text, systemInstruction);
-      setMessages(prev => [...prev, { role: 'assistant', content: response || "Our strategic systems are processing high-priority data. Please connect with Jackson directly at " + APP_DATA.phone }]);
+      // 🔥 PATCH: CALL YOUR OPENAI BACKEND INSTEAD OF GEMINI
+      const res = await fetch("/api/strategic-advisor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: `${systemInstruction}\n\nClient Inquiry: ${text}`
+        })
+      });
+
+      const data = await res.json();
+
+      setMessages(prev => [
+        ...prev,
+        { role: 'assistant', content: data.reply || "Our strategic systems are processing high-priority data. Please connect with Jackson directly at " + APP_DATA.phone }
+      ]);
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: "Our encrypted strategy link is refreshing. Please reach out to Jackson directly for immediate consultation." }]);
+      setMessages(prev => [
+        ...prev,
+        { role: 'assistant', content: "Our encrypted strategy link is refreshing. Please reach out to Jackson directly for immediate consultation." }
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +133,7 @@ const Assistant: React.FC<AssistantProps> = ({ onClose, initialQuery }) => {
             </div>
           </div>
         ))}
-        
+
         {isLoading && (
           <div className="flex justify-start animate-pulse">
             <div className="bg-white border border-slate-200 p-5 rounded-3xl flex items-center space-x-4 shadow-sm">
